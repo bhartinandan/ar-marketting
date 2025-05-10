@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AliveFrame AR Experience</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css"
+  />
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar/dist/mindar-image-aframe.prod.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      background-color: #000;
+    }
+
+    #messageBox,
+    #tapNotification {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 10px;
+      padding: 12px 24px;
+      z-index: 100;
+      text-align: center;
+      color: #fff;
+      font-weight: 500;
+      font-size: 14px;
+      background: linear-gradient(90deg, #00c6ff, #7f00ff);
+      box-shadow: 0 0 12px rgba(0, 198, 255, 0.5);
+    }
+
+    #messageBox {
+      top: 20px;
+    }
+
+    #tapNotification {
+      top: 10%;
+      font-size: 16px;
+      display: none;
+    }
+
+    #targetOverlay {
+      position: absolute;
+      top: 50%;
+      opacity:0.8;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50vw;
+      pointer-events: none;
+      opacity: 0.95;
+      z-index: 99;
+      border: 0px solid rgba(0, 198, 255, 0.5);
+      border-radius: 4px;
+      box-shadow: 0 0 40px rgba(0, 198, 255, 0.25);
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    #visitButton {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, #00c6ff, #7f00ff);
+      color: #fff;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      z-index: 101;
+      width: 70%;
+      text-decoration: none;
+      box-shadow: 0 6px 20px rgba(0, 198, 255, 0.4);
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 0px;
+      width: 100%;
+      text-align: center;
+      color: #aaa;
+      font-size: 12px;
+      font-weight: 400;
+      z-index: 101;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px 0;
+    }
+
+    a-scene {
+      height: 100vh;
+      width: 100vw;
+    }
+  </style>
+</head>
+<body>
+  <div id="messageBox">Scanning for target image...</div>
+  <div id="tapNotification">Tap Anywhere to Start</div>
+  <img
+    id="targetOverlay"
+    src="{{media.reference_img.url}}"
+    alt="Target Overlay"
+  />
+  <a
+    id="visitButton"
+    href="{{media.redirect_url}}"
+    target="_blank"
+  >
+    Visit Now <i class="fa-solid fa-arrow-right-long"></i>
+  </a>
+  <div class="footer">© AliveFrame. All rights reserved.</div>
+
+  <a-scene
+    mindar-image="imageTargetSrc: {{media.target_img.url}}; minCameraResolution: {width: 1920, height: 1080}; displayFov: 70; filterMinCF: 0.2; filterBeta: 0.9; maxTrack: 1; uiScanning: #messageBox; uiLoading: #messageBox;"
+    color-space="sRGB"
+    renderer="logarithmicDepthBuffer: true;"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false"
+    embedded
+  >
+    <a-assets>
+      <video
+        id="myVideo"
+        src="{{media.overlap_video.url}}"
+        preload="auto"
+        loop
+        playsinline
+        crossorigin="anonymous"
+      ></video>
+    </a-assets>
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <a-entity id="targetAnchor" mindar-image-target="targetIndex: 0">
+      <a-entity id="videoWrapper" position="0 0 0" rotation="0 0 0">
+        <a-plane
+          id="videoPlane"
+          width="{{media.width}}"
+          height="{{media.height}}"
+          position="0 0 0"
+          material="shader: flat; src: #myVideo;"
+          visible="false"
+        ></a-plane>
+      </a-entity>
+    </a-entity>
+  </a-scene>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const videoEl = document.getElementById("myVideo");
+      const videoPlane = document.getElementById("videoPlane");
+      const messageBox = document.getElementById("messageBox");
+      const overlayImg = document.getElementById("targetOverlay");
+      const tapNotification = document.getElementById("tapNotification");
+      const targetAnchor = document.getElementById("targetAnchor");
+
+      let videoPlaying = false;
+      let targetFound = false;
+      let userHasTapped = false;
+      let tapHandledOnce = false;
+
+      const startVideo = () => {
+        videoEl.play().then(() => {
+          videoPlaying = true;
+          videoPlane.setAttribute("visible", "true");
+          tapNotification.style.display = "none";
+        }).catch((err) => {
+          console.error("Video error:", err);
+          messageBox.textContent = "Tap again to allow video with sound.";
+          messageBox.style.display = "block";
+        });
+      };
+
+      targetAnchor.addEventListener("targetFound", () => {
+        targetFound = true;
+        messageBox.style.display = "none";
+        overlayImg.style.display = "none";
+
+        if (!tapHandledOnce) {
+          tapNotification.style.display = "block";
+        } else {
+          startVideo();
+        }
+      });
+
+      targetAnchor.addEventListener("targetLost", () => {
+        videoPlane.setAttribute("visible", "false");
+        if (videoPlaying) {
+          videoEl.pause();
+          videoPlaying = false;
+        }
+        overlayImg.style.display = "block";
+        messageBox.textContent = "Scanning for target image...";
+        messageBox.style.display = "block";
+        targetFound = false;
+      });
+
+      document.body.addEventListener("click", () => {
+        if (targetFound && !tapHandledOnce) {
+          startVideo();
+          tapHandledOnce = true;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

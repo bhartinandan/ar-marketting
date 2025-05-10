@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AliveFrame - Augmented Reality Marketing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="{% static 'styles.css' %}" rel="stylesheet">
+
+
+
+  <style>
+    /* Branding */
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  margin-top: 2rem;
+  margin-bottom: 30px;height: 100%;
+  font-size: .9rem;
+}
+
+.brand img{
+  width: 38px;
+  height: 30px;
+  border-radius: 50%;
+  margin-bottom: .4rem;
+}
+  </style>
+</head>
+<body>
+  <div id="qr-particles"></div>
+
+<header>
+  <nav class="container">
+    <div class="logo"><div class="brand">
+      <img src="{% static 'logo.png' %}" alt="">
+      <h1>liveFrame</h1>
+    </div>
+</div>
+    <ul class="nav-links">
+      <li class="btn-primary"><a style="color: black;" onclick="window.location.href ='/contact'">Contact</a></li>
+    </ul>
+    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+    <button class="btn-primary nav-btn" onclick="window.location.href ='/contact'">Contact</button>
+  </nav>
+</header>
+
+<section id="home" class="hero container reveal">
+  <div class="hero-content">
+    <h1>Transform Marketing with AR Videos</h1>
+    <p>Engage your audience with AliveFrame's innovative QR codes linked to AR video experiences.</p>
+    <button class="btn-primary" onclick="window.location.href ='/signin'">Get Started</button>
+  </div>
+  <div class="hero-img">
+    <img src="{% static 'Gemini_Generated_Image_b1w37jb1w37jb1w3.jpeg' %}" alt="AR Phone" />
+  </div>
+</section>
+
+<section class="features">
+  <h2 class="features-title">Features</h2>
+  <div class="features-grid">
+    
+    <div class="feature-card">
+      <img src="{% static 'ajj.jpg' %}" alt="QR Icon" class="feature-icon" />
+      <h3>Dynamic QR Codes</h3>
+      <p>Easily update destination content without reprinting.</p>
+    </div>
+
+    <div class="feature-card">
+      <img src="{% static 'rocket.png' %}" alt="Rocket Icon" class="feature-icon" />
+      <h3>Engaging Content</h3>
+      <p>Enhance brand interaction with immersive AR experiences.</p>
+    </div>
+
+    <div class="feature-card">
+      <img src="{% static 'analatics.png' %}" alt="Analytics Icon" class="feature-icon" />
+      <h3>Analytics & Insights</h3>
+      <p>Track scans and interactions to measure campaign success.</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="reels" class="reels container reveal">
+  <h2>Explore AliveFrame</h2>
+  <div class="reel-slider">
+    <div class="reel"><img src="{% static 'unlockAR.webp' %}" alt="Reel 1"></div>
+    <div class="reel"><img src="{% static 'unlockEx.webp' %}" alt="Reel 2"></div>
+    <div class="reel"><img src="{% static 'unlockBook.jpeg' %}" alt="Reel 3"></div>
+    <div class="reel"><img src="{% static 'unlockMore.webp' %}" alt="Reel 4"></div>
+  </div>
+</section>
+
+<section id="contact" class="contact container reveal">
+  <h2>Contact Us</h2>
+  <p style="padding: 1rem;">Get in touch to elevate your marketing strategy with AliveFrame AR solutions.</p>
+  <button style="margin-top: 2rem;" class="btn-primary" onclick="window.location.href ='/contact'">Send a Message</button>
+</section>
+
+<footer class="footer">
+  <p>
+      <a href="https://www.instagram.com/aliveframe.ai?utm_source=qr&igsh=MWZlcGw3NnhkZTBjaw==" target="_blank" style="color: #f0f0f0; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <svg width="20" height="20" fill="#f0f0f0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 .001 5.999A3 3 0 0 0 12 9zm5.25-2.5a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0z"/>
+        </svg>
+        Instagram
+      </a>
+    </p>
+<p>© 2025 AliveFrame — All rights reserved.</p>
+<div style="margin: 0.5rem 0; font-size: .5rem;">
+  
+  <a onclick="window.location.href ='/aboutus/'" style="color: #f0f0f0; text-decoration: none; margin: 0 1rem;">
+    📧 About Us
+  </a>
+  |
+  <a onclick="window.location.href ='/privacypolicy/'" target="_blank" style="color: #f0f0f0; text-decoration: none; margin: 0 1rem;">
+    🔒 Privacy Policy
+  </a>
+  |
+  <a onclick="window.location.href ='/term-condition/'" target="_blank" style="color: #f0f0f0; text-decoration: none; margin: 0 1rem;">
+    📃 Terms & Conditions
+  </a>
+</div>
+</footer>
+
+
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

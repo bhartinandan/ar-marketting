@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AliveFrame Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    .user {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    #popout {
+      display: none;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 text-white font-sans">
+  <!-- User Profile Pop-out Box -->
+  <div id="popout" class="absolute top-16 right-6 w-64 bg-[#1c1f26] text-white rounded-2xl shadow-xl p-4 z-50">
+    <div class="flex items-center space-x-4">
+      <img src="{% static 'logo.png' %}" alt="User Avatar" class="w-12 h-12 rounded-full border border-[#2e2e2e]" />
+      <div>
+        <h2 class="text-lg font-semibold">{{client.name}}</h2>
+        <p class="text-sm text-gray-400">{{client.email}}</p>
+      </div>
+    </div>
+    <hr class="my-4 border-gray-700" />
+    <button class="w-full bg-[#2d6df6] hover:bg-[#1a50c4] text-white py-2 rounded-xl transition-colors duration-200 text-sm font-medium" onclick="window.location.href='/client-logout'">
+      Sign Out
+    </button>
+  </div>
+
+  <!-- Header -->
+  <header class="p-4 sm:p-6 flex items-center justify-between bg-gray-800 shadow">
+    <div class="flex items-center text-2xl font-bold">
+      <img class="w-8 h-7 mr-2" src="{% static 'logo.png' %}" alt="Logo"> AliveFrame
+    </div>
+    <div id="userIcon" class="user text-center">
+      <i class="fa-solid fa-user text-xl mb-1"></i>
+      <p class="text-sm">Hi {{client.name}}</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="p-4 sm:p-6 space-y-6">
+    <h1 class="text-3xl font-bold">Campaign Name</h1>
+
+    <!-- Tabs -->
+    <nav class="flex space-x-4 border-b border-gray-700 pb-2">
+      <button class="tab-btn text-blue-400 border-b-2 border-blue-400 pb-1 text-sm sm:text-base">Overview</button>
+    </nav>
+
+    <!-- Campaign Days Left -->
+    <div class="bg-blue-700 text-white p-4 rounded-xl text-lg sm:text-xl font-semibold shadow-lg">
+      Campaign Days: <span class="text-yellow-300">{{service.campaign_days}} days</span>
+    </div>
+
+    <!-- Responsive Table -->
+    <div class="overflow-x-auto rounded-xl shadow-lg border border-gray-700">
+      <table class="min-w-full bg-gray-800 text-sm sm:text-base">
+        <thead class="bg-gray-700 text-white uppercase text-xs sm:text-sm tracking-wider">
+          <tr>
+            <th class="p-4 text-left">Date</th>
+            <th class="p-4 text-left">Total Scans</th>
+            <th class="p-4 text-left">Unique Scans</th>
+            
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-700">
+            {% for key, value in click_stats_map.items %}
+          <tr class="hover:bg-gray-700 transition">
+            <td class="p-4">{{ key }}</td>
+            <td class="p-4">{{ value.1 }}</td>
+            <td class="p-4">{{ value.0 }}</td>
+           
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- JS for popout toggle -->
+  <script>
+    const userIcon = document.getElementById('userIcon');
+    const popout = document.getElementById('popout');
+
+    userIcon.addEventListener('click', () => {
+      if (popout.style.display === 'none' || popout.style.display === '') {
+        popout.style.display = 'block';
+      } else {
+        popout.style.display = 'none';
+      }
+    });
+
+    // Optional: Close popout if clicked outside
+    window.addEventListener('click', (e) => {
+      if (!userIcon.contains(e.target) && !popout.contains(e.target)) {
+        popout.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

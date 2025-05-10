@@ -1,0 +1,82 @@
+from django.db import models
+
+# Create your models here.
+from django.db import models
+from django.contrib.auth.models import User
+from datetime import datetime 
+from django.utils import timezone
+#web user experience
+
+class StaffProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username + "-"+ str(self.id)
+    
+class ClientProfile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    joined_date = models.DateTimeField(default=datetime.now, blank=True)
+    name = models.CharField(max_length=255)
+    business_name = models.CharField(max_length=255)
+    website_url = models.CharField(max_length=255)
+    business_description = models.TextField()
+    business_size = models.CharField(max_length=255)
+    business_industry = models.CharField(max_length=255)
+    email = models.EmailField(max_length = 254)
+    pin_code = models.CharField(max_length=6)
+    address = models.TextField()
+    contact = models.CharField(max_length=15)
+    city = models.CharField(max_length=20)
+    state = models.CharField(max_length=20)
+    country = models.CharField(max_length=20)
+
+    def __str__(self):
+        return str(self.user.username) +"-"+ self.business_name
+    
+class ServiceType(models.Model):
+    service_type = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.service_type +"-"+ str(self.id)
+    
+class ServiceAvail(models.Model):
+    client_id = models.ForeignKey(ClientProfile, on_delete=models.CASCADE, related_name='clientid')
+    date_started = models.DateTimeField(default=datetime.now, blank=True)
+    service_type = models.ForeignKey(ServiceType, on_delete=models.CASCADE, related_name='service_associated')
+    height = models.DecimalField(max_digits=4, decimal_places=2, default=1.60)
+    width = models.DecimalField(max_digits=4, decimal_places=2, default=1.15)
+    overlap_video = models.FileField(upload_to='overlap_videos/')
+    target_img = models.FileField(upload_to='target_images/', blank=True)
+    reference_img = models.FileField(upload_to='reference_images/', blank=True)
+    redirect_url = models.URLField(default='https://aliveframe.com/')
+    campaign_name = models.CharField(max_length=255)
+    campaingn_description = models.TextField(blank=True)
+    campaign_days = models.IntegerField(default=0)
+    enabled = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return str(self.client_id.user.username) + "-" + str(self.id)
+    
+class ServiceStatistics(models.Model):
+    service_id = models.ForeignKey(ServiceAvail, on_delete=models.CASCADE, related_name='serviceid')
+    ip_address = models.GenericIPAddressField()
+    timestamp = models.DateTimeField(default=datetime.now, blank=True)
+    impressions = models.IntegerField(default=0)
+    clicks = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.service_id.client_id.user.username) + "-" + str(self.id)
+
+class ContactUs(models.Model):
+    name = models.CharField(max_length=255)
+    business_name = models.CharField(max_length=255)
+    contact = models.CharField(max_length=15)
+    email = models.EmailField(max_length = 254)
+    message = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.business_name +"-"+ str(self.id)

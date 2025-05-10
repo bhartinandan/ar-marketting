@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AliveFrame - Augmented Reality Marketing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+  <div id="qr-particles"></div>
+
+<header>
+  <nav class="container">
+    <div class="logo">AliveFrame</div>
+    
+    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+    <button class="btn-primary nav-btn">Contact</button>
+  </nav>
+</header>
+
+<section class="features">
+  <h2 class="features-title">Contact Us</h2>
+  <div class="features-grid">
+    
+    <div class="form-card">
+        <form action="#" method="POST">{% csrf_token %}
+            <div>
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your Name" required>
+            </div>
+        
+            <div>
+                <label for="businessname">Business Name</label>
+                <input type="text" id="businessname" name="businessname" placeholder="Your Company Name" required>
+              </div>
+          
+              <div>
+                <label for="contact">Contact Number</label>
+                <input type="text" id="contact" name="contact" placeholder="Mobile Number" required>
+              </div>
+          
+            <div>
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email"  placeholder="you@example.com" required>
+            </div>
+        
+            <div>
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+            </div>
+        
+            <button type="submit" class="btn-primary">Send Message</button>
+          </form></div>
+
+    
+  </div>
+</section>
+
+
+<footer class="footer">
+  <p>© 2025 AliveFrame | All Rights Reserved.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

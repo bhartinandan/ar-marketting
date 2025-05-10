@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choose Campaign</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    .user {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #popout {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+  <!-- Popout -->
+  <div id="popout" class="absolute top-16 right-6 w-64 bg-[#1c1f26] text-white rounded-2xl shadow-xl p-4 z-50">
+    <div class="flex items-center space-x-4">
+      <img src="{% static 'logo.png' %}" alt="User Avatar" class="w-12 h-12 rounded-full border border-[#2e2e2e]" />
+      <div>
+        <h2 class="text-lg font-semibold">{{client.name}}</h2>
+        <p class="text-sm text-gray-400">{{client.email}}</p>
+      </div>
+    </div>
+    <hr class="my-4 border-gray-700" />
+    <button class="w-full bg-[#2d6df6] hover:bg-[#1a50c4] text-white py-2 rounded-xl text-sm font-medium" onclick="window.location.href='/client-logout'">
+      Sign Out
+    </button>
+  </div>
+
+  <!-- Header -->
+  <header class="p-6 flex items-center justify-between bg-gray-800 relative">
+    <div class="text-2xl font-bold text-white flex items-center">
+      <img src="{% static 'logo.png' %}" alt="Logo" class="w-8 h-7 mr-2"> AliveFrame
+    </div>
+    <div class="user">
+      <i class="fa-solid fa-user text-xl mb-1"></i>
+      <p class="text-sm">Hi {{client.name}}</p>
+    </div>
+  </header>
+
+  <!-- Campaign Page Content -->
+  <main class="p-6">
+    <h1 class="text-3xl font-bold mb-4">Select a Campaign</h1>
+
+    <!-- Campaign Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="campaignGrid">
+      <!-- Example campaign cards -->
+      {% for campaign in service %}
+        <div class="bg-gray-800 p-4 rounded-xl shadow hover:bg-gray-700 cursor-pointer transition" onclick="window.location.href ='/service-statistics/{{campaign.id}}'">
+          <h2 class="text-lg font-semibold mb-1">{{ campaign.campaign_name }}</h2>
+          <p class="text-sm text-gray-400">Service Type: {{ campaign.service_type.service_type }}</p>
+          <p class="text-sm text-gray-400">Created on: {{ campaign.date_started }}</p>
+          <p class="text-sm text-gray-400">Campaign description: {{ campaign.campaingn_description }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </main>
+
+  <script>
+    // Popout logic
+    const userTrigger = document.querySelector('.user');
+    const popoutBox = document.getElementById('popout');
+
+    if (userTrigger && popoutBox) {
+      userTrigger.addEventListener('click', () => {
+        const visible = popoutBox.style.display === 'flex';
+        popoutBox.style.display = visible ? 'none' : 'flex';
+        if (!visible) popoutBox.style.flexDirection = 'column';
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!popoutBox.contains(e.target) && !userTrigger.contains(e.target)) {
+          popoutBox.style.display = 'none';
+        }
+      });
+    }
+
+    // Example: Select campaign and redirect (replace with your Django route)
+    function selectCampaign(id) {
+      window.location.href = `/campaign/${id}/`;  // or fetch data via AJAX
+    }
+  </script>
+</body>
+</html>

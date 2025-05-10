@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 Not Found | AliveFrame</title>
+  <link rel="stylesheet" href="404.css" />
+  <style>
+    /* Reset & Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #0F1117;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Container */
+.error-container {
+  max-width: 500px;
+  padding: 40px 20px;
+  background-color: #1A1D24;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+}
+
+/* 404 Circle */
+.circle {
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
+  background-color: #2563eb;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  border-radius: 50%;
+  margin: 0 auto 24px;
+}
+
+/* Texts */
+h1 {
+  font-size: 1.75rem;
+  margin-bottom: 16px;
+}
+
+p {
+  color: #cbd5e1;
+  font-size: 1rem;
+  margin-bottom: 24px;
+}
+
+/* Button */
+.home-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #2563eb;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.home-btn:hover {
+  background-color: #1e40af;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .circle {
+    width: 90px;
+    height: 90px;
+    line-height: 90px;
+    font-size: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <div class="circle">404</div>
+    <h1>Page Not Found</h1>
+    <p>The page you’re looking for doesn’t exist or has been moved.</p>
+    <a href="/" class="home-btn">Go Back Home</a>
+  </div>
+</body>
+</html>
