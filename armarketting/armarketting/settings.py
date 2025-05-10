@@ -93,8 +93,12 @@ WSGI_APPLICATION = 'armarketting.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': Name,  # Replace with your MySQL database name
+        'USER': User,      # Replace with your MySQL username
+        'PASSWORD': Password,  # Replace with your MySQL password
+        'HOST': Host, # Replace with the IP address of your VPS
+        'PORT': Port,        # Default MySQL port
     }
 }
 
