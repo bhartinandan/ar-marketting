@@ -462,6 +462,7 @@ def client_signup_password_forget(request):
         logger.exception("Unexpected error in client_signup_password")
         return render(request, "client_error.html", {"error_message": "An error occurred. Please try again later."})
 
+@login_required(login_url='/signin')
 def dashboard(request):
     """
     Handles the client service page rendering.
@@ -488,7 +489,8 @@ def dashboard(request):
     except Exception as e:
         logger.exception("Error occurred while loading client service page")
         return JsonResponse({"error": "An internal server error occurred."}, status=500)
-    
+
+@login_required(login_url='/signin')
 def service_statitiscs(request, id):
     """
     Renders the client dashboard with their profile information and services.
@@ -516,11 +518,10 @@ def service_statitiscs(request, id):
         .values('day')
         .annotate(
         unique_clicks=Count('ip_address', distinct=True),
-        total_clicks=Sum('clicks')
+        total_clicks=Sum('impressions')
         )
         .order_by('day'))
         
-
         click_stats_map = OrderedDict()
 
         for item in daily_click_stats:
@@ -546,7 +547,6 @@ def service_statitiscs(request, id):
         return JsonResponse({"error": "An internal server error occurred."}, status=500)
 
 @login_required(login_url='/signin')
-@user_passes_test(is_staff)
 def client_logout(request):
     """
     Handles user logout and redirects to the login page.
@@ -819,11 +819,7 @@ def assets(request, id):
                     "error": "All fields are required."
                 })
 
-            print("file name found")
-
-            
-
-
+ 
             # Remove old file if it exists
             old_file = None
             print(os.path.join(settings.MEDIA_ROOT, service.reference_img.name))

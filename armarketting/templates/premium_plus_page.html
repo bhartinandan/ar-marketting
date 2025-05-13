@@ -7,101 +7,92 @@
     <meta name="theme-color" content="#000000" />
     <link rel="manifest" href="manifest.json" />
     <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css"
-  />
-      <div class="footer">© AliveFrame. All rights reserved.</div>
-
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css"
+    />
     <link rel="apple-touch-icon" href="icon-192.png" />
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar/dist/mindar-image-aframe.prod.js"></script>
     <style>
       body {
         margin: 0;
-         font-family: 'Poppins', sans-serif;
+        font-family: 'Poppins', sans-serif;
         overflow: hidden;
       }
       a-scene {
         height: 100vh;
         width: 100vw;
       }
-    #messageBox,
-    #tapNotification {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 10px;
-      padding: 12px 24px;
-      z-index: 100;
-      text-align: center;
-      color: #fff;
-      font-weight: 500;
-      font-size: 14px;
-      background: linear-gradient(90deg, #00c6ff, #7f00ff);
-      box-shadow: 0 0 12px rgba(0, 198, 255, 0.5);
-    }
-
-    #messageBox {
-      top: 20px;
-    }
-
-    #tapNotification {
-      top: 10%;
-      font-size: 16px;
-      display: none;
-    }
-
-    #targetOverlay {
-      position: absolute;
-      top: 50%;
-      opacity:0.8;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50vw;
-      pointer-events: none;
-      opacity: 0.95;
-      z-index: 99;
-      border: 0px solid rgba(0, 198, 255, 0.5);
-      border-radius: 4px;
-      box-shadow: 0 0 40px rgba(0, 198, 255, 0.25);
-      background-color: rgba(255, 255, 255, 0.02);
-    }
-
-    #visitButton {
-      position: absolute;
-      bottom: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(90deg, #00c6ff, #7f00ff);
-      color: #fff;
-      padding: 14px 28px;
-      border: none;
-      border-radius: 30px;
-      font-size: 16px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      z-index: 101;
-      width: 70%;
-      text-decoration: none;
-      box-shadow: 0 6px 20px rgba(0, 198, 255, 0.4);
-    }
-
-    .footer {
-      position: absolute;
-      bottom: 0px;
-      width: 100%;
-      text-align: center;
-      color: #aaa;
-      font-size: 12px;
-      font-weight: 400;
-      z-index: 101;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 4px 0;
-    }
-     #greenscreen-canvas {
+      #messageBox,
+      #tapNotification {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 10px;
+        padding: 12px 24px;
+        z-index: 100;
+        text-align: center;
+        color: #fff;
+        font-weight: 500;
+        font-size: 14px;
+        background: linear-gradient(90deg, #00c6ff, #7f00ff);
+        box-shadow: 0 0 12px rgba(0, 198, 255, 0.5);
+      }
+      #messageBox {
+        top: 20px;
+      }
+      #tapNotification {
+        top: 10%;
+        font-size: 16px;
+        display: none;
+      }
+      #targetOverlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50vw;
+        opacity: 0.95;
+        pointer-events: none;
+        z-index: 99;
+        border-radius: 4px;
+        box-shadow: 0 0 40px rgba(0, 198, 255, 0.25);
+        background-color: rgba(255, 255, 255, 0.02);
+      }
+      #visitButton {
+        position: absolute;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(90deg, #00c6ff, #7f00ff);
+        color: #fff;
+        padding: 14px 28px;
+        border: none;
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        z-index: 101;
+        width: 70%;
+        text-decoration: none;
+        box-shadow: 0 6px 20px rgba(0, 198, 255, 0.4);
+      }
+      .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        color: #aaa;
+        font-size: 12px;
+        font-weight: 400;
+        z-index: 101;
+        background: rgba(0, 0, 0, 0.4);
+        padding: 4px 0;
+      }
+      #greenscreen-canvas {
         display: none;
       }
     </style>
@@ -110,19 +101,19 @@
     <div id="messageBox">Loading AR experience...</div>
     <div id="tapNotification">Tap Anywhere to Start</div>
     <canvas id="greenscreen-canvas"></canvas>
-    <img id="targetOverlay" src="{{media.reference_img.url}}" alt="Target Overlay" />
- <a
-    id="visitButton"
-    href="{{media.redirect_url}}"
-    target="_blank"
-  >
-    Visit Now <i class="fa-solid fa-arrow-right-long"></i>
-  </a>
- 
+    <img
+      id="targetOverlay"
+      src="{{media.reference_img.url}}"
+      alt="Target Overlay"
+    />
+    <a id="visitButton" href="{{media.redirect_url}}" target="_blank">
+      Visit Now <i class="fa-solid fa-arrow-right-long"></i>
+    </a>
+
     <a-scene
       mindar-image="imageTargetSrc: {{media.target_img.url}};
                      filterMinCF: 0.5;
-                     filterBeta: 0.5;
+                     filterBeta: 0.1;
                      filterMaxDist: 0.2;
                      maxTrack: 1;
                      uiScanning: #messageBox;
@@ -159,11 +150,13 @@
       </a-entity>
     </a-scene>
 
+    <div class="footer">©️ AliveFrame. All rights reserved.</div>
+
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const videoEl = document.getElementById("myVideo");
         const canvas = document.getElementById("greenscreen-canvas");
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
         const videoPlane = document.getElementById("videoPlane");
         const messageBox = document.getElementById("messageBox");
         const targetAnchor = document.getElementById("targetAnchor");
@@ -174,57 +167,72 @@
         let targetFound = false;
         let userHasTapped = false;
         let hasClickListener = false;
+        let renderStarted = false;
         let prevTargetPosition = { x: 0, y: 0, z: 0 };
+        const smoothingFactor = 0.01;
+        const scale = 0.75;
 
         function smoothPosition(targetPosition) {
-          const smoothingFactor = 0.05; // Small factor for smoothing
-
           const dx = targetPosition.x - prevTargetPosition.x;
           const dy = targetPosition.y - prevTargetPosition.y;
           const dz = targetPosition.z - prevTargetPosition.z;
-
-          // Apply smoothing using linear interpolation
-          const smoothedPosition = {
+          const smoothed = {
             x: prevTargetPosition.x + dx * smoothingFactor,
             y: prevTargetPosition.y + dy * smoothingFactor,
             z: prevTargetPosition.z + dz * smoothingFactor,
           };
-
-          prevTargetPosition = smoothedPosition;
-          return smoothedPosition;
+          prevTargetPosition = smoothed;
+          return smoothed;
         }
 
         function renderGreenScreen() {
           if (videoEl.readyState >= 2 && videoPlaying) {
-            if (
-              canvas.width !== videoEl.videoWidth ||
-              canvas.height !== videoEl.videoHeight
-            ) {
-              canvas.width = videoEl.videoWidth;
-              canvas.height = videoEl.videoHeight;
+            const w = videoEl.videoWidth * scale;
+            const h = videoEl.videoHeight * scale;
+            if (canvas.width !== w || canvas.height !== h) {
+              canvas.width = w;
+              canvas.height = h;
             }
 
-            ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
-            const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(videoEl, 0, 0, w, h);
+            const frame = ctx.getImageData(0, 0, w, h);
             const data = frame.data;
-            const threshold = 150 * 150;
 
             for (let i = 0; i < data.length; i += 4) {
-              const r = data[i],
-                g = data[i + 1],
-                b = data[i + 2];
-              const greenDistSq = (r - 0) ** 2 + (g - 255) ** 2 + (b - 0) ** 2;
-              if (greenDistSq < threshold) data[i + 3] = 0;
+              const r = data[i];
+              const g = data[i + 1];
+              const b = data[i + 2];
+
+              const max = Math.max(r, g, b);
+              const min = Math.min(r, g, b);
+              const delta = max - min;
+
+              let h = 0;
+              let s = 0;
+              if (delta !== 0) {
+                if (max === r) h = 60 * (((g - b) / delta) % 6);
+                else if (max === g) h = 60 * ((b - r) / delta + 2);
+                else h = 60 * ((r - g) / delta + 4);
+                s = delta / max;
+              }
+
+              h = (h + 360) % 360;
+              const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+
+              // Apply chroma key for green color
+              if (h >= 120 && h <= 140 && s >= 0.45 && g > r && g > b && brightness > 60) {
+                data[i + 3] = 0; // Set alpha to 0 (transparent)
+              }
             }
 
             ctx.putImageData(frame, 0, 0);
             const material = videoPlane.getObject3D("mesh")?.material;
             if (material?.map) material.map.needsUpdate = true;
           }
-          requestAnimationFrame(renderGreenScreen);
-        }
 
-        renderGreenScreen();
+          // Request next frame at 60fps
+          requestAnimationFrame(renderGreenScreen); // 60 FPS
+        }
 
         targetAnchor.addEventListener("targetFound", () => {
           targetFound = true;
@@ -233,25 +241,24 @@
 
           if (!userHasTapped) {
             tapNotification.style.display = "block";
-
             if (!hasClickListener) {
               hasClickListener = true;
               document.body.addEventListener("click", () => {
                 if (targetFound && !userHasTapped) {
-                  videoEl
-                    .play()
-                    .then(() => {
-                      userHasTapped = true;
-                      videoPlaying = true;
-                      videoPlane.setAttribute("visible", "true");
-                      tapNotification.style.display = "none";
-                    })
-                    .catch((err) => {
-                      console.error("Video error:", err);
-                      messageBox.textContent =
-                        "Tap again to allow video with sound.";
-                      messageBox.style.display = "block";
-                    });
+                  videoEl.play().then(() => {
+                    userHasTapped = true;
+                    videoPlaying = true;
+                    videoPlane.setAttribute("visible", "true");
+                    tapNotification.style.display = "none";
+                    if (!renderStarted) {
+                      renderStarted = true;
+                      renderGreenScreen();
+                    }
+                  }).catch((err) => {
+                    console.error("Video error:", err);
+                    messageBox.textContent = "Tap again to allow video with sound.";
+                    messageBox.style.display = "block";
+                  });
                 }
               });
             }
@@ -268,6 +275,7 @@
           overlayImg.style.display = "block";
           if (videoPlaying) {
             videoEl.pause();
+            videoEl.currentTime = 0;
             videoPlaying = false;
           }
           messageBox.textContent = "Scanning for target image...";
@@ -275,21 +283,21 @@
           targetFound = false;
         });
 
-        // Smoothly update target position
         const target = targetAnchor.object3D;
         function updatePosition() {
           if (targetFound) {
-            const targetPosition = target.position;
-            const smoothedPosition = smoothPosition(targetPosition);
+            const smoothed = smoothPosition(target.position);
+            videoPlane.setAttribute("position", smoothed);
 
-            // Apply smoothed position to video plane
-            videoPlane.setAttribute("position", smoothedPosition);
-
-            // Adjust rotation if needed
-            const targetRotation = target.rotation;
-            videoPlane.setAttribute("rotation", targetRotation);
+            const currentRot = videoPlane.getAttribute("rotation");
+            const targetRot = target.rotation;
+            const smoothedRot = {
+              x: currentRot.x + (targetRot.x - currentRot.x) * smoothingFactor,
+              y: currentRot.y + (targetRot.y - currentRot.y) * smoothingFactor,
+              z: currentRot.z + (targetRot.z - currentRot.z) * smoothingFactor,
+            };
+            videoPlane.setAttribute("rotation", smoothedRot);
           }
-
           requestAnimationFrame(updatePosition);
         }
 

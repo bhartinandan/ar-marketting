@@ -59,7 +59,7 @@ class ServiceAvail(models.Model):
     enabled = models.BooleanField(default=False)
     
     def __str__(self):
-        return str(self.client_id.user.username) + "-" + str(self.id)
+        return str(self.client_id.user.username) + "-" + str(self.id)+ "-" +str(self.campaign_name)
     
 class ServiceStatistics(models.Model):
     service_id = models.ForeignKey(ServiceAvail, on_delete=models.CASCADE, related_name='serviceid')

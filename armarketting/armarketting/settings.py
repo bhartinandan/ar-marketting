@@ -35,7 +35,7 @@ DEBUG = SECRETS["debug"]
 ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = SECRETS["csrf_trusted_origin"]
-LOGIN_URL = '/staff-signin'
+LOGIN_URL = '/signin'
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
