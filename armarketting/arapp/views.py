@@ -749,34 +749,37 @@ def create_service(request, id):
 
 
             if overlap_video:
-                # Generate a new filename
-                file_extension = os.path.splitext(overlap_video.name)[1]  # Get the file extension
-                new_file_name = f"{client.business_name}{timezone.now().strftime('%Y%m%d_%H%M%S')}{file_extension}"
-                # new_file_name = f"{uuid.uuid4().hex}{file_extension}" #another way to generate unique name
+                # # Generate a new filename
+                # file_extension = os.path.splitext(overlap_video.name)[1]  # Get the file extension
+                # new_file_name = f"{client.business_name}{timezone.now().strftime('%Y%m%d_%H%M%S')}{file_extension}"
+                # # new_file_name = f"{uuid.uuid4().hex}{file_extension}" #another way to generate unique name
 
-                # Save the file with the new name
-                file_path = default_storage.save(new_file_name, ContentFile(overlap_video.read()))
-                service.overlap_video = file_path  # Save the path to the file
+                # # Save the file with the new name
+                # file_path = default_storage.save(new_file_name, ContentFile(overlap_video.read()))
+                # service.overlap_video = file_path  # Save the path to the file
+                service.overlap_video = overlap_video
 
             if target_img:
-                # Generate a new filename
-                file_extension = os.path.splitext(target_img.name)[1]
-                new_file_name = f"{client.business_name}{timezone.now().strftime('%Y%m%d_%H%M%S')}{file_extension}"
-                # new_file_name = f"{uuid.uuid4().hex}{file_extension}" #another way to generate unique name
-                # Save the file with the new name   
-                # Save the file with the new name
-                file_path = default_storage.save(new_file_name, ContentFile(target_img.read()))
-                service.target_img = file_path  # Save the path to the file
+                # # Generate a new filename
+                # file_extension = os.path.splitext(target_img.name)[1]
+                # new_file_name = f"{client.business_name}{timezone.now().strftime('%Y%m%d_%H%M%S')}{file_extension}"
+                # # new_file_name = f"{uuid.uuid4().hex}{file_extension}" #another way to generate unique name
+                # # Save the file with the new name   
+                # # Save the file with the new name
+                # file_path = default_storage.save(new_file_name, ContentFile(target_img.read()))
+                # service.target_img = file_path  # Save the path to the file
+                service.target_img = target_img  # Save the path to the file
 
             if reference_img:
-                # Generate a new filename
-                file_extension = os.path.splitext(reference_img.name)[1]
-                new_file_name = f"{client.business_name}{timezone.now().strftime('%Y%m%d_%H%M%S')}{file_extension}"
-                # new_file_name = f"{uuid.uuid4().hex}{file_extension}" #another way to generate unique name
-                # Save the file with the new name   
-                # Save the file with the new name
-                file_path = default_storage.save(new_file_name, ContentFile(reference_img.read()))
-                service.reference_img = file_path  # Save the path to the file
+                # # Generate a new filename
+                # file_extension = os.path.splitext(reference_img.name)[1]
+                # new_file_name = f"{client.business_name}{timezone.now().strftime('%Y%m%d_%H%M%S')}{file_extension}"
+                # # new_file_name = f"{uuid.uuid4().hex}{file_extension}" #another way to generate unique name
+                # # Save the file with the new name   
+                # # Save the file with the new name
+                # file_path = default_storage.save(new_file_name, ContentFile(reference_img.read()))
+                # service.reference_img = file_path  # Save the path to the file
+                service.reference_img = reference_img  # Save the path to the file
 
 
             service.save()
@@ -818,78 +821,32 @@ def assets(request, id):
                     "serv": service,
                     "error": "All fields are required."
                 })
-
- 
-            # Remove old file if it exists
-            old_file = None
-            print(os.path.join(settings.MEDIA_ROOT, service.reference_img.name))
-            if upload_type == "overlap_video" and service.overlap_video:
-                old_file = os.path.join(settings.MEDIA_ROOT, service.reference_img.name)
-                print(old_file)
-            elif upload_type == "target_img" and service.target_img:
-                old_file = os.path.join(settings.MEDIA_ROOT, service.reference_img.name)
-                print(old_file)
-            elif upload_type == "reference_img" and service.reference_img:
-                old_file = os.path.join(settings.MEDIA_ROOT, service.reference_img.name)
-                print(old_file)
             
-            print("old file name")
-            print(old_file)
-            print(os.path.exists(old_file))
-
-            if old_file and os.path.exists(old_file):
-                print(old_file)
-                print("removed")
-                os.remove(old_file)
-
+            if not upload_type or upload_type not in ["overlap_video", "target_img", "reference_img"]:
+                print("upload type not found")
+                return render(request, "assets.html", {
+                    "serv": service,
+                    "error": "Invalid upload type."
+                })
+            if upload_type == "overlap_video" and service.overlap_video:
+                os.remove(service.overlap_video.path)
+                service.overlap_video=file_name
+            elif upload_type == "target_img" and service.target_img:
+                os.remove(service.target_img.path)
+                service.target_img=file_name
+            elif upload_type == "reference_img" and service.reference_img:
+                os.remove(service.reference_img.path)
+                service.reference_img=file_name
             else:
                 return render(request, "assets.html", {
                     "serv": service,
                     "error": "Invalid upload type."
                 })
-
-            print(file_name)
-
-            if upload_type == "overlap_video" and file_name:
-                # Generate a new filename
-                file_extension = os.path.splitext(file_name.name)[1]  # Get the file extension
-                new_file_name = f"{client.business_name}{timezone.now().strftime('%Y%m%d_%H%M%S')}{file_extension}"
-                # new_file_name = f"{uuid.uuid4().hex}{file_extension}" #another way to generate unique name
-
-                # Save the file with the new name
-                file_path = default_storage.save(new_file_name, ContentFile(file_name.read()))
-                service.overlap_video = file_path  # Save the path to the file
-                print("saved")
-                print(file_path)
-
-            if upload_type == "target_img" and file_name:
-                # Generate a new filename
-                file_extension = os.path.splitext(file_name.name)[1]
-                new_file_name = f"{client.business_name}{timezone.now().strftime('%Y%m%d_%H%M%S')}{file_extension}"
-                # new_file_name = f"{uuid.uuid4().hex}{file_extension}" #another way to generate unique name
-                # Save the file with the new name   
-                # Save the file with the new name
-                file_path = default_storage.save(new_file_name, ContentFile(file_name.read()))
-                service.target_img = file_path  # Save the path to the file
-                print("saved")
-                print(file_path)
-
-            if upload_type == "reference_img" and file_name:
-                print("ref file")
-                # Generate a new filename
-                file_extension = os.path.splitext(file_name.name)[1]
-                new_file_name = f"{client.business_name}{timezone.now().strftime('%Y%m%d_%H%M%S')}{file_extension}"
-                # new_file_name = f"{uuid.uuid4().hex}{file_extension}" #another way to generate unique name
-                # Save the file with the new name   
-                # Save the file with the new name
-                file_path = default_storage.save(new_file_name, ContentFile(file_name.read()))
-                service.reference_img = file_path  # Save the path to the file
-                print("saved")
-                print(file_path)
+            # Save the file with the new name
 
             service.save()
 
-            logger.info("Assets uploaded successfully for Frame User ID: %s", frame_user_id)
+            logger.info("Assets uploaded successfully for Frame User ID: %s", client_id)
             return redirect("/staff-dashboard")
         
         
