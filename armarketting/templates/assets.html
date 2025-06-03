@@ -93,61 +93,78 @@
 
 
             <div class="container-fluid pt-4 px-4">
-                <div class="row g-4">
-                    <div class="col-sm-12 col-xl-6">
-                        <div class="bg-secondary rounded h-100 p-4">
-                            <h6 class="mb-4">Video</h6>
-                                <div class="testimonial-item text-center">
-                                    <video class="img-fluid mx-auto mb-4" controls><source src="{{serv.overlap_video.url}}" type="video/mp4" autoplay></video>
-                                    <h4 class="mb-1">Select your video</h4>
-                                    <form action="#" method="post" enctype="multipart/form-data">{% csrf_token %}
-                                        <label for="formFileSm" class="form-label"></label>
-                                        <input class="form-control form-control-sm bg-dark" id="file_name" name="file_name" type="file" required>
-                                        <input type="hidden" name="type" value="overlap_video">
-                                        <p><button type="submit" class="btn btn-success rounded-pill m-2">Replace</button></p>
-                                        <p class="mb-0"></p>
-                                    </form>
-                                    
-                                </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xl-6">
-                        <div class="bg-secondary rounded h-100 p-4">
-                            <h6 class="mb-4">Target Image</h6>
-                                <div class="testimonial-item text-center">
-                                    <video class="img-fluid mx-auto mb-4" controls><source src="{{serv.target_img.url}}" type="video/mp4" autoplay></video>
-                                    <h4 class="mb-1">Select your target image (.mind file)</h4>
-                                    <form action="#" method="post" enctype="multipart/form-data">{% csrf_token %}
-                                        <label for="formFileSm" class="form-label"></label>
-                                        <input class="form-control form-control-sm bg-dark" id="file_name" name="file_name" type="file" required>
-                                        <input type="hidden" name="type" value="target_img">
-                                        <p><button type="submit" class="btn btn-success rounded-pill m-2">Replace</button></p>
-                                        <p class="mb-0"></p>
-                                    </form>
-                                    
-                                </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xl-6">
-                        <div class="bg-secondary rounded h-100 p-4">
-                            <h6 class="mb-4">Reference Image</h6>
-                                <div class="testimonial-item text-center">
-                                    <img class="img-fluid mx-auto mb-4" src="{{ serv.reference_img.url }}" alt="Reference Image" />
-                                    <h4 class="mb-1">Select your video</h4>
-                                    <form action="#" method="post" enctype="multipart/form-data">{% csrf_token %}
-                                        <label for="formFileSm" class="form-label"></label>
-                                        <input class="form-control form-control-sm bg-dark" id="file_name" name="file_name" type="file" required>
-                                        <input type="hidden" name="type" value="reference_img">
-                                        <p><button type="submit" class="btn btn-success rounded-pill m-2">Replace</button></p>
-                                        <p class="mb-0"></p>
-                                    </form>
-                                    
-                                </div>
-                        </div>
-                    </div>
-                    
+    <div class="row g-4">
+
+        <!-- Overlap Video -->
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">Video</h6>
+                <div class="testimonial-item text-center">
+                    {% if serv.overlap_video %}
+                        <video class="img-fluid mx-auto mb-4" controls>
+                            <source src="{{ serv.overlap_video.url }}" type="video/mp4">
+                        </video>
+                    {% else %}
+                        <p class="text-muted">No video available.</p>
+                    {% endif %}
+                    <h4 class="mb-1">Select your video</h4>
+                    <form action="#" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="formFileSm" class="form-label"></label>
+                        <input class="form-control form-control-sm bg-dark" id="file_name" name="file_name" type="file" required>
+                        <input type="hidden" name="type" value="overlap_video">
+                        <p><button type="submit" class="btn btn-success rounded-pill m-2">Replace</button></p>
+                    </form>
                 </div>
             </div>
+        </div>
+
+        <!-- Target Image (.mind file) -->
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">Target Image</h6>
+                <div class="testimonial-item text-center">
+                    {% if serv.target_img %}
+                        <p class="text-success">Uploaded file: {{ serv.target_img.name }}</p>
+                    {% else %}
+                        <p class="text-muted">No target file uploaded.</p>
+                    {% endif %}
+                    <h4 class="mb-1">Select your target image (.mind file)</h4>
+                    <form action="#" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="formFileSm" class="form-label"></label>
+                        <input class="form-control form-control-sm bg-dark" id="file_name" name="file_name" type="file" required>
+                        <input type="hidden" name="type" value="target_img">
+                        <p><button type="submit" class="btn btn-success rounded-pill m-2">Replace</button></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reference Image -->
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">Reference Image</h6>
+                <div class="testimonial-item text-center">
+                    {% if serv.reference_img %}
+                        <img class="img-fluid mx-auto mb-4" src="{{ serv.reference_img.url }}" alt="Reference Image" />
+                    {% else %}
+                        <p class="text-muted">No reference image available.</p>
+                    {% endif %}
+                    <h4 class="mb-1">Select your image</h4>
+                    <form action="#" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="formFileSm" class="form-label"></label>
+                        <input class="form-control form-control-sm bg-dark" id="file_name" name="file_name" type="file" required>
+                        <input type="hidden" name="type" value="reference_img">
+                        <p><button type="submit" class="btn btn-success rounded-pill m-2">Replace</button></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 
             <!-- Footer Start -->
