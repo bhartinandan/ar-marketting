@@ -4,16 +4,63 @@
     {% load static %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AliveFrame - Privacy & Policy</title>
+  <title>AliveFrame - AboutUs</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+
+  <style>
+
+      .founderpic{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    z-index: 5;
+  }
+
+      .founder{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .founder p{
+    font-weight: 600;
+    padding: 1rem;
+  }
+  .founder img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+  }
+
+    .Services-card {
+    background: #0d0d36;
+    border-radius: 20px;
+    padding: 30px;
+    width: 800px;
+    text-align: center;
+    display: flex;
+    justify-content: start;
+    align-items:start;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  </style>
 </head>
 <body>
   <div id="qr-particles"></div>
 
 <header>
   <nav class="container">
-    <div class="logo">AliveFrame</div>
+    <div class="logo" onclick="window.location.href ='/'">AliveFrame</div>
     <div class="menu-toggle" id="menu-toggle">&#9776;</div>
     <button class="btn-primary nav-btn">Contact</button>
   </nav>
@@ -87,6 +134,15 @@ What We Do
 <br><li>Built in India. Made for the World.
 </li>
 </ul>
+<br>
+
+<br>
+<h1>Founders</h1>
+<div class="founderpic">
+  <div class="founder"><img src="{% static 'bharti.jpeg' %}" alt=""><p>Founder & CEO: <br>Bharti Nandan <br><i class="fa-brands fa-linkedin"></i><tr/> <span style="text-decoration: underline;font-size: 15px;cursor: pointer;" onclick="window.location.href ='https://www.linkedin.com/in/bharti-nandan-38a151197/'">Linkedin</span></p></div>
+  <div class="founder"><img src="{% static 'aryan.jpeg' %}" alt=""><p>Co-founder & CTO: <br>Aryan Kumar <br><i class="fa-brands fa-linkedin"></i><tr/> <span style="text-decoration: underline;font-size: 15px;cursor: pointer;" onclick="window.location.href ='https://www.linkedin.com/in/aryan-kumar-a06523249?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app'">Linkedin</span></p></div>
+  <div class="founder"><img src="{% static 'aliveframe.jpg' %}" alt=""><p>Co-founder & CMO: <br>Kariyapa Kumar <br><i class="fa-brands fa-linkedin"></i><tr/> <span style="text-decoration: underline;font-size: 15px;cursor: pointer;">Linkedin</span></p></div>
+</div>
 
 <br>
 <p>AliveFrame is proudly Indian — building next-gen AR infrastructure that scales across industries and countries.
@@ -114,3 +170,5 @@ What We Do
 <script src="{% static 'script.js' %}"></script>
 </body>
 </html>
+
+

@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AliveFrame - Augmented Reality Marketing</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="{% static 'styles.css' %}" rel="stylesheet">
 
@@ -55,7 +56,7 @@
     <button class="btn-primary" onclick="window.location.href ='/signin'">Get Started</button>
   </div>
   <div class="hero-img">
-    <img src="{% static 'Gemini_Generated_Image_b1w37jb1w37jb1w3.jpeg' %}" alt="AR Phone" />
+    <img src="{% static 'poster.jpeg' %}" alt="AR Phone" />
   </div>
 </section>
 
@@ -100,33 +101,51 @@
   <button style="margin-top: 2rem;" class="btn-primary" onclick="window.location.href ='/contact'">Send a Message</button>
 </section>
 
-<footer class="footer">
-  <p>
-      <a href="https://www.instagram.com/aliveframe.ai?utm_source=qr&igsh=MWZlcGw3NnhkZTBjaw==" target="_blank" style="color: #f0f0f0; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-        <svg width="20" height="20" fill="#f0f0f0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 .001 5.999A3 3 0 0 0 12 9zm5.25-2.5a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0z"/>
-        </svg>
-        Instagram
-      </a>
+<footer class="footer" style="background-color: #00000035; color: #f0f0f0; padding: 2rem 1rem; font-family: 'Poppins', sans-serif;">
+  <div class="container" style="max-width: 1200px; margin: auto;">
+    <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">AliveFrame</h3>
+    <p style="max-width: 100%; margin-bottom: 2rem;text-align: center;">
+      AliveFrame is a next-gen AR marketing platform. Create and publish interactive video experiences via QR codes in minutes. Turn packaging, print, OOH, and digital assets into immersive brand journeys.
     </p>
-<p>© 2025 AliveFrame — All rights reserved.</p>
-<div style="margin: 0.5rem 0; font-size: .5rem;">
-  
-  <a onclick="window.location.href ='/aboutus/'" style="color: #f0f0f0; text-decoration: none; margin: 0 1rem;">
-    📧 About Us
-  </a>
-  |
-  <a onclick="window.location.href ='/privacypolicy/'" target="_blank" style="color: #f0f0f0; text-decoration: none; margin: 0 1rem;">
-    🔒 Privacy Policy
-  </a>
-  |
-  <a onclick="window.location.href ='/term-condition/'" target="_blank" style="color: #f0f0f0; text-decoration: none; margin: 0 1rem;">
-    📃 Terms & Conditions
-  </a>
-</div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between;">
+      <!-- Company -->
+      <div>
+        <h4 style="margin-bottom: 1rem;">Company</h4>
+        <ul style="list-style: none; padding: 0;text-align: start;">
+          <li><a onclick="window.location.href ='/contact'" style="color: #f0f0f0; text-decoration: none;">Contact us</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h4 style="margin-bottom: 1rem;">Resources</h4>
+        <ul style="list-style: none; padding: 0;text-align: start;">
+          <li><a onclick="window.location.href ='/privacypolicy/'" style="color: #f0f0f0; text-decoration: none;">Privacy Policy</a></li>
+          <li><a onclick="window.location.href ='/term-condition/'" style="color: #f0f0f0; text-decoration: none;">Terms of Use</a></li>
+          <li><a onclick="window.location.href ='/aboutus/'" style="color: #f0f0f0; text-decoration: none;">About Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Social -->
+      <div>
+        <h4 style="margin-bottom: 1rem;">Catch us on</h4>
+        <ul style="list-style: none; padding: 0;text-align: start;">
+          <li><a href="https://www.instagram.com/aliveframe.ai/" target="_blank" style="color: #f0f0f0; text-decoration: none;">Instagram</a></li>
+          <li><a href="https://www.linkedin.com/company/aliveframe/" target="_blank" style="color: #f0f0f0; text-decoration: none;">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem; font-size: 0.875rem; color: #ccc;">
+      © 2025 AliveFrame — All rights reserved.
+    </div>
+  </div>
 </footer>
 
 
 <script src="{% static 'script.js' %}"></script>
 </body>
 </html>
+
+
