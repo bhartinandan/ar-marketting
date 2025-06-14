@@ -27,26 +27,36 @@
     #messageBox,
     #tapNotification {
       position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 10px;
-      padding: 12px 24px;
+      margin-top:10rem;
       z-index: 100;
       text-align: center;
       color: #fff;
-      font-weight: 500;
-      font-size: 14px;
-      background: linear-gradient(90deg, #00c6ff, #7f00ff);
-      box-shadow: 0 0 12px rgba(0, 198, 255, 0.5);
+        text-shadow: black;
+      width:100%;
+  font-size: 1.4rem;
+  z-index: 100;
+  font-weight: 600;
+   animation: pulse 1.2s infinite ease-in-out, glow 2s infinite alternate;
+
+    }
+   @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.08); opacity: 0.8; }
     }
 
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #00CFFF, 0 0 10px #7B61FF, 0 0 15px #8A2EFF;
+      }
+      to {
+        text-shadow: 0 0 10px #00CFFF, 0 0 20px #7B61FF, 0 0 30px #8A2EFF;
+      }
+    }
     #messageBox {
       top: 20px;
     }
 
     #tapNotification {
-      top: 10%;
-      font-size: 16px;
       display: none;
     }
 
@@ -71,21 +81,21 @@
       bottom: 50px;
       left: 50%;
       transform: translateX(-50%);
-      background: linear-gradient(90deg, #00c6ff, #7f00ff);
+      background: #7f00ff;
       color: #fff;
       padding: 14px 28px;
       border: none;
-      border-radius: 30px;
+      border-radius: 10px;
       font-size: 16px;
       font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
+      height:3.5rem;
       z-index: 101;
-      width: 70%;
+      width: 80%;
       text-decoration: none;
-      box-shadow: 0 6px 20px rgba(0, 198, 255, 0.4);
     }
 
     .footer {
@@ -108,7 +118,7 @@
   </style>
 </head>
 <body>
-  <div id="messageBox">Scanning for target image...</div>
+  <div id="messageBox">Scan This Poster</div>
   <div id="tapNotification">Tap Anywhere to Start</div>
   <img
     id="targetOverlay"
@@ -204,10 +214,11 @@
           videoPlaying = false;
         }
         overlayImg.style.display = "block";
-        messageBox.textContent = "Scanning for target image...";
+        messageBox.textContent = "Place Camera On Poster";
         messageBox.style.display = "block";
+        tapNotification.style.display="none";
         targetFound = false;
-      });
+     });
 
       document.body.addEventListener("click", () => {
         if (targetFound && !tapHandledOnce) {
