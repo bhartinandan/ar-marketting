@@ -27,19 +27,18 @@
       }
       #messageBox,
       #tapNotification {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        border-radius: 10px;
-        padding: 12px 24px;
-        z-index: 100;
-        text-align: center;
-        color: #fff;
-        font-weight: 500;
-        font-size: 14px;
-        background: linear-gradient(90deg, #00c6ff, #7f00ff);
-        box-shadow: 0 0 12px rgba(0, 198, 255, 0.5);
-      }
+          position: absolute;
+      margin-top:5rem;
+      z-index: 100;
+      text-align: center;
+      color: #fff;
+        text-shadow: black;
+      width:100%;
+  font-size: 1.4rem;
+  z-index: 100;
+  font-weight: 600;
+   animation: pulse 1.2s infinite ease-in-out, glow 2s infinite alternate;
+    }
       #messageBox {
         top: 20px;
       }
@@ -62,26 +61,26 @@
         background-color: rgba(255, 255, 255, 0.02);
       }
       #visitButton {
-        position: absolute;
-        bottom: 50px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(90deg, #00c6ff, #7f00ff);
-        color: #fff;
-        padding: 14px 28px;
-        border: none;
-        border-radius: 30px;
-        font-size: 16px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-        z-index: 101;
-        width: 70%;
-        text-decoration: none;
-        box-shadow: 0 6px 20px rgba(0, 198, 255, 0.4);
-      }
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #7f00ff;
+      color: #fff;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      height:3rem;
+      z-index: 101;
+      width: 80%;
+      text-decoration: none;
+    }
       .footer {
         position: absolute;
         bottom: 0;
@@ -97,10 +96,24 @@
       #greenscreen-canvas {
         display: none;
       }
+      
+       @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.08); opacity: 0.8; }
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #00CFFF, 0 0 10px #7B61FF, 0 0 15px #8A2EFF;
+      }
+      to {
+        text-shadow: 0 0 10px #00CFFF, 0 0 20px #7B61FF, 0 0 30px #8A2EFF;
+      }
+    }
     </style>
   </head>
   <body>
-    <div id="messageBox">Loading AR experience...</div>
+    <div id="messageBox">Scan This Poster </div>
     <div id="tapNotification">Tap Anywhere to Start</div>
     <canvas id="greenscreen-canvas"></canvas>
     <img
@@ -152,7 +165,7 @@
       </a-entity>
     </a-scene>
 
-    <div class="footer">©️ AliveFrame. All rights reserved.</div>
+    <div class="footer">© AliveFrame. All rights reserved.</div>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
@@ -280,8 +293,9 @@
             videoEl.currentTime = 0;
             videoPlaying = false;
           }
-          messageBox.textContent = "Scanning for target image...";
+          messageBox.textContent = "Place Camera On Poster";
           messageBox.style.display = "block";
+          tapNotification.style.display="none";
           targetFound = false;
         });
 
@@ -306,5 +320,5 @@
         updatePosition();
       });
     </script>
-  </body>
+  </body>
 </html>
