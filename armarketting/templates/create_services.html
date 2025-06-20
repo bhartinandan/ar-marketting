@@ -120,10 +120,10 @@
     <script>
         document.getElementById('video').addEventListener('change', function () {
             const file = this.files[0];
-            const maxSize = 20 * 1024 * 1024; // 20 MB
+            const maxSize = 50 * 1024 * 1024; // 50 MB
 
             if (file && file.size > maxSize) {
-                alert("File size must be less than 20 MB.");
+                alert("File size must be less than 50 MB.");
                 this.value = ""; // Clear file input
             }
         });
