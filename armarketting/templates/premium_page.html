@@ -2,24 +2,23 @@
 <html lang="en">
 <head>
   {% load static %}
+  {% load media %}
   <meta charset="UTF-8" />
   <title>AliveFrame AR Experience</title>
   <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  />
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css"
-  />
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" />
+ <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+ <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar/dist/mindar-image-aframe.prod.js"></script>
   <style>
     body {
-      margin: 0;
+    overflow-y: hidden !important;
+        margin: 0;
       overflow: hidden;
+      height:100vh;
       font-family: 'Poppins', sans-serif;
       background-color: #000;
     }
@@ -27,19 +26,17 @@
     #messageBox,
     #tapNotification {
       position: absolute;
-      margin-top:5rem;
+      margin-top: 5rem;
       z-index: 100;
       text-align: center;
       color: #fff;
-        text-shadow: black;
-      width:100%;
-  font-size: 1.4rem;
-  z-index: 100;
-  font-weight: 600;
-   animation: pulse 1.2s infinite ease-in-out, glow 2s infinite alternate;
-
+      width: 100%;
+      font-size: 1.4rem;
+      font-weight: 600;
+      animation: pulse 1.2s infinite ease-in-out, glow 2s infinite alternate;
     }
-   @keyframes pulse {
+
+    @keyframes pulse {
       0%, 100% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.08); opacity: 0.8; }
     }
@@ -52,26 +49,19 @@
         text-shadow: 0 0 10px #00CFFF, 0 0 20px #7B61FF, 0 0 30px #8A2EFF;
       }
     }
-    #messageBox {
-      top: 20px;
-    }
 
-    #tapNotification {
-      display: none;
-    }
+    #messageBox { top: 20px; }
+    #tapNotification { display: none; }
 
     #targetOverlay {
       position: absolute;
       top: 50%;
-      opacity:0.8;
       left: 50%;
       transform: translate(-50%, -50%);
       width: 50vw;
-      pointer-events: none;
       opacity: 0.95;
+      pointer-events: none;
       z-index: 99;
-      border: 0px solid rgba(0, 198, 255, 0.5);
-      border-radius: 4px;
       box-shadow: 0 0 40px rgba(0, 198, 255, 0.25);
       background-color: rgba(255, 255, 255, 0.02);
     }
@@ -92,10 +82,12 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
-      height:3rem;
+      height: 2rem;
       z-index: 101;
       width: 80%;
       text-decoration: none;
+      display: none;
+      opacity:.8;
     }
 
     .footer {
@@ -115,27 +107,46 @@
       height: 100vh;
       width: 100vw;
     }
+    
+    /* Example usage */
+
+    body, p, .footer, #messageBox,h1, .cta, #visitButton {
+  font-family: 'Poppins', sans-serif;
+
+    }
+    .a-loader {
+  display: none !important;
+}
+
+#customLoader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
   </style>
 </head>
 <body>
-  <div id="messageBox">Scan This Poster</div>
+  <div id="messageBox">Place Camera On Poster</div>
   <div id="tapNotification">Tap Anywhere to Start</div>
-  <img
-    id="targetOverlay"
-    src="{{media.reference_img.url}}"
-    alt="Target Overlay"
-  />
-  <a
-    id="visitButton"
-    href="{{media.redirect_url}}"
-    target="_blank"
-  >
+  <img id="targetOverlay" src="{{media.reference_img.url}}" alt="Target Overlay" />
+  <a id="visitButton" href="{{media.redirect_url}}" target="_blank">
     Register now <i class="fa-solid fa-arrow-right-long"></i>
   </a>
   <div class="footer">Powered by Aliveframe</div>
+<div id="customLoader">
+  <img src="{% static 'logo.png' %}" alt="AliveFrame Logo" style="width:194px; animation: pulse 1.4s infinite ease-in-out;" />
+  <p style="margin-top: 0.8rem; font-weight: 500; color: white;">Loading AR Experience...</p>
+</div>
 
   <a-scene
-    mindar-image="imageTargetSrc: {{media.target_img.url}}; minCameraResolution: {width: 1920, height: 1080}; displayFov: 70; filterMinCF: 0.2; filterBeta: 0.9; maxTrack: 1; uiScanning: #messageBox; uiLoading: #messageBox;"
+    mindar-image="imageTargetSrc: {{media.target_img.url}}; minCameraResolution: {width: 1920, height: 1080}; displayFov: 70; filterMinCF: 0.2; filterBeta: 0.9; maxTrack: 1;uiScanning: false;"
     color-space="sRGB"
     renderer="logarithmicDepthBuffer: true;"
     vr-mode-ui="enabled: false"
@@ -159,9 +170,9 @@
       <a-entity id="videoWrapper" position="0 0 0" rotation="0 0 0">
         <a-plane
           id="videoPlane"
-          width="{{media.width}}"
-          height="{{media.height}}"
-          position="0 0 0"
+			width="{{media.width}}"
+			height="{{media.height}}"
+			position="0 0 0"
           material="shader: flat; src: #myVideo;"
           visible="false"
         ></a-plane>
@@ -177,17 +188,28 @@
       const overlayImg = document.getElementById("targetOverlay");
       const tapNotification = document.getElementById("tapNotification");
       const targetAnchor = document.getElementById("targetAnchor");
+      const visitBtn = document.getElementById("visitButton");
 
       let videoPlaying = false;
       let targetFound = false;
-      let userHasTapped = false;
       let tapHandledOnce = false;
+      let buttonShownOnce = false;
 
       const startVideo = () => {
         videoEl.play().then(() => {
           videoPlaying = true;
           videoPlane.setAttribute("visible", "true");
           tapNotification.style.display = "none";
+
+          if (!buttonShownOnce) {
+            setTimeout(() => {
+              visitBtn.style.display = "flex";
+              buttonShownOnce = true;
+            }, 5000);
+          } else {
+            visitBtn.style.display = "flex";
+          }
+
         }).catch((err) => {
           console.error("Video error:", err);
           messageBox.textContent = "Tap again to allow video with sound.";
@@ -216,9 +238,10 @@
         overlayImg.style.display = "block";
         messageBox.textContent = "Place Camera On Poster";
         messageBox.style.display = "block";
-        tapNotification.style.display="none";
+        tapNotification.style.display = "none";
+        visitBtn.style.display = buttonShownOnce ? "flex" : "none";
         targetFound = false;
-     });
+      });
 
       document.body.addEventListener("click", () => {
         if (targetFound && !tapHandledOnce) {
@@ -227,6 +250,17 @@
         }
       });
     });
+    
+    
+    window.addEventListener("load", () => {
+  // Wait for MindAR to start
+  const sceneEl = document.querySelector('a-scene');
+  sceneEl.addEventListener("renderstart", () => {
+    const loader = document.getElementById("customLoader");
+    if (loader) loader.style.display = "none";
+  });
+});
+
   </script>
 </body>
 </html>
