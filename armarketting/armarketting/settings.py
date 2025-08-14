@@ -45,6 +45,8 @@ User=SECRETS["USER"]
 Password=SECRETS["PASSWORD"]
 Host=SECRETS["HOST"]
 Port=SECRETS["PORT"]
+RAZOR_KEY_ID=SECRETS["razor_key_id"]
+RAZOR_KEY_SECRET=SECRETS["razor_key_secret"]
 
 LOGGING = {
     'version': 1,
@@ -69,6 +71,7 @@ LOGGING = {
 
 INSTALLED_APPS = [
     'arapp.apps.ArappConfig',
+    'photo_frame.apps.PhotoFrameConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
