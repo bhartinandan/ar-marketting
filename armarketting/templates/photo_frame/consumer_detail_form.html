@@ -61,8 +61,6 @@
                                 <label for="refimageUpload">Image</label>
                             </div>
 
-                            <!-- Hidden input for .mind file -->
-                            <input type="hidden" id="mindData" name="mindFile">
 
                             <button type="submit" class="btn btn-info py-3 w-100 mb-4">Submit</button>
                         </form>
@@ -73,47 +71,5 @@
         <!-- Sign Up End -->
     </div>
 
-    <!-- JavaScript -->
-    <script>
-        const form = document.getElementById("uploadForm");
-        form.addEventListener("submit", async function(e) {
-            e.preventDefault(); // stop normal submit
-
-            const targetFile = document.getElementById("tarimageUpload").files[0];
-            if (!targetFile) {
-                alert("Please upload a Target Image.");
-                return;
-            }
-
-            // Convert uploaded file to HTMLImageElement
-            const img = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    const image = new Image();
-                    image.onload = () => resolve(image);
-                    image.onerror = reject;
-                    image.src = evt.target.result;
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(targetFile);
-            });
-
-            // Compile to .mind using MindAR
-            const compiler = new window.MINDAR.Compiler();
-            await compiler.compileImageTargets([img], (progress) => {
-                console.log("Progress:", progress);
-            });
-            const buffer = await compiler.exportData();
-
-            // Convert buffer to Base64 string
-            const base64Mind = btoa(String.fromCharCode(...new Uint8Array(buffer)));
-
-            // Put Base64 into hidden field
-            document.getElementById("mindData").value = base64Mind;
-
-            // Now submit form normally
-            form.submit();
-        });
-    </script>
 </body>
 </html>

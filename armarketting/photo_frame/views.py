@@ -624,8 +624,6 @@ def add_frame(request, id):
             email = request.POST.get('emailid')
             contact = request.POST.get('contact')
             video_file = request.FILES.get('videoUpload')
-
-            # target_img = request.FILES.get('tarimageUpload')
             reference_img = request.FILES.get('refimageUpload')
 
             
