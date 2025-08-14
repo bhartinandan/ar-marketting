@@ -11,9 +11,6 @@
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
-    <link rel="shortcut icon" type="image/png" href="{% static 'aflogo.png' %}">
-    <title>AliveFrame - Bring Memories to Life</title>
-    <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,15 +50,13 @@
                     <h3 class="text-info"><i class="fa fa-user-edit me-2"></i>AliveFrame</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
+                    
                     <div class="ms-3">
-                        <h6 class="mb-0">{{client.name}}</h6>
-                        <span>{{client.business_name}}</span>
+                        <h6 class="mb-0">{{frame_user.client_id.name}}</h6>
+                        <span>{{frame_user.client_id.business_name}}</span>
                     </div>
                 </div>
-                <div class="navbar-nav w-100">
-                    <a onclick="window.location.href ='/'" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a onclick="window.location.href ='/payment'" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Frame Dashboard</a>
-                </div>
+                
             </nav>
         </div>
         <!-- Sidebar End -->
@@ -81,14 +76,15 @@
                     <input class="form-control bg-dark border-0" type="search" placeholder="Search">
                 </form>
                 <div class="navbar-nav align-items-center ms-auto">
+                    
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="{% static 'aflogo.png' %}" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">{{client.name}}</span>
+                            
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            <a onclick="window.location.href ='/payment'" class="dropdown-item">Purchase frame</a>
-                            <a onclick="window.location.href ='/staff-logout'" class="dropdown-item">Log Out</a>
+                            <a href="#" class="dropdown-item">My Profile</a>
+                            <a href="#" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
                 </div>
@@ -96,93 +92,63 @@
             <!-- Navbar End -->
 
 
-            <!-- Sale & Revenue Start -->
             <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
-                            <i class="fa fa-chart-line fa-3x text-info"></i>
-                            <div class="ms-3">
-                                <p class="mb-2">Total Clients</p>
-                                <h6 class="mb-0">{{total_frames}}</h6>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Instructions and Details</h6>
+                            <nav>
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <button class="nav-link active text-info" id="nav-home-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                        aria-selected="true">Instruction</button>
+                                    <button class="nav-link text-info" id="nav-profile-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-profile" type="button" role="tab"
+                                        aria-controls="nav-profile" aria-selected="false">Details</button>
+                                </div>
+                            </nav>
+                            <div class="tab-content pt-3" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    User can update video here
+                                </div>
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                        <ul class="list-group">
+                                            <li class="list-group-item bg-transparent">Customer Id : {{frame_user.id}}</li>
+                                            <li class="list-group-item bg-transparent">Customer Name : {{frame_user.name}}</li>
+                                            <li class="list-group-item bg-transparent">Customer Contact : {{frame_user.contact}}</li>
+                                            <li class="list-group-item bg-transparent">Customer Date : {{frame_user.date}}</li>
+                                            <li class="list-group-item bg-transparent">Customer Email : {{frame_user.email}}</li>
+                                            <li class="list-group-item bg-transparent">Customer City : {{frame_user.city}}</li>
+                                            <li class="list-group-item bg-transparent">Customer State : {{frame_user.state}}</li>
+                                            <li class="list-group-item bg-transparent">Customer Address : {{frame_user.address}}</li>
+                                            <li class="list-group-item bg-transparent">Customer Country : {{frame_user.country}}</li>
+                                        </ul>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
-                            <i class="fa fa-chart-bar fa-3x text-info"></i>
-                            <div class="ms-3">
-                                <p class="mb-2">Active Services</p>
-                                <h6 class="mb-0">{{used_frames}}</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
-                            <i class="fa fa-chart-area fa-3x text-info"></i>
-                            <div class="ms-3">
-                                <p class="mb-2">Available Frames</p>
-                                <h6 class="mb-0">{{left_frames}}</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
-                            <i class="fa fa-chart-pie fa-3x text-success"></i>
-                                <button type="button" class="btn btn-sm btn-success m-2" onclick="window.location.href ='/create-client'">Add Client</button>
-                           
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Sale & Revenue End -->
-
-
-            <!-- Sales Chart Start -->
-            
-            <!-- Sales Chart End -->
-
-
-            <!-- Recent Sales Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-secondary text-center rounded p-4">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Customer Details</h6>
-                        
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table text-start align-middle table-bordered table-hover mb-0">
-                            <thead>
-                                <tr class="text-white">
-                                    <th scope="col">Client ID</th>
-                                    <th scope="col">Client Name</th>
-                                    <th scope="col">Joining Date</th>
-                                    <th scope="col">Business Name</th>
-                                    <th scope="col">Details</th>
+                    
+                    
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Video</h6>
+                                <div class="testimonial-item text-center">
+                                    <video class="img-fluid mx-auto mb-4" controls><source src="{{framemedia.web_video.url}}" type="video/mp4" autoplay></video>
+                                    <h4 class="mb-1">Select your video</h4>
+                                    <form action="#" method="post" enctype="multipart/form-data">{% csrf_token %}
+                                        <label for="formFileSm" class="form-label"></label>
+                                        <input class="form-control form-control-sm bg-dark" id="videoUpload" name="videoUpload" type="file" required>
+                                        <p><button type="submit" class="btn btn-success rounded-pill m-2">Replace</button></p>
+                                        <p class="mb-0"></p>
+                                    </form>
                                     
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for ele in client_list %}
-                                <tr>
-                                    <td>{{ele.id}}</td>
-                                    <td>{{ele.name}}</td>
-                                    <td>{{ele.joined_date}}</td>
-                                    <td>{{ele.business_name}}</td>
-                                    <td><a class="btn btn-sm btn-info" onclick="window.location.href ='/client-details/{{ele.id}}'">Detail</a></td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                </div>
+                        </div>
                     </div>
+                    
                 </div>
             </div>
-            <!-- Recent Sales End -->
-
-
-            <!-- Widgets Start -->
-            
-            <!-- Widgets End -->
 
 
             <!-- Footer Start -->

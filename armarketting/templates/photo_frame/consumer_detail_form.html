@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/png" href="{% static 'aflogo.png' %}">
+    <title>AliveFrame</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
+    
+    <!-- Icon Fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- MindAR Compiler -->
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@0.4.2/dist/mindar.prod-min.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Sign Up Start -->
+        <div class="container-fluid">
+            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                    <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <a onclick="window.location.href ='/'">
+                                <h4 class="text-info"><i class="fa fa-user-edit me-2"></i>AliveFrame</h4>
+                            </a>
+                        </div>
+                        <form id="uploadForm" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <!-- All your existing form fields -->
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="name" required>
+                                <label for="name">Consumer Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="contact" name="contact" placeholder="Contact">
+                                <label for="contact">Consumer Contact Number</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="emailid" name="emailid" placeholder="name@example.com">
+                                <label for="emailid">Email address (Optional)</label>
+                            </div>
+                           
+                            <div class="form-floating mb-3">
+                                <input type="file" class="form-control" id="video" name="videoUpload" accept="video/*" required>
+                                <label for="video">Video</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="file" class="form-control" id="refimageUpload" name="refimageUpload" accept="image/*" required>
+                                <label for="refimageUpload">Image</label>
+                            </div>
+
+                            <!-- Hidden input for .mind file -->
+                            <input type="hidden" id="mindData" name="mindFile">
+
+                            <button type="submit" class="btn btn-info py-3 w-100 mb-4">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Sign Up End -->
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        const form = document.getElementById("uploadForm");
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault(); // stop normal submit
+
+            const targetFile = document.getElementById("tarimageUpload").files[0];
+            if (!targetFile) {
+                alert("Please upload a Target Image.");
+                return;
+            }
+
+            // Convert uploaded file to HTMLImageElement
+            const img = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const image = new Image();
+                    image.onload = () => resolve(image);
+                    image.onerror = reject;
+                    image.src = evt.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(targetFile);
+            });
+
+            // Compile to .mind using MindAR
+            const compiler = new window.MINDAR.Compiler();
+            await compiler.compileImageTargets([img], (progress) => {
+                console.log("Progress:", progress);
+            });
+            const buffer = await compiler.exportData();
+
+            // Convert buffer to Base64 string
+            const base64Mind = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+
+            // Put Base64 into hidden field
+            document.getElementById("mindData").value = base64Mind;
+
+            // Now submit form normally
+            form.submit();
+        });
+    </script>
+</body>
+</html>

@@ -13,7 +13,6 @@
     <link href="img/favicon.ico" rel="icon">
     <link rel="shortcut icon" type="image/png" href="{% static 'aflogo.png' %}">
     <title>AliveFrame - Bring Memories to Life</title>
-    <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,7 +59,7 @@
                 </div>
                 <div class="navbar-nav w-100">
                     <a onclick="window.location.href ='/'" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a onclick="window.location.href ='/payment'" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Frame Dashboard</a>
+                    <a onclick="window.location.href ='/frame/payment'" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Purchase Frame</a>
                 </div>
             </nav>
         </div>
@@ -88,7 +87,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                             <a onclick="window.location.href ='/payment'" class="dropdown-item">Purchase frame</a>
-                            <a onclick="window.location.href ='/staff-logout'" class="dropdown-item">Log Out</a>
+                            <a onclick="window.location.href ='/logout'" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
                 </div>
@@ -103,7 +102,7 @@
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-line fa-3x text-info"></i>
                             <div class="ms-3">
-                                <p class="mb-2">Total Clients</p>
+                                <p class="mb-2">Total Frames</p>
                                 <h6 class="mb-0">{{total_frames}}</h6>
                             </div>
                         </div>
@@ -112,7 +111,7 @@
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-bar fa-3x text-info"></i>
                             <div class="ms-3">
-                                <p class="mb-2">Active Services</p>
+                                <p class="mb-2">Used Frames</p>
                                 <h6 class="mb-0">{{used_frames}}</h6>
                             </div>
                         </div>
@@ -129,7 +128,7 @@
                     <div class="col-sm-6 col-xl-3">
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-pie fa-3x text-success"></i>
-                                <button type="button" class="btn btn-sm btn-success m-2" onclick="window.location.href ='/create-client'">Add Client</button>
+                                <button type="button" class="btn btn-sm btn-success m-2" onclick="window.location.href ='/frame/add-frame/{{client.id}}'">Add Frames</button>
                            
                         </div>
                     </div>
@@ -154,22 +153,22 @@
                         <table class="table text-start align-middle table-bordered table-hover mb-0">
                             <thead>
                                 <tr class="text-white">
-                                    <th scope="col">Client ID</th>
-                                    <th scope="col">Client Name</th>
+                                    <th scope="col">Customer ID</th>
+                                    <th scope="col">Customer Name</th>
                                     <th scope="col">Joining Date</th>
-                                    <th scope="col">Business Name</th>
-                                    <th scope="col">Details</th>
+                                    <th scope="col">Download QR</th>
+                                    <th scope="col">Update Details</th>
                                     
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for ele in client_list %}
+                                {% for ele in frame_users %}
                                 <tr>
                                     <td>{{ele.id}}</td>
                                     <td>{{ele.name}}</td>
-                                    <td>{{ele.joined_date}}</td>
-                                    <td>{{ele.business_name}}</td>
-                                    <td><a class="btn btn-sm btn-info" onclick="window.location.href ='/client-details/{{ele.id}}'">Detail</a></td>
+                                    <td>{{ele.date}}</td>
+                                    <td><a class="btn btn-sm btn-success" onclick="window.location.href ='/qr/{{ele.id}}'">Download</a></td>
+                                    <td><a class="btn btn-sm btn-info" onclick="window.location.href ='/customer-data/{{ele.id}}'">Detail</a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

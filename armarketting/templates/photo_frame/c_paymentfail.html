@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/png" href="{% static 'aflogo.png' %}">
+    <title>Payment Failed - AliveFrame</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
+    
+    <!-- Icon Fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    
+    <style>
+        /* Custom Styling for Payment Failed Page */
+        body {
+            background-color: #121212;
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .payment-failed-container {
+            text-align: center;
+            background-color: #2c2c2c;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .payment-failed-container i {
+            color: #f44336;
+            font-size: 4rem;
+        }
+
+        .payment-failed-container h2 {
+            color: #fff;
+            margin-top: 20px;
+            font-size: 2rem;
+        }
+
+        .payment-failed-container p {
+            color: #b0b0b0;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+
+        .payment-failed-container a {
+            display: inline-block;
+            background-color: #00bcd4;
+            color: #fff;
+            font-size: 1rem;
+            padding: 12px 30px;
+            margin-top: 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-failed-container a:hover {
+            background-color: #0097a7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .payment-failed-container {
+                padding: 20px;
+            }
+
+            .payment-failed-container i {
+                font-size: 3rem;
+            }
+
+            .payment-failed-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .payment-failed-container p {
+                font-size: 1rem;
+            }
+
+            .payment-failed-container a {
+                padding: 10px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Payment Failure Message -->
+    <div class="payment-failed-container">
+        <div class="mb-4">
+            <i class="fas fa-times-circle"></i>
+        </div>
+        <h2>Payment Failed</h2>
+        <p>Unfortunately, your transaction could not be completed. Please try again or contact support.</p>
+        <a href="/dashboard" class="btn btn-info">Go Back Home</a>
+    </div>
+
+    <!-- JS Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
