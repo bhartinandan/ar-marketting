@@ -47,7 +47,7 @@ def generate_qr(request, frameuserid):
         userid_hash = encode_primary_key(frameuserid)
 
         # Construct the media URL
-        media_url = request.build_absolute_uri(f'frame/userex/{userid_hash}')
+        media_url = request.build_absolute_uri(f'/frame/userex/{userid_hash}')
         logger.info(f"Generating QR Code for: {media_url}")
 
         # Create the QR code
