@@ -165,6 +165,8 @@ def customer_data(request, id):
         frame_media = MediaForWebExperience.objects.filter(user=frame_user).first()
 
         logger.info(f"Accessing customer data for FrameUser ID: {id}")
+        print(frame_media.web_video.url)
+        print(frame_media.reference_img.url)
 
         if request.method == "POST":
             uploaded_video = request.FILES.get('videoUpload')
