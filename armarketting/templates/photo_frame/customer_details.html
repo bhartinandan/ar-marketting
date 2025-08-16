@@ -118,10 +118,7 @@
                                             <li class="list-group-item bg-transparent">Customer Contact : {{frame_user.contact}}</li>
                                             <li class="list-group-item bg-transparent">Customer Date : {{frame_user.date}}</li>
                                             <li class="list-group-item bg-transparent">Customer Email : {{frame_user.email}}</li>
-                                            <li class="list-group-item bg-transparent">Customer City : {{frame_user.city}}</li>
-                                            <li class="list-group-item bg-transparent">Customer State : {{frame_user.state}}</li>
-                                            <li class="list-group-item bg-transparent">Customer Address : {{frame_user.address}}</li>
-                                            <li class="list-group-item bg-transparent">Customer Country : {{frame_user.country}}</li>
+                                            
                                         </ul>
                                 </div>
                                 
@@ -134,7 +131,7 @@
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Video</h6>
                                 <div class="testimonial-item text-center">
-                                    <video class="img-fluid mx-auto mb-4" controls><source src="{{framemedia.web_video.url}}" type="video/mp4" autoplay></video>
+                                    <video style="height: 10rem;" class="img-fluid mx-auto mb-4" controls><source src="https://aliveframe.com/{{frame_media.web_video.url}}" type="video/mp4" autoplay></video>
                                     <h4 class="mb-1">Select your video</h4>
                                     <form action="#" method="post" enctype="multipart/form-data">{% csrf_token %}
                                         <label for="formFileSm" class="form-label"></label>
@@ -147,6 +144,23 @@
                         </div>
                     </div>
                     
+
+                       <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Image</h6>
+                                <div class="testimonial-item text-center">
+                                    <img style="height: 10rem;" class="img-fluid mx-auto mb-4" src="https://aliveframe.com/{{frame_media.reference_img.url}}" alt="">
+                                    <h4 class="mb-1">Select your Photo</h4>
+                                    <form action="#" method="post" enctype="multipart/form-data">{% csrf_token %}
+                                        <label for="formFileSm" class="form-label"></label>
+                                        <input class="form-control form-control-sm bg-dark" id="videoUpload" name="videoUpload" type="file" required>
+                                        <p><button type="submit" class="btn btn-success rounded-pill m-2">Replace</button></p>
+                                        <p class="mb-0"></p>
+                                    </form>
+                                    
+                                </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
