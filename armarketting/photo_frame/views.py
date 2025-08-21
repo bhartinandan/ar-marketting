@@ -169,6 +169,7 @@ def customer_data(request, id):
         print(frame_media.reference_img.url)
 
         if request.method == "POST":
+            
             uploaded_video = request.FILES.get('videoUpload')
             
             if uploaded_video:
@@ -672,20 +673,34 @@ def payment(request):
     """
     try:
         if request.method == "POST":
-            frame_count = int(request.POST.get('count', 10))  # Default to 10 frames if missing
+            frame_count = int(request.POST.get('count', 10))  # Default to 10 if missing
             if frame_count <= 0:
-                messages.error(request, "Invalid frame count.")
                 return JsonResponse({"error": "Invalid frame count"}, status=400)
 
             request.session['framecount'] = frame_count
-            amount = (frame_count * 199) * 100  # Convert to paisa
+
+            # ✅ Correct discount logic (highest → lowest)
+            if frame_count >= 2000:
+                price_per_frame = 0.05
+            elif frame_count >= 1000:
+                price_per_frame = 0.06
+            elif frame_count >= 500:
+                price_per_frame = 0.07
+            elif frame_count >= 250:
+                price_per_frame = 0.08
+            elif frame_count >= 100:
+                price_per_frame = 0.09
+            else:
+                price_per_frame = 1
+
+            amount = int(frame_count * price_per_frame * 100)  # convert to paisa
             request.session['fnl_amount'] = amount
 
             # Create Razorpay Order
             razorpay_order = razorpay_client.order.create({
                 "amount": amount,
                 "currency": "INR",
-                "payment_capture": '0'  # Auto-capture enabled
+                "payment_capture": '0'  
             })
 
             logger.info(f"Created Razorpay order: {razorpay_order['id']} for {amount} INR")
@@ -695,6 +710,7 @@ def payment(request):
                 "amount": amount,
                 "currency": "INR",
                 "key": settings.RAZOR_KEY_ID,
+                "callback_url": "/frame/paymenthandler/",
             })
 
     except Exception as e:
@@ -702,6 +718,44 @@ def payment(request):
         return JsonResponse({"error": "Something went wrong. Please try again."}, status=500)
 
     return render(request, "photo_frame/payment.html")
+
+# @login_required(login_url='/frame/signin')
+# def payment(request):
+#     """
+#     Handles frame purchase and initiates Razorpay payment order.
+#     """
+#     try:
+#         if request.method == "POST":
+#             frame_count = int(request.POST.get('count', 10))  # Default to 10 frames if missing
+#             if frame_count <= 0:
+#                 messages.error(request, "Invalid frame count.")
+#                 return JsonResponse({"error": "Invalid frame count"}, status=400)
+
+#             request.session['framecount'] = frame_count
+#             amount = (frame_count * 199) * 100  # Convert to paisa
+#             request.session['fnl_amount'] = amount
+
+#             # Create Razorpay Order
+#             razorpay_order = razorpay_client.order.create({
+#                 "amount": amount,
+#                 "currency": "INR",
+#                 "payment_capture": '0'  # Auto-capture enabled
+#             })
+
+#             logger.info(f"Created Razorpay order: {razorpay_order['id']} for {amount} INR")
+
+#             return JsonResponse({
+#                 "order_id": razorpay_order["id"],
+#                 "amount": amount,
+#                 "currency": "INR",
+#                 "key": settings.RAZOR_KEY_ID,
+#             })
+
+#     except Exception as e:
+#         logger.exception("Error in payment processing: %s", str(e))
+#         return JsonResponse({"error": "Something went wrong. Please try again."}, status=500)
+
+#     return render(request, "photo_frame/payment.html")
 
 @csrf_exempt
 def paymenthandler(request):

@@ -1,127 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy Frames - Razorpay</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            background-color: #121212;
-            color: #ffffff;
-        }
-        .card {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-        }
-        .btn-success {
-            background-color: #0a84ff;
-            border: none;
-        }
-        .btn-success:hover {
-            background-color: #007bff;
-        }
-        input {
-            background-color: #2b2b2b;
-            color: #fff;
-            border: 1px solid #444;
-        }
-        input:focus {
-            background-color: #333;
-            color: #fff;
-            border-color: #007bff;
-        }
-    </style>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Purchase Frames</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 { margin-bottom: 20px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .card {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .card h2 {
+      font-size: 20px;
+      margin: 10px 0;
+      color: #38bdf8;
+    }
+    .price { font-size: 18px; margin: 10px 0; }
+    .per-frame { font-size: 14px; color: #9ca3af; }
+    .btn {
+      margin-top: 15px;
+      padding: 10px;
+      border: none;
+      background:#0a84ff;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .btn:hover { background: #1d4ed8; }
+    .badge {
+      display: inline-block;
+      background: #16a34a;
+      color: white;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .custom-box {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      text-align: left;
+    }
+    .custom-box label { display: block; margin-bottom: 8px; }
+    .custom-box input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      .card h2 { font-size: 18px; }
+    }
+  </style>
 </head>
-
 <body>
-    <div class="container">
-        <h2 class="mt-5 text-center">Purchase Frames</h2>
+  <div class="container">
+    <h1>Purchase Frames</h1>
 
-        <div class="card p-4 mt-3 shadow-lg">
-            <form id="payment-form">
-                {% csrf_token %}
-                <label for="count" class="form-label">Number of Frames:</label>
-                <input type="number" id="count" name="count" class="form-control" value="10" min="1" required>
-                <p class="mt-2">Amount: ₹<span id="amount-display">1990</span></p>
-                <button type="submit" class="btn btn-success w-100 mt-3">Proceed to Pay</button>
-            </form>
+    <!-- Pricing Packages -->
+    <div class="grid">
+      <form class="payment-form">
+        {% csrf_token %}
+        <div class="card">
+          <h2>100 Frames</h2>
+          <div class="price">₹2800</div>
+          <div class="per-frame">₹28 per frame</div>
+          <input type="hidden" name="count" value="100">
+          <button class="btn" type="submit">Buy Now</button>
         </div>
+      </form>
+
+      <form class="payment-form">
+        {% csrf_token %}
+        <div class="card">
+          <h2>250 Frames</h2>
+          <div class="price">₹6800</div>
+          <div class="per-frame">₹27.2 per frame</div>
+          <input type="hidden" name="count" value="250">
+          <button class="btn" type="submit">Buy Now</button>
+        </div>
+      </form>
+
+      <form class="payment-form">
+        {% csrf_token %}
+        <div class="card">
+          <h2>500 Frames</h2>
+          <div class="price">₹13,000</div>
+          <div class="per-frame">₹26 per frame</div>
+          <input type="hidden" name="count" value="500">
+          <button class="btn" type="submit">Buy Now</button>
+        </div>
+      </form>
+
+      <form class="payment-form">
+        {% csrf_token %}
+        <div class="card">
+          <span class="badge">Best Deal</span>
+          <h2>1000 Frames</h2>
+          <div class="price">₹25,000</div>
+          <div class="per-frame">₹25 per frame</div>
+          <input type="hidden" name="count" value="1000">
+          <button class="btn" type="submit">Buy Now</button>
+        </div>
+      </form>
+
+      <form class="payment-form">
+        {% csrf_token %}
+        <div class="card">
+          <h2>2000 Frames</h2>
+          <div class="price">₹45,000</div>
+          <div class="per-frame">₹22.5 per frame</div>
+          <input type="hidden" name="count" value="2000">
+          <button class="btn" type="submit">Buy Now</button>
+        </div>
+      </form>
+
+      <div class="card">
+        <h2>Single Frames</h2>
+        <div class="price">₹29 each</div>
+        <div class="per-frame">Pay as you go</div>
+        <a href="#custom-pricing"><button class="btn">Enter No. Of Frames Below</button></a>
+      </div>
     </div>
 
-    <!-- Razorpay JavaScript -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let countInput = document.getElementById("count");
-            let amountDisplay = document.getElementById("amount-display");
-            let paymentForm = document.getElementById("payment-form");
+    <!-- Custom Entry -->
+    <form class="payment-form">
+      {% csrf_token %}
+      <div class="custom-box" id="custom-pricing">
+        <label for="frames">Enter Number of Frames:</label>
+        <input type="number" id="frames" name="count" placeholder="e.g. 10" required />
+        <label for="amount">Amount:</label>
+        <input type="text" id="amount" readonly />
+        <button type="submit" class="btn">Proceed to Pay</button>
+      </div>
+    </form>
+  </div>
 
-            function updateAmount() {
-                let frameCount = parseInt(countInput.value) || 0;
-                let amount = frameCount * 199;
-                amountDisplay.textContent = amount;
+  <footer style="width: 100%;display: flex;justify-content: center;">
+    <p>© 2025 AliveFrame — All rights reserved</p>
+  </footer>
+
+  <!-- Razorpay JavaScript -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    function calculateAmount() {
+      const frames = document.getElementById("frames").value;
+      let pricePerFrame = 1;
+      if (frames >= 2000) pricePerFrame = 0.05;
+      else if (frames >= 1000) pricePerFrame = 0.06;
+      else if (frames >= 500) pricePerFrame = 0.07;
+      else if (frames >= 250) pricePerFrame = 0.08;
+      else if (frames >= 100) pricePerFrame = 0.09;
+      const total = frames * pricePerFrame;
+      document.getElementById("amount").value = "₹" + total;
+    }
+
+    document.getElementById("frames").addEventListener("input", calculateAmount);
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll("form.payment-form").forEach(form => {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          let frameCountInput = this.querySelector("input[name='count']");
+          let frameCount = frameCountInput ? parseInt(frameCountInput.value) : 0;
+
+          if (!frameCount || frameCount <= 0) {
+            alert("Please enter a valid frame count.");
+            return;
+          }
+
+          fetch("{% url 'payment' %}", {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": "{{ csrf_token }}",
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `count=${frameCount}`
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.error) {
+              alert(data.error);
+              return;
             }
 
-            countInput.addEventListener("input", updateAmount);
+            var options = {
+              key: data.key,
+              amount: data.amount,
+              currency: data.currency,
+              name: "AliveFrame.ai",
+              order_id: data.order_id,
+              callback_url: data.callback_url,
+              handler: function (response) {
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = "/frame/paymenthandler/";
 
-            paymentForm.addEventListener("submit", function (e) {
-                e.preventDefault();
+                const addInput = (name, value) => {
+                  const input = document.createElement("input");
+                  input.type = "hidden";
+                  input.name = name;
+                  input.value = value;
+                  form.appendChild(input);
+                };
 
-                let frameCount = parseInt(countInput.value) || 1;
-                fetch("", {
-                    method: "POST",
-                    headers: {
-                        "X-CSRFToken": "{{ csrf_token }}",
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: `count=${frameCount}`
-                })
-                .then(response => response.json())
-                .then(data => {
-                    var options = {
-                        key: data.key,
-                        amount: data.amount,
-                        currency: data.currency,
-                        name: "AliveFrame.ai",
-                        order_id: data.order_id,
-                        callback_url: data.callback_url,
-                        handler: function (response) {
-                        const form = document.createElement("form");
-                        form.method = "POST";
-                        form.action = "/frame/paymenthandler/";
+                addInput("payment_id", response.razorpay_payment_id);
+                addInput("order_id", options.order_id);
+                addInput("signature", response.razorpay_signature);
+                addInput("csrfmiddlewaretoken", "{{ csrf_token }}");
 
-                        const addInput = (name, value) => {
-                            const input = document.createElement("input");
-                            input.type = "hidden";
-                            input.name = name;
-                            input.value = value;
-                            form.appendChild(input);
-                        };
+                document.body.appendChild(form);
+                form.submit();
+              }
+            };
 
-                        addInput("payment_id", response.razorpay_payment_id);
-                        addInput("order_id", options.order_id);
-                        addInput("signature", response.razorpay_signature);
-
-                        // Add CSRF token if needed
-                        addInput("csrfmiddlewaretoken", "{{ csrf_token }}");
-
-                        document.body.appendChild(form);
-                        form.submit();
-                    }
-
-                    };
-
-                    var rzp1 = new Razorpay(options);
-                    rzp1.open();
-                })
-                .catch(error => console.error("Error:", error));
-            });
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+          })
+          .catch(error => console.error("Error:", error));
         });
-    </script>
+      });
+    });
+  </script>
 </body>
 </html>

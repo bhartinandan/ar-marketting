@@ -83,8 +83,7 @@
                             
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">My Profile</a>
-                            <a href="#" class="dropdown-item">Log Out</a>
+                            
                         </div>
                     </div>
                 </div>
@@ -109,7 +108,7 @@
                             </nav>
                             <div class="tab-content pt-3" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                    User can update video here
+                                    For any technical assistance or any updates, please contact our support team at support@aliveframe.com or call/message 7061798523.
                                 </div>
                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                                         <ul class="list-group">
@@ -132,13 +131,7 @@
                             <h6 class="mb-4">Video</h6>
                                 <div class="testimonial-item text-center">
                                     <video style="height: 10rem;" class="img-fluid mx-auto mb-4" controls><source src="https://aliveframe.com/{{frame_media.web_video.url}}" type="video/mp4" autoplay></video>
-                                    <h4 class="mb-1">Select your video</h4>
-                                    <form action="#" method="post" enctype="multipart/form-data">{% csrf_token %}
-                                        <label for="formFileSm" class="form-label"></label>
-                                        <input class="form-control form-control-sm bg-dark" id="videoUpload" name="videoUpload" type="file" required>
-                                        <p><button type="submit" class="btn btn-success rounded-pill m-2">Replace</button></p>
-                                        <p class="mb-0"></p>
-                                    </form>
+                                    
                                     
                                 </div>
                         </div>
@@ -150,13 +143,7 @@
                             <h6 class="mb-4">Image</h6>
                                 <div class="testimonial-item text-center">
                                     <img style="height: 10rem;" class="img-fluid mx-auto mb-4" src="https://aliveframe.com/{{frame_media.reference_img.url}}" alt="">
-                                    <h4 class="mb-1">Select your Photo</h4>
-                                    <form action="#" method="post" enctype="multipart/form-data">{% csrf_token %}
-                                        <label for="formFileSm" class="form-label"></label>
-                                        <input class="form-control form-control-sm bg-dark" id="videoUpload" name="videoUpload" type="file" required>
-                                        <p><button type="submit" class="btn btn-success rounded-pill m-2">Replace</button></p>
-                                        <p class="mb-0"></p>
-                                    </form>
+                                    
                                     
                                 </div>
                         </div>
