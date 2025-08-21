@@ -681,17 +681,17 @@ def payment(request):
 
             # ✅ Correct discount logic (highest → lowest)
             if frame_count >= 2000:
-                price_per_frame = 0.05
+                price_per_frame = 22.5
             elif frame_count >= 1000:
-                price_per_frame = 0.06
+                price_per_frame = 25
             elif frame_count >= 500:
-                price_per_frame = 0.07
+                price_per_frame = 26
             elif frame_count >= 250:
-                price_per_frame = 0.08
+                price_per_frame = 27.2
             elif frame_count >= 100:
-                price_per_frame = 0.09
+                price_per_frame = 28
             else:
-                price_per_frame = 1
+                price_per_frame = 29
 
             amount = int(frame_count * price_per_frame * 100)  # convert to paisa
             request.session['fnl_amount'] = amount
@@ -718,44 +718,6 @@ def payment(request):
         return JsonResponse({"error": "Something went wrong. Please try again."}, status=500)
 
     return render(request, "photo_frame/payment.html")
-
-# @login_required(login_url='/frame/signin')
-# def payment(request):
-#     """
-#     Handles frame purchase and initiates Razorpay payment order.
-#     """
-#     try:
-#         if request.method == "POST":
-#             frame_count = int(request.POST.get('count', 10))  # Default to 10 frames if missing
-#             if frame_count <= 0:
-#                 messages.error(request, "Invalid frame count.")
-#                 return JsonResponse({"error": "Invalid frame count"}, status=400)
-
-#             request.session['framecount'] = frame_count
-#             amount = (frame_count * 199) * 100  # Convert to paisa
-#             request.session['fnl_amount'] = amount
-
-#             # Create Razorpay Order
-#             razorpay_order = razorpay_client.order.create({
-#                 "amount": amount,
-#                 "currency": "INR",
-#                 "payment_capture": '0'  # Auto-capture enabled
-#             })
-
-#             logger.info(f"Created Razorpay order: {razorpay_order['id']} for {amount} INR")
-
-#             return JsonResponse({
-#                 "order_id": razorpay_order["id"],
-#                 "amount": amount,
-#                 "currency": "INR",
-#                 "key": settings.RAZOR_KEY_ID,
-#             })
-
-#     except Exception as e:
-#         logger.exception("Error in payment processing: %s", str(e))
-#         return JsonResponse({"error": "Something went wrong. Please try again."}, status=500)
-
-#     return render(request, "photo_frame/payment.html")
 
 @csrf_exempt
 def paymenthandler(request):

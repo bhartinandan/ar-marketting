@@ -178,12 +178,12 @@
   <script>
     function calculateAmount() {
       const frames = document.getElementById("frames").value;
-      let pricePerFrame = 1;
-      if (frames >= 2000) pricePerFrame = 0.05;
-      else if (frames >= 1000) pricePerFrame = 0.06;
-      else if (frames >= 500) pricePerFrame = 0.07;
-      else if (frames >= 250) pricePerFrame = 0.08;
-      else if (frames >= 100) pricePerFrame = 0.09;
+      let pricePerFrame = 29;
+      if (frames >= 2000) pricePerFrame = 22.5;
+      else if (frames >= 1000) pricePerFrame = 25;
+      else if (frames >= 500) pricePerFrame = 26;
+      else if (frames >= 250) pricePerFrame = 27.2;
+      else if (frames >= 100) pricePerFrame = 28;
       const total = frames * pricePerFrame;
       document.getElementById("amount").value = "₹" + total;
     }
