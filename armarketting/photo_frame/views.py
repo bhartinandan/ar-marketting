@@ -628,6 +628,7 @@ def add_frame(request, id):
             contact = request.POST.get('contact')
             video_file = request.FILES.get('videoUpload')
             reference_img = request.FILES.get('refimageUpload')
+            type_choice = request.POST.get("type", "square")
 
             
 
@@ -651,7 +652,7 @@ def add_frame(request, id):
             # Save Media if uploaded
             
             if video_file and reference_img:
-                MediaForWebExperience.objects.create(user=frame_user, web_video=video_file, reference_img=reference_img)
+                MediaForWebExperience.objects.create(user=frame_user, web_video=video_file, reference_img=reference_img,  type=type_choice,)
 
             logger.info("New frame user '%s' added for client '%s'.", name, cli_id)
             messages.success(request, "Frame user added successfully!")
@@ -814,8 +815,10 @@ def user_experience(request, hasheduserid):
         # Get associated media
         media = MediaForWebExperience.objects.filter(user=frameuser).first()
 
-        if media and media.web_video:
+        if media and media.web_video and media.type == "square":
             return render(request, "photo_frame/user_experience.html", {"media": media})
+        elif media and media.web_video and media.type == "circle":
+            return render(request, "photo_frame/user_experience_circle.html", {"media": media})
 
         logger.warning(f"No video found for user {userid}")
         return JsonResponse({"error": "No video found"}, status=404)

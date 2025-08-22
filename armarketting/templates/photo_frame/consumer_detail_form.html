@@ -39,6 +39,11 @@
                         <form id="uploadForm" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <!-- All your existing form fields -->
+                            <select class="form-select mb-3" aria-label="Default select example" id="type" name="type">
+                                <option selected >Shape of photo frame</option>
+                                <option value="circle">Circle</option>
+                                <option value="square">Square</option>
+                            </select>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="name" name="name" placeholder="name" required>
                                 <label for="name">Consumer Name</label>

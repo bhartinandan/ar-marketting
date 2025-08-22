@@ -31,12 +31,22 @@ class FrameUserInfo(models.Model):
         return str(self.client_id.user.username) + "-" + "name:" + self.name + "-" + str(self.id)
     
 class MediaForWebExperience(models.Model):
+    TYPE_CHOICES = [
+        ('circle', 'Circle'),('square', 'Square')
+    ]
     user=models.ForeignKey(FrameUserInfo, on_delete=models.CASCADE, related_name='frameuser')
     web_video = models.FileField(upload_to='photo_frame_videos/')
     target_img = models.FileField(upload_to='photo_frame_target_images/', blank=True)
     reference_img = models.FileField(upload_to='photo_frame_reference_images/')
+    
     height = models.DecimalField(max_digits=4, decimal_places=2, default=1.60)
     width = models.DecimalField(max_digits=4, decimal_places=2, default=1.15)
+    radius = models.DecimalField(max_digits=4, decimal_places=2, default=0.50)
+    type = models.CharField(
+        max_length=10, 
+        choices=TYPE_CHOICES, 
+        default='square'
+    )
 
     def __str__(self):
         return str(self.user.client_id.user.username) + "-" + str(self.user.name) +"-"+ str(self.id)

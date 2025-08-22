@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  {% load static %} 
+    {% load static %} 
   <meta charset="UTF-8" />
   <title>AliveFrame AR Experience</title>
   <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
@@ -129,6 +129,9 @@
       justify-content: center;
       z-index: 99999;
     }
+     #targetOverlay{
+        border-radius: 50% !important;
+    }
   </style>
 </head>
 <body>
@@ -165,10 +168,13 @@
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <a-entity id="targetAnchor" mindar-image-target="targetIndex: 0">
-      <a-plane id="videoPlane" width="{{media.width}}" height="{{media.height}}" position="0 0 0"
-        material="shader: flat; src: #myVideo;"
-        visible="false"></a-plane>
-    </a-entity>
+  <a-circle id="videoPlane" radius="{{media.radius}}" position="0 0 0"
+    material="shader: flat; src: #myVideo; transparent: true;"
+    visible="false">
+  </a-circle>
+</a-entity>
+
+
   </a-scene>
 
   <script>
