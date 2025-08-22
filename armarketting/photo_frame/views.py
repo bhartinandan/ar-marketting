@@ -823,7 +823,11 @@ def user_experience(request, hasheduserid):
     except Exception as e:
         logger.exception("Error in camera_feed: %s", str(e))
         return JsonResponse({"error": "An unexpected error occurred."}, status=500)
-
+    
+def scanner(request):
+    """ Renders the scanner page for AR experience.
+    """ 
+    return render(request, "photo_frame/scanner.html")
 
 def cancellation_policy(request):
     """

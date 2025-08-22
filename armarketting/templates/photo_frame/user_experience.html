@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   {% load static %}  
+  {% load static %} 
   <meta charset="UTF-8" />
   <title>AliveFrame AR Experience</title>
   <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar/dist/mindar-image-aframe.prod.js"></script>
   <style>
@@ -51,7 +50,7 @@
     }
     #visitButton {
       position: absolute;
-      bottom: 50px;
+      bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
       background: #7f00ff;
@@ -66,7 +65,46 @@
       text-decoration: none;
       width: 80%;
       z-index: 101;
-    }
+      text-align: center;
+    } #scanQrBtn {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, #007bff, #00bfff);
+    color: #fff;
+    padding: 18px 28px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    width: 80%;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0, 191, 255, 0.4);
+    cursor: pointer;
+    user-select: none; /* disable text selection */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    z-index: 101;
+  }
+
+  #scanQrBtn:hover {
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 191, 255, 0.5);
+  }
+
+  #scanQrBtn:active {
+    transform: translateX(-50%) scale(0.98);
+    box-shadow: 0 3px 10px rgba(0, 191, 255, 0.4);
+  }
+
+  #scanQrBtn i {
+    font-size: 22px;
+  }
     .footer {
       position: absolute;
       bottom: 0;
@@ -98,9 +136,12 @@
   <div class="grid">
     <img id="targetOverlay" src="{{media.reference_img.url}}" alt="Target Overlay" />
     <div id="tapNotification">Tap Anywhere to Start</div>
-    <div id="messageBox">Place Camera On Image</div>
+    <div id="messageBox">Place Camera On Poster</div>
   </div>
-
+ 
+  <!-- Scan QR button -->
+  <a id="scanQrBtn"  onclick="window.location.href='/frame/scanner'">
+    <i class="fa-solid fa-qrcode"></i> Scan Another Image  </a>
 
   <div class="footer">Powered by Aliveframe</div>
 
@@ -118,7 +159,7 @@
     embedded
   >
     <a-assets>
-      <video id="myVideo" src="{{media.web_video.url}}" preload="auto" playsinline loop crossorigin="anonymous" loop></video>
+      <video id="myVideo" src="{{media.web_video.url}}" preload="auto" playsinline crossorigin="anonymous"></video>
     </a-assets>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -145,7 +186,6 @@
       let tapHandledOnce = false;
       let buttonShownOnce = false;
 
-      // Preload video so first tap is instant
       videoEl.load();
 
       const startVideo = () => {
@@ -205,30 +245,26 @@
       });
     });
 
+    document.addEventListener("visibilitychange", () => {
+  const scene = document.querySelector("a-scene");
+  if (!scene) return;
 
-    // restric
+  const videoEl = document.getElementById("myVideo");
 
-
-    document.addEventListener("contextmenu", e => e.preventDefault()); // Block right click
-
-document.addEventListener("keydown", e => {
-  if (e.ctrlKey && ["u","U","s","S","c","C","i","I","j","J"].includes(e.key)) {
-    e.preventDefault(); // Block Ctrl+U, Ctrl+S, Ctrl+Shift+I, Ctrl+Shift+J
+  if (document.hidden) {
+    // Pause AR tracking and video
+    if (scene.components['mindar-image']) {
+      scene.components['mindar-image'].stop();
+    }
+    if (videoEl && !videoEl.paused) videoEl.pause();
+  } else {
+    // Resume AR tracking
+    if (scene.components['mindar-image']) {
+      scene.components['mindar-image'].start();
+    }
   }
-  if (e.key === "F12") e.preventDefault(); // Block F12
 });
 
-(function() {
-  const detector = setInterval(() => {
-    const before = new Date();
-    debugger; // slows execution if DevTools is open
-    const after = new Date();
-    if (after - before > 100) {
-      document.body.innerHTML = "<h2 style='color:red;text-align:center;margin-top:40vh'>Access Restricted</h2>";
-      clearInterval(detector);
-    }
-  }, 2000);
-})();
   </script>
 </body>
 </html>

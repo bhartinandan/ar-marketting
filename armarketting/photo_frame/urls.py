@@ -26,6 +26,7 @@ from django.urls import include
 
 urlpatterns = [
     path('qr/userex/<hasheduserid>', views.user_experience, name='userex'),
+    path('scanner', views.scanner, name='scanner'),
     path('qr/<int:frameuserid>', views.generate_qr, name='qr'),
     # path('aboutus', views.aboutus, name='aboutus'),
     path('client-signup', views.client_signup, name='client-signup'),

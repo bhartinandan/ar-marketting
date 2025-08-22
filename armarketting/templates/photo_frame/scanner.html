@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>QR Scanner</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .overlay {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+    }
+    /* Scanner box */
+    .scan-box {
+      width: 250px;
+      height: 250px;
+      border: 3px solid white;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Moving scan line */
+    .scan-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(0, 255, 0, 0.9);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+      animation: sweep 2s linear infinite;
+    }
+    @keyframes sweep {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+    /* Flash animation */
+    .flash {
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 14, 96, 0.414);
+      animation: flashAnim 0.3s ease-out;
+      pointer-events: none;
+    }
+    @keyframes flashAnim {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    /* Text below */
+    #messageBox {
+      margin-top: 15px;
+      background: rgb(7,15,96);
+      color: #fff;
+      padding: .4rem .8rem;
+      border-radius: .3rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    .footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      color: #aaa;
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px 0;
+      z-index: 3;
+    }
+  </style>
+</head>
+<body>
+  <video id="video" playsinline autoplay muted></video>
+
+  <div class="overlay">
+    <div class="scan-box" id="scanBox">
+      <div class="scan-line"></div>
+    </div>
+    <div id="messageBox">Scan The QR On The Image</div>
+  </div>
+
+  <div class="footer">Powered by Aliveframe</div>
+
+  <!-- QR Scanner library -->
+  <script src="https://unpkg.com/qr-scanner@1.4.2/qr-scanner.umd.min.js"></script>
+  <script>
+    QrScanner.WORKER_PATH = 'https://unpkg.com/qr-scanner@1.4.2/qr-scanner-worker.min.js';
+    const video = document.getElementById('video');
+    const scanBox = document.getElementById('scanBox');
+    let redirected = false;
+
+    const sanitizeToUrl = (text) => {
+      try {
+        if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(text)) {
+          if (/^[\w-]+\.[\w.-]+(\/.*)?$/.test(text)) text = 'https://' + text;
+        }
+        return new URL(text).href;
+      } catch {
+        return null;
+      }
+    };
+
+    const autoRedirect = (text) => {
+      if (redirected) return;
+      const url = sanitizeToUrl(text);
+      if (url) {
+        redirected = true;
+
+        // flash animation
+        const flash = document.createElement("div");
+        flash.className = "flash";
+        scanBox.appendChild(flash);
+        setTimeout(() => { flash.remove(); }, 400);
+
+        // redirect after short delay
+        setTimeout(() => { window.location.href = url; }, 500);
+      }
+    };
+
+    (async () => {
+      try {
+        const scanner = new QrScanner(
+          video,
+          result => autoRedirect(result.data || result),
+          { preferredCamera: 'environment', maxScansPerSecond: 20 }
+        );
+        await scanner.start();
+      } catch (err) {
+        console.error(err);
+        alert('Camera access denied or not available.');
+      }
+    })();
+  </script>
+</body>
+</html>
