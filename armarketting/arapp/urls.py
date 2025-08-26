@@ -35,6 +35,8 @@ urlpatterns = [
     #services urls
     path('staff-signin', views.staff_signin, name='staff-signin'),
     path('staff-dashboard', views.staff_dashboard, name='staff-dashboard'),
+    path('frame-dashboard', views.frame_dashboard, name='frame-dashboard'),
+    path('end-consumer-details/<str:id>', views.end_consumer_details, name='end-consumer-details'),
     path('create-client', views.create_client, name='create-client'),
     path('client-details/<str:id>', views.client_details, name='client-details'),
     path('create-service/<str:id>', views.create_service, name='create-service'),
@@ -49,6 +51,8 @@ urlpatterns = [
     path('dashboard', views.dashboard, name='dashboard'),
     path('service-statistics/<str:id>', views.service_statitiscs, name='service-statistics'),
     path('client-logout', views.client_logout, name='client-logout'),
+    path('staff-logout', views.staff_logout, name='staff-logout'),
+    path('blog', views.blog_page, name='blog-page'),
 
     path('assets/<int:id>', views.assets, name='assets'),
     path('userex/<str:hasheduserid>', views.user_ex, name='userex'),

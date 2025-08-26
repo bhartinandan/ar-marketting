@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-  {% load static %}
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AliveFrame - Augmented Reality Marketing</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  <link rel="stylesheet" href="styles.css">
 
   <style>
     .reel-slider {
@@ -35,8 +34,8 @@
 
     .whatsapp-icon {
       margin-left: .5rem;
-      height: 1.2rem;
-      width: 1.2rem;
+      height: 2rem;
+      width: 2rem;
     }
     .btn-primary {
       font-weight: 600;
@@ -93,30 +92,26 @@
     .blog-card a:hover {
       text-decoration: underline;
     }
-
   </style>
 </head>
 <body>
   <div id="qr-particles"></div>
 
 <header>
-  <nav style="padding: 0rem; display: flex;" class="container">
-    <div style="margin-left: 1rem;" class="brand">
-     
-      <h1 style="font-size: 1.6rem;"><img style="height: 2rem;width: 2.5rem;margin-bottom: -0.2rem;" src="{% static 'logo.png' %}" alt="" onclick="window.location.href ='/'">liveFrame</h1>
-    </div>
-    <ul style="margin-right: 1rem; padding: 0;" class="nav-links">
+  <nav class="container">
+    <div class="logo">AliveFrame</div>
+    <ul class="nav-links">
       <li style="display: flex;justify-content: center; align-items: center;" class="btn-primary">
-        <a style="color: black; font-size: 0.8rem;font-weight: 600;" href="https://wa.me/7061798523">Contact 
+        <a style="color: black;" href="#contact">Contact 
           <!-- ✅ WhatsApp Button -->
-          <a href="https://wa.me/7061798523" target="_blank" class="whatsapp-btn">
+          <a href="https://wa.me/919876543210" target="_blank" class="whatsapp-btn">
             <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" class="whatsapp-icon">
           </a>
         </a>
       </li>
     </ul>
     <div class="menu-toggle" id="menu-toggle">&#9776;</div>
-    <button class="btn-primary nav-btn">Contact</button>
+    <button class="btn-primary nav-btn">Contact\</button>
   </nav>
 </header>
 
@@ -124,10 +119,10 @@
   <div class="hero-content">
     <h1>Transform Marketing with AR</h1>
     <p>Engage your audience with AliveFrame's innovative AR,<br>No App Needed.</p>
-    <button style="padding: 1rem 2rem;" class="btn-primary" onclick="window.location.href ='/frame/dashboard'">Get Started</button>
+    <button style="padding: 1rem 2rem;" class="btn-primary">Get Started</button>
   </div>
   <div class="hero-img">
-    <img src="{% static 'Poster.jpg' %}" alt="AR Phone" />
+    <img src="Gemini_Generated_Image_b1w37jb1w37jb1w3.jpeg" alt="AR Phone" />
   </div>
 </section>
 
@@ -136,19 +131,19 @@
   <div class="features-grid">
     
     <div class="feature-card">
-      <img src="{% static 'ajj.jpg' %}" alt="QR Icon" class="feature-icon" />
+      <img src="ajj.jpg" alt="QR Icon" class="feature-icon" />
       <h3>Dynamic QR Codes</h3>
       <p>Easily update destination content without reprinting.</p>
     </div>
 
     <div class="feature-card">
-      <img src="{% static 'rocket.png' %}" alt="Rocket Icon" class="feature-icon" />
+      <img src="rocket.png" alt="Rocket Icon" class="feature-icon" />
       <h3>Engaging Content</h3>
       <p>Enhance brand interaction with immersive AR experiences.</p>
     </div>
 
     <div class="feature-card">
-      <img src="{% static 'analatics.png' %}" alt="Analytics Icon" class="feature-icon" />
+      <img src="analatics.png" alt="Analytics Icon" class="feature-icon" />
       <h3>Analytics & Insights</h3>
       <p>Track scans and interactions to measure campaign success.</p>
     </div>
@@ -165,28 +160,28 @@
     and it starts playing your chosen video instantly. Perfect for gifts, events, and everlasting keepsakes.
   </p>
   <div style="margin-top: 2rem;">
-    <img src="{% static 'bigframe.png' %}" alt="Alive Photo Frame" style="box-shadow: none; max-width: 80%; height: 40%; border-radius: 12px;" />
+    <img src="bigframe.png" alt="Alive Photo Frame" style="box-shadow: none; max-width: 80%; height: 40%; border-radius: 12px;" />
   <div style="margin-top: -4rem;">
-    <img src="{% static 'round.png' %}" alt="Alive Photo Frame" style="box-shadow: none; max-width: 80%; height: 40%; border-radius: 12px;" />
+    <img src="round.png" alt="Alive Photo Frame" style="box-shadow: none; max-width: 80%; height: 40%; border-radius: 12px;" />
   </div>
   </div>
-  <a class="btn-primary" style="margin-top: 2rem;text-decoration: none; display:inline-flex;" onclick="window.location.href ='/frame/dashboard'" target="_blank">
+  <a class="btn-primary" style="margin-top: 2rem;text-decoration: none; display:inline-flex;" href="https://wa.me/919876543210" target="_blank">
     🖼️ Make AR Frame
   </a>
 </section>
 
 <!-- ✅ New AR Marketing Section -->
 <section id="ar-marketing" class="ar-marketing container reveal" style="padding: 4rem 1rem; text-align: center;">
-  <h2 style="font-size: 2rem; margin-bottom: 1rem;" >AR Marketing</h2>
+  <h2 style="font-size: 2rem; margin-bottom: 1rem;">AR Marketing</h2>
   <p style="max-width: 700px; margin: auto; font-size: 1.1rem; line-height: 1.6;">
     Supercharge your campaigns with <b>AliveFrame’s AR Marketing solutions</b>.  
     Turn packaging, pamphlets, flyers, or billboards into interactive video experiences that connect instantly with customers.  
     Make your brand unforgettable with immersive storytelling powered by AR.
   </p>
   <div style="margin-top: 2rem;">
-    <img src="{% static 'unlockAR.webp' %}" alt="AR Marketing" style="box-shadow: none; max-width: 60%; height: auto; border-radius: 12px;" />
+    <img src="unlockAR.webp" alt="AR Marketing" style="box-shadow: none; max-width: 60%; height: auto; border-radius: 12px;" />
   </div>
-  <a class="btn-primary" style="margin-top: 2rem;text-decoration: none; display:inline-flex;" onclick="window.location.href ='/dashboard'" target="_blank">
+  <a class="btn-primary" style="margin-top: 2rem;text-decoration: none; display:inline-flex;" href="https://wa.me/919876543210" target="_blank">
     🚀 Start AR Marketing
   </a>
 </section>
@@ -198,7 +193,7 @@
     <!-- Reel 1 -->
     <div class="reel">
       <video autoplay controls muted loop playsinline>
-        <source src="{% static 'reel5.mp4' %}" type="video/mp4">
+        <source src="reel5.mp4" type="video/mp4">
         Your browser does not support video.
       </video>
     </div>
@@ -206,7 +201,7 @@
     <!-- Reel 2 -->
     <div class="reel">
       <video autoplay controls muted loop playsinline>
-        <source src="{% static 'reel1.mp4' %}" type="video/mp4">
+        <source src="reel1.mp4" type="video/mp4">
         Your browser does not support video.
       </video>
     </div>
@@ -214,7 +209,7 @@
     <!-- Reel 3 -->
     <div class="reel">
       <video autoplay controls muted loop playsinline>
-        <source src="{% static 'reel4.mp4' %}" type="video/mp4">
+        <source src="reel4.mp4" type="video/mp4">
         Your browser does not support video.
       </video>
     </div>
@@ -222,7 +217,7 @@
     <!-- Reel 4 -->
     <div class="reel">
       <video autoplay controls muted loop playsinline>
-        <source src="{% static 'reel3.mp4' %}" type="video/mp4">
+        <source src="reel3.mp4" type="video/mp4">
         Your browser does not support video.
       </video>
     </div>
@@ -230,7 +225,7 @@
     <!-- Reel 5 -->
     <div class="reel">
       <video autoplay controls muted loop playsinline>
-        <source src="{% static 'reel2.mp4' %}" type="video/mp4">
+        <source src="reel2.mp4" type="video/mp4">
         Your browser does not support video.
       </video>
     </div>
@@ -238,12 +233,39 @@
   </div>
 </section>
 
+<!-- ✅ Blog Section -->
+<section id="blog" class="blog container reveal">
+  <h2>Latest from Our Blog</h2>
+  <div class="blog-grid">
+    
+    <div class="blog-card">
+      <img src="ARChangingMarketion.png" alt="Blog 1">
+      <h3>How AR is Changing Marketing</h3>
+      <p>Discover how brands are using Augmented Reality to create memorable campaigns and connect deeper with customers.</p>
+      <a href="#">Read More →</a>
+    </div>
 
+    <div class="blog-card">
+      <img src="QRchangingMarketiong.png" alt="Blog 2">
+      <h3>QR Codes: The Next Big Thing</h3>
+      <p>Learn why QR codes paired with AR experiences are revolutionizing both offline and online marketing strategies.</p>
+      <a href="#">Read More →</a>
+    </div>
+
+    <div class="blog-card">
+      <img src="SuccessStory.png" alt="Blog 3">
+      <h3>AliveFrame Success Stories</h3>
+      <p>See how AliveFrame helped real estate and retail clients boost sales and brand awareness with AR video frames.</p>
+      <a href="#">Read More →</a>
+    </div>
+
+  </div>
+</section>
 
 <section id="contact" class="contact container reveal">
   <h2>Contact Us</h2>
   <p>Get in touch to elevate your marketing strategy with AliveFrame AR solutions.</p>
-  <button style="margin-top: 2rem;" class="btn-primary" onclick="window.location.href ='/contact'">Send a Message</button>
+  <button style="margin-top: 2rem;" class="btn-primary">Send a Message</button>
 </section>
 
 <footer class="footer" style="background-color: #00000035; color: #f0f0f0; padding: 2rem 1rem; font-family: 'Poppins', sans-serif;">
@@ -258,7 +280,7 @@
       <div>
         <h4 style="margin-bottom: 1rem;">Company</h4>
         <ul style="list-style: none; padding: 0;text-align: start;">
-          <li><a onclick="window.location.href ='/contact'" style="color: #f0f0f0; text-decoration: none;">Contact us</a></li>
+          <li><a href="#contact" style="color: #f0f0f0; text-decoration: none;">Contact us</a></li>
         </ul>
       </div>
 
@@ -266,9 +288,9 @@
       <div>
         <h4 style="margin-bottom: 1rem;">Resources</h4>
         <ul style="list-style: none; padding: 0;text-align: start;">
-          <li><a onclick="window.location.href ='/privacypolicy/'" style="color: #f0f0f0; text-decoration: none;">Privacy Policy</a></li>
-          <li><a onclick="window.location.href ='/term-condition/'" style="color: #f0f0f0; text-decoration: none;">Terms of Use</a></li>
-          <li><a onclick="window.location.href ='/aboutus/'" style="color: #f0f0f0; text-decoration: none;">About Us</a></li>
+          <li><a href="/privacy-policy.html" style="color: #f0f0f0; text-decoration: none;">Privacy Policy</a></li>
+          <li><a href="/terms-conditions.html" style="color: #f0f0f0; text-decoration: none;">Terms of Use</a></li>
+          <li><a href="/media.html" style="color: #f0f0f0; text-decoration: none;">About Us</a></li>
         </ul>
       </div>
 
@@ -276,8 +298,8 @@
       <div>
         <h4 style="margin-bottom: 1rem;">Catch us on</h4>
         <ul style="list-style: none; padding: 0;text-align: start;">
-          <li><a href="https://www.instagram.com/aliveframe.official/" target="_blank" style="color: #f0f0f0; text-decoration: none;">Instagram</a></li>
-          <li><a href="https://www.linkedin.com/company/aliveframe/" target="_blank" style="color: #f0f0f0; text-decoration: none;">LinkedIn</a></li>
+          <li><a href="https://instagram.com" target="_blank" style="color: #f0f0f0; text-decoration: none;">Instagram</a></li>
+          <li><a href="https://linkedin.com" target="_blank" style="color: #f0f0f0; text-decoration: none;">LinkedIn</a></li>
         </ul>
       </div>
     </div>
@@ -288,30 +310,6 @@
   </div>
 </footer>
 
-<script src="{% static 'script.js' %}"></script>
+<script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AliveFrame — Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'styles.css' %}" />
+  <style>
+    /* (your existing styles remain unchanged) */
+    .page-hero { padding: 5rem 1rem 3rem; text-align: center; }
+    .page-hero h1 { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: .75rem; }
+    .page-hero p { max-width: 760px; margin: 0 auto; line-height: 1.6; opacity: .9; }
+    .blog-toolbar { display: grid; grid-template-columns: 1fr 180px; gap: 1rem; margin: 2rem auto 1.25rem; max-width: 1100px; padding: 0 1rem; }
+    .blog-search,.blog-filter { border-radius: 12px; padding:.9rem 1rem; border: 1px solid #ffffff22; background:#ffffff10; color:inherit; outline:none; }
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:2rem; max-width:1100px; margin:0 auto 3rem; padding:0 1rem; }
+    .blog-card { background:#ffffff10; border-radius:16px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.25); display:flex; flex-direction:column; transition:.2s; }
+    .blog-card:hover { transform:translateY(-6px); box-shadow:0 10px 24px rgba(0,0,0,.3); }
+    .blog-card img { width:100%; height:auto; object-fit:cover; }
+    .blog-card .body { padding:1.1rem 1.1rem 1.25rem; }
+    .blog-meta { display:flex; gap:.75rem; flex-wrap:wrap; font-size:.85rem; opacity:.85; margin-bottom:.5rem; }
+    .badge {  padding:.25rem .6rem; padding-bottom: 0; border-radius:999px; font-size:.78rem; font-weight:600; background:#00bfa522; border:1px solid #00bfa544; }
+    .blog-card h3 { font-size:1.25rem; margin:.35rem 0 .5rem; }
+    .blog-card p { opacity:.9; line-height:1.55; margin-bottom:1rem; }
+    .blog-actions { display:flex; gap:.75rem; margin-top:auto; }
+    .btn-link, .btn-primary { text-decoration:none; font-weight:600; padding:.6rem 1rem; border-radius:10px; border:1px solid #ffffff22; background:#ffffff08; color:inherit; cursor:pointer; }
+    .btn-primary { background:#00bfa5; color:black; }
+    .pagination { display:flex; gap:.5rem; justify-content:center; margin:1rem 0 4rem; }
+    .page-btn { padding:.55rem .9rem; border-radius:10px; border:1px solid #ffffff22; background:#ffffff10; text-decoration:none; color:inherit; }
+    .page-btn.active { background:#ffffff22; font-weight:700; }
+    header .nav-links a { text-decoration:none; }
+    .whatsapp-icon { margin-left:.5rem; height:2rem; width:2rem; }
+    option{color: black;}
+
+    /* Blog detail view */
+    #blog-detail { display:none; max-width:800px; margin:3rem auto; padding:0 1rem; }
+    #blog-detail img { width:10%; border-radius:12px; margin:1rem 0; }
+    #back-btn { display:inline-block; margin-bottom:1rem; cursor:pointer; font-weight:600; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <nav class="container">
+      <div class="logo">AliveFrame</div>
+      <ul class="nav-links">
+      </ul>
+      <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+    </nav>
+  </header>
+
+  
+
+  <!-- Blog Grid -->
+  <section style="margin-top: 5rem;" id="blog-list" class="blog-grid">
+    <article class="blog-card" data-title="How AR is Changing Marketing" data-cat="strategy" data-content="
+      <h2>How AR is Changing Marketing</h2>
+      <p>From interactive packaging to in-store try-ons, AR turns static touchpoints into shoppable, measurable moments...</p>
+      <img src='images/blog-how-ar-is-changing-marketing.png' />
+      <p>Full blog body goes here with detailed paragraphs, examples, and case studies.</p>">
+      <img src="ARChangingMarketion.png" alt="How AR is Changing Marketing">
+      <div style="padding: 2rem;" class="body">
+        <div  class="blog-meta"><span>•</span><span>Aug 2025</span> <p>by Aram Singh</p></div>
+         <h2>How AR Photos Are Transforming the Photo Printing Business in India</h2>
+
+    <h1>Introduction: The Future of Photos is Here</h1>
+    <p>
+      The photo printing industry in India is changing rapidly. Customers no longer want just simple photo prints; they are looking for something more unique, modern, and memorable. That’s where Augmented Reality (AR) photos come in.
+    </p>
+    <p>
+      With <strong>AliveFrame</strong>, traditional photo shops and online print businesses can now offer interactive AR photos. These photos come alive when scanned with a smartphone, turning still images into engaging videos or memories.
+    </p>
+
+    <h2>Why AR Photos Are Trending</h2>
+    <ul>
+      <li>🎁 <strong>Unique Gifting Option</strong> – Perfect for couples, family events, and special occasions.</li>
+      <li>📱 <strong>Easy to Access</strong> – Customers can scan via QR and instantly relive their memories.</li>
+      <li>💡 <strong>Modern &amp; Trendy</strong> – Young customers prefer digital experiences over static prints.</li>
+      <li>💼 <strong>Business Growth</strong> – Shops can charge a premium for AR photo products.</li>
+    </ul>
+
+    <h2>How AliveFrame Helps Photo Businesses</h2>
+    <p><strong>AliveFrame</strong> is a B2B subscription platform designed for photo shops and online printing businesses. Instead of investing in complex technology, you can simply use AliveFrame to:</p>
+    <ul>
+      <li>Create AR-enabled photo frames and prints</li>
+      <li>Sell them as premium gifting products</li>
+      <li>Increase customer loyalty with unique offerings</li>
+      <li>Grow revenue without additional heavy investment</li>
+    </ul>
+    <p>With just a simple subscription, any shop can start offering AR-powered products and stand out in the market.</p>
+
+    <h2>Use Cases of AR Photos</h2>
+    <ul>
+      <li><strong>Couple Gifts</strong> – A framed photo that plays a love video.</li>
+      <li><strong>Birthdays</strong> – A birthday picture that reveals birthday wishes in AR.</li>
+      <li><strong>Weddings</strong> – Wedding albums that come alive with video memories.</li>
+      <li><strong>Corporate Gifting</strong> – Businesses can gift AR-powered photo frames to clients.</li>
+    </ul>
+
+    <h2>Why AliveFrame is the Right Partner</h2>
+    <ul>
+      <li>✅ Easy-to-use platform for shops</li>
+      <li>✅ Affordable subscription model</li>
+      <li>✅ Works without app – simple web and QR code based</li>
+      <li>✅ High demand among youth and gifting customers</li>
+    </ul>
+    <p>AliveFrame is not just a tool, it’s a way for your photo business to stay ahead of the competition.</p>
+
+    <h2>Conclusion: The Future of Photo Printing is AR</h2>
+    <p>
+      The demand for personalized and digital-first products is only going to grow. By adopting AR photo printing, you can transform your shop into a modern, tech-driven business that attracts more customers and generates higher profits.
+    </p>
+    <p>
+      With <strong>AliveFrame</strong>, you get everything you need to start offering AR-powered photo products today.
+    </p>
+    <p class="note"><strong>👉 Want to grow your photo business with AR?</strong><br />
+      Get started with AliveFrame now and turn every photo into a memory that truly lives.
+    </p>
+
+    <h3>Target Keywords Used</h3>
+    <ul>
+      <li>AR photos</li>
+      <li>AR photo printing</li>
+      <li>AR gifts India</li>
+      <li>photo printing business growth</li>
+      <li>AR in photo shops</li>
+      <li>AR-powered memories</li>
+    </ul>
+
+    <hr />
+
+    <h2>How AR Photos are Changing the Future of Gifting</h2>
+    <p>
+      In today’s digital-first world, people are always looking for unique and memorable ways to capture their moments. From birthdays and anniversaries to weddings and couple gifts, photos have always been at the heart of every celebration. But now, a new trend is transforming the photo gifting industry — AR Photos.
+    </p>
+    <p>
+      With <strong>AliveFrame</strong>, photo businesses can take a big step forward by offering their customers an exciting way to relive memories through Augmented Reality (AR).
+    </p>
+
+    <h3>What Are AR Photos?</h3>
+    <p>
+      AR Photos are normal printed photos or frames that come alive when scanned with a phone camera. Imagine scanning a printed picture and suddenly watching a video play on top of it. This creates a magical and emotional experience that goes beyond traditional photography.
+    </p>
+    <ul>
+      <li>A wedding photo that plays the couple’s highlight video.</li>
+      <li>A birthday frame that shows a heartfelt message.</li>
+      <li>A couple’s photo that comes alive with their favorite song.</li>
+    </ul>
+
+    <h3>Why AR Photos Are Trending Among Youth and Gen Z</h3>
+    <ul>
+      <li><strong>Unique &amp; Personalized</strong> – AR Photos give a personal touch that makes gifts unforgettable.</li>
+      <li><strong>Perfect for Gifting</strong> – Birthdays, anniversaries, Valentine’s Day, and weddings become more special.</li>
+      <li><strong>Social Media Friendly</strong> – Youth love sharing creative and interactive experiences online.</li>
+      <li><strong>Memories in Motion</strong> – Photos are no longer static; they carry emotions, stories, and surprises.</li>
+    </ul>
+
+    <h3>How AR Can Help Photo Printing Businesses</h3>
+    <p>
+      For photo studios, printing shops, and online custom gift sellers, AR Photos are not just a trend but a business opportunity.
+    </p>
+    <ul>
+      <li><strong>Stand Out from Competitors</strong> – By offering AR-powered photos, you give customers something new.</li>
+      <li><strong>Increase Sales</strong> – Customers are willing to pay extra for innovative products.</li>
+      <li><strong>Build Loyalty</strong> – When customers love the experience, they come back for more.</li>
+      <li><strong>Future-Ready Business</strong> – AR is the next big thing in photography and gifting.</li>
+    </ul>
+
+    <h3>AliveFrame – Powering AR for Photo Businesses</h3>
+    <ul>
+      <li>No technical knowledge required.</li>
+      <li>Easy to set up QR-based AR photos.</li>
+      <li>Scans work directly from a smartphone browser (no app required).</li>
+      <li>Subscription model designed for business growth.</li>
+    </ul>
+    <p>
+      With AliveFrame, photo businesses can transform their product line and attract a new generation of customers who love innovation.
+    </p>
+
+    <h3>Conclusion</h3>
+    <p>
+      AR Photos are not just a trend — they are the future of the gifting and photography industry. Whether it’s a couple gift, a birthday surprise, or a wedding memory, AR makes every moment unforgettable.
+    </p>
+    <p>
+      If you run a photo studio, print shop, or online photo gift store, this is the right time to adopt AR and stay ahead of the competition. With AliveFrame, you can offer your customers a magical experience and grow your business faster.
+    </p>
+    <p class="note"><strong>👉 Start offering AR Photos today</strong> and become a part of the future of gifting.</p>
+
+        
+      </div>
+    </article>
+    <!-- Repeat for other cards -->
+  </section>
+
+  <!-- Blog Detail -->
+  <section id="blog-detail">
+    <span id="back-btn">← Back to Blog List</span>
+    <div id="blog-content"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" style="background:#00000035;color:#f0f0f0;padding:2rem 1rem;">
+    <div class="container" style="max-width:1200px;margin:auto;">
+      <h3>AliveFrame</h3>
+      <p>AliveFrame is a next-gen AR marketing platform...</p>
+      <div style="text-align:center;margin-top:3rem;font-size:.875rem;color:#ccc;">
+        © 2025 AliveFrame — All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const q=document.getElementById('search');
+    const cat=document.getElementById('category');
+    const cards=[...document.querySelectorAll('.blog-card')];
+    const list=document.getElementById('blog-list');
+    const detail=document.getElementById('blog-detail');
+    const content=document.getElementById('blog-content');
+    const back=document.getElementById('back-btn');
+
+    function filter(){
+      const term=(q.value||'').toLowerCase().trim();
+      const c=(cat.value||'all');
+      cards.forEach(card=>{
+        const inCat=c==='all'||card.dataset.cat===c;
+        const inText=(card.dataset.title||'').toLowerCase().includes(term);
+        card.style.display=(inCat&&inText)?'':'none';
+      });
+    }
+    q.addEventListener('input',filter);
+    cat.addEventListener('change',filter);
+
+    // Blog detail logic
+    document.querySelectorAll('.read-btn').forEach(btn=>{
+      btn.addEventListener('click',e=>{
+        const card=e.target.closest('.blog-card');
+        content.innerHTML=card.dataset.content;
+        list.style.display='none';
+        detail.style.display='block';
+      });
+    });
+    back.addEventListener('click',()=>{
+      detail.style.display='none';
+      list.style.display='grid';
+    });
+  </script>
+</body>
+</html>

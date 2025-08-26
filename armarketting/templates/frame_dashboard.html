@@ -59,8 +59,8 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a onclick="window.location.href ='/'" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a onclick="window.location.href ='/frame-dashboard'" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Frame Dashboard</a>
+                    <a onclick="window.location.href ='/'" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a onclick="window.location.href ='/frame-dashboard'" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Frame Dashboard</a>
                 </div>
             </nav>
         </div>
@@ -154,8 +154,8 @@
                         <table class="table text-start align-middle table-bordered table-hover mb-0">
                             <thead>
                                 <tr class="text-white">
-                                    <th scope="col">Client ID</th>
-                                    <th scope="col">Client Name</th>
+                                    <th scope="col">Customer ID</th>
+                                    <th scope="col">Customer Name</th>
                                     <th scope="col">Joining Date</th>
                                     <th scope="col">Business Name</th>
                                     <th scope="col">Details</th>
@@ -167,9 +167,23 @@
                                 <tr>
                                     <td>{{ele.id}}</td>
                                     <td>{{ele.name}}</td>
-                                    <td>{{ele.joined_date}}</td>
-                                    <td>{{ele.business_name}}</td>
-                                    <td><a class="btn btn-sm btn-info" onclick="window.location.href ='/client-details/{{ele.id}}'">Detail</a></td>
+                                    <td>{{ele.date}}</td>
+                                    <td> {% for media in ele.frameuser.all %}
+                                        {{ media.type }} <br>
+                                    {% endfor %}</td>
+                                    <td>
+    {% for media in ele.frameuser.all %}
+        {% if media.target_img %}
+            <a href="{{ media.target_img.url }}" target="_blank">Available</a><br>
+        {% else %}
+            Not Available<br>
+        {% endif %}
+    {% empty %}
+        No Media
+    {% endfor %}
+</td>
+
+                                    <td><a class="btn btn-sm btn-info" onclick="window.location.href ='/end-consumer-details/{{ele.id}}'">Detail</a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

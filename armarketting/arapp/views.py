@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render,redirect
 from django.conf import settings
 from arapp.models import *
+from photo_frame.models import *
 from .utils import *
 import qrcode
 import os
@@ -252,6 +253,63 @@ def staff_dashboard(request):
 
     except Exception as e:
         logger.exception("Error occurred while loading user dashboard")
+        return JsonResponse({"error": "An internal server error occurred."}, status=500)
+    
+@login_required(login_url='/staff-signin')
+@user_passes_test(is_staff)
+def frame_dashboard(request):
+    """
+    Renders the user dashboard with client information, frame user details, 
+    and frame usage statistics.
+    """
+    try:
+        user = request.user
+        logger.info(f"Accessing dashboard for user: {user.username} (ID: {user.id})")
+        print(f"Accessing dashboard for user: {user.username} (ID: {user.id})")
+
+        # Fetch client info
+        staff = StaffProfile.objects.filter(user=user).first()
+        print(staff)
+        if not staff:
+            logger.warning(f"No ClientInfo found for user: {user.username}")
+            return JsonResponse({"error": "Client information not found."}, status=404)
+
+        # Fetch frame user information
+        client_list = FrameUserInfo.objects.all().order_by('-date')
+
+        context = {
+            "client_list": client_list,
+        }
+
+        return render(request, "frame_dashboard.html", context)
+
+    except Exception as e:
+        logger.exception("Error occurred while loading user dashboard")
+        return JsonResponse({"error": "An internal server error occurred."}, status=500)
+
+def end_consumer_details(request, id):
+    """
+    Displays the details of a specific client.
+    """
+    try:
+       
+
+        # # Fetch the associated frame users
+        frame_user = FrameUserInfo.objects.filter(id=id)
+
+        logger.info(f"Accessing client details for Client ID: {id}")
+
+        return render(
+            request,
+            "end_consumer_detail.html",
+            context={
+                
+                "frame_user": frame_user
+            }
+        )
+
+    except Exception as e:
+        logger.exception("Error occurred while loading client details")
         return JsonResponse({"error": "An internal server error occurred."}, status=500)
 
 @login_required(login_url='/staff-signin')
@@ -1047,6 +1105,18 @@ def term_and_condition(request):
         return render(request, "terms_and_condition.html")
     except Exception as e:
         logger.exception("Error while loading Terms and Conditions page")
+        return render(request, "client_error.html", {
+            "error_message": "An unexpected error occurred. Please try again later."
+        })
+
+def blog_page(request):
+    """
+    Renders the Blog page.
+    """
+    try:
+        return render(request, "blog.html")
+    except Exception as e:
+        logger.exception("Error while loading Blog page")
         return render(request, "client_error.html", {
             "error_message": "An unexpected error occurred. Please try again later."
         })
