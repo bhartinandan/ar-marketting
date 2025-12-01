@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <title>AliveFrame AR Experience</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar/dist/mindar-image-aframe.prod.js"></script>
+
+  <style>
+    body { margin:0; overflow:hidden; background:#000; font-family:'Poppins',sans-serif; }
+    .grid{display:flex;flex-direction:column;align-items:center;justify-content:center;position:absolute;top:0;width:100%;height:80vh;}
+    #tapNotification,#messageBox{
+      z-index:100;background:#071060;padding:.3rem .6rem;border-radius:.2rem;
+      color:#fff;font-size:1.3rem;font-weight:600;margin-top:.5rem;text-align:center;
+    }
+    #tapNotification{display:none;}
+    .footer{position:absolute;bottom:0;width:100%;text-align:center;color:#aaa;background:rgba(0,0,0,0.4);font-size:12px;padding:4px 0;}
+    #customLoader{
+      position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      z-index:99999;
+    }
+    a-scene{height:100vh;width:100vw;}
+    .a-loader{display:none!important;}
+  </style>
+</head>
+
+<body>
+
+  <!-- UI elements -->
+  <div class="grid">
+    <div id="tapNotification">👆 Tap to Start</div>
+    <div id="messageBox">Place Camera on Poster</div>
+  </div>
+  <div class="footer">Powered by AliveFrame</div>
+
+  <!-- Loader -->
+  <div id="customLoader">
+    <img src="{% static 'logo.png' %}" style="width:180px;animation:pulse 1.4s infinite;">
+    <p style="color:white;margin-top:.8rem;">Loading AR Experience...</p>
+  </div>
+
+  <!-- AR Scene -->
+  <a-scene
+    mindar-image="imageTargetSrc: multipletarget.mind; maxTrack:1;"
+    color-space="sRGB"
+    renderer="logarithmicDepthBuffer:true;"
+    vr-mode-ui="enabled:false"
+    embedded
+  >
+    <a-assets>
+      {% for item in media %}
+        <video id="video{{ forloop.counter }}"
+               src="{{ item.web_video.url }}"
+               preload="auto" playsinline loop muted></video>
+      {% endfor %}
+    </a-assets>
+
+    <a-camera look-controls="enabled:false"></a-camera>
+
+    {% for item in media %}
+      <a-entity id="targetAnchor{{ forloop.counter }}"
+                mindar-image-target="targetIndex: {{ item.target_img }}">
+        
+         {% if item.radius %}
+          <!-- CIRCLE if radius not null -->
+          <a-circle id="shape{{ forloop.counter }}"
+                    radius="{{ item.radius }}"
+                    material="shader:flat;src:#video{{ forloop.counter }};transparent:true;"
+                    visible="false">
+          </a-circle>
+        
+        {% else %}
+          <!-- RECTANGLE plane if radius null -->
+          <a-plane id="shape{{ forloop.counter }}"
+                   width="{{ item.width }}"
+                   height="{{ item.height }}"
+                   material="shader:flat;src:#video{{ forloop.counter }};transparent:true;"
+                   visible="false">
+          </a-plane>
+        {% endif %}
+      </a-entity>
+    {% endfor %}
+  </a-scene>
+
+
+  <!-- JS -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const totalItems = parseInt("{{ media|length|default:0 }}");
+
+      const videos = {};
+      const planes = {};
+      const anchors = {};
+
+      for (let i = 1; i <= totalItems; i++) {
+        videos[i] = document.getElementById(`video${i}`);
+        planes[i] = document.getElementById(`plane${i}`);
+        anchors[i] = document.getElementById(`targetAnchor${i}`);
+      }
+
+      const messageBox = document.getElementById("messageBox");
+      const tapNotification = document.getElementById("tapNotification");
+
+      let audioUnlocked = false;
+      let firstDetection = false;
+      let pending = null;
+
+      document.body.addEventListener("click", () => {
+        if (firstDetection && !audioUnlocked) {
+          Object.values(videos).forEach(v => v.muted = false);
+          audioUnlocked = true;
+          tapNotification.style.display = "none";
+
+          if (pending) {
+            planes[pending].setAttribute("visible", "true");
+            videos[pending].play();
+            messageBox.style.display = "none";
+            pending = null;
+          }
+        }
+      });
+
+      function stopAll() {
+        Object.values(videos).forEach(v => { v.pause(); v.currentTime = 0; });
+        Object.values(planes).forEach(p => p.setAttribute("visible","false"));
+      }
+
+      for (let i = 1; i <= totalItems; i++) {
+        anchors[i].addEventListener("targetFound", () => {
+          stopAll();
+
+          if (!firstDetection) {
+            firstDetection = true;
+            tapNotification.style.display = "block";
+            pending = i;
+          } else {
+            messageBox.style.display = "none";
+            planes[i].setAttribute("visible", "true");
+            if (audioUnlocked) videos[i].play();
+          }
+        });
+
+        anchors[i].addEventListener("targetLost", () => {
+          videos[i].pause();
+          videos[i].currentTime = 0;
+          planes[i].setAttribute("visible", "false");
+          messageBox.style.display = "block";
+        });
+      }
+    });
+
+    window.addEventListener("load", () => {
+      document.querySelector("a-scene").addEventListener("arReady", () => {
+        document.getElementById("customLoader").style.display = "none";
+      });
+    });
+  </script>
+
+</body>
+</html>

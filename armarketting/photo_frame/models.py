@@ -32,7 +32,7 @@ class FrameUserInfo(models.Model):
     
 class MediaForWebExperience(models.Model):
     TYPE_CHOICES = [
-        ('circle', 'Circle'),('square', 'Square')
+        ('circle', 'Circle'),('square', 'Square'),('album', 'Album')
     ]
     user=models.ForeignKey(FrameUserInfo, on_delete=models.CASCADE, related_name='frameuser')
     web_video = models.FileField(upload_to='photo_frame_videos/')
@@ -41,7 +41,7 @@ class MediaForWebExperience(models.Model):
     
     height = models.DecimalField(max_digits=4, decimal_places=2, default=1.60)
     width = models.DecimalField(max_digits=4, decimal_places=2, default=1.15)
-    radius = models.DecimalField(max_digits=4, decimal_places=2, default=0.50)
+    radius = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True, default=None)
     type = models.CharField(
         max_length=10, 
         choices=TYPE_CHOICES, 

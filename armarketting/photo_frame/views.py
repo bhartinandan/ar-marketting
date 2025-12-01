@@ -23,7 +23,6 @@ from django.contrib import messages
 razorpay_client = razorpay.Client(
     auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
-
 # from .models import MediaData
 
 # For web experience
@@ -67,7 +66,6 @@ def generate_qr(request, frameuserid):
     except Exception as e:
         logger.exception("Error generating QR code")
         return JsonResponse({"error": "Internal server error"}, status=500)
-
 
 @login_required(login_url='/frame/signin')
 def user_dashboard(request):
@@ -278,7 +276,6 @@ def otp(request):
     except Exception as e:
         logger.exception("Error occurred during OTP verification")
         return render(request, "photo_frame/client_error.html", {"error_message": "An unexpected error occurred. Please try again later."})
-    
 
 def client_signup_password(request):
     """
@@ -409,7 +406,6 @@ def otp_forget(request):
         logger.exception("Error occurred during OTP verification")
         return render(request, "photo_frame/client_error.html", {"error_message": "An unexpected error occurred. Please try again later."})
 
-
 def client_signup_password_forget(request):
     """
     Handles client password setup after OTP verification.
@@ -530,8 +526,6 @@ def client_form(request):
             
             client_info.save()
 
-          
-            
             logger.info("Client information saved successfully for user: %s", user.username)
             return redirect("/frame/dashboard")
 
@@ -586,8 +580,6 @@ def client_signin(request):
             })
 
     return render(request, "photo_frame/client_signin.html")
-
-
     
 def user_logout(request):
     """
@@ -621,7 +613,6 @@ def add_frame(request, id):
         if not framecount:
             return redirect("/frame/payment")
 
-
         if request.method == "POST":
             name = request.POST.get('name')
             email = request.POST.get('emailid')
@@ -629,8 +620,6 @@ def add_frame(request, id):
             video_file = request.FILES.get('videoUpload')
             reference_img = request.FILES.get('refimageUpload')
             type_choice = request.POST.get("type", "square")
-
-            
 
             # Validate required fields
             if not all([name]):
@@ -645,12 +634,59 @@ def add_frame(request, id):
                 client_id=cli_id
             )
             frame_count_item = FrameCount.objects.filter(client_id=cli_id).first()
-            frame_count_item.frame_count = frame_count_item.frame_count - 1
-            frame_count_item.save()
 
+            # Get only the album video files
+            videos = [file for key, file in request.FILES.items() if key.startswith("albumVideo")]
+            images = [file for key, file in request.FILES.items() if key.startswith("albumImage")]
+            print(videos)
+            print(images)
 
+            video_count = len(videos)   # ✅ number of video files
+            image_count = len(images)   # number of images
+
+            print("Video count:", video_count)
+            print("Image count:", image_count)
+
+            if type_choice == "album" and video_file and reference_img:
+                saved_count = 0
+
+                for i in range(video_count):
+                    if i < image_count:  # ensure matching image exists
+                        img_key = f"albumImage{i}"
+                        vid_key = f"albumVideo{i}"
+
+                        img = request.FILES.get(img_key)
+                        vid = request.FILES.get(vid_key)
+
+                        # Only save if BOTH are uploaded
+                        if img and vid:
+                            print("Album item:", img_key, vid_key)
+                            MediaForWebExperience.objects.create(
+                                user=frame_user,
+                                web_video=vid,
+                                reference_img=img,
+                                type="album"
+                            )
+                            saved_count += 1
+
+                if saved_count == 0:
+                    messages.warning(request, "No album items uploaded.")
+
+                frame_count_item.frame_count = frame_count_item.frame_count - saved_count
+                frame_count_item.save()
+
+                messages.success(request, f"Album uploaded successfully ({saved_count} items saved).")
+                return redirect("/frame/dashboard")
+
+            elif type_choice in ["square", "circle"] and video_file and reference_img:
+                MediaForWebExperience.objects.create(
+                    user=frame_user,
+                    web_video=video_file,
+                    reference_img=reference_img,
+                    type=type_choice,
+                )
             # Save Media if uploaded
-            
+
             if video_file and reference_img:
                 MediaForWebExperience.objects.create(user=frame_user, web_video=video_file, reference_img=reference_img,  type=type_choice,)
 
@@ -665,7 +701,7 @@ def add_frame(request, id):
         logger.exception("Error adding frame user: %s", str(e))
         messages.error(request, "An unexpected error occurred. Please try again.")
 
-    return render(request, "photo_frame/consumer_detail_form.html")
+    return render(request, "photo_frame/consumer_detail_form_updated.html")
 
 @login_required(login_url='/frame/signin')
 def payment(request):
@@ -813,12 +849,17 @@ def user_experience(request, hasheduserid):
         frameuser = get_object_or_404(FrameUserInfo, id=userid)
 
         # Get associated media
-        media = MediaForWebExperience.objects.filter(user=frameuser).first()
+        media = MediaForWebExperience.objects.filter(user=frameuser).all()
+        print("Media fetched:")
+        print(media[0])
+        
 
-        if media and media.web_video and media.type == "square":
-            return render(request, "photo_frame/user_experience.html", {"media": media})
-        elif media and media.web_video and media.type == "circle":
-            return render(request, "photo_frame/user_experience_circle.html", {"media": media})
+        if media[0] and media[0].web_video and media[0].type == "square":
+            return render(request, "photo_frame/user_experience.html", {"media": media[0]})
+        elif media[0] and media[0].web_video and media[0].type == "circle":
+            return render(request, "photo_frame/user_experience_circle.html", {"media": media[0]})
+        elif media[0] and media[0].web_video and media[0].type == "album":
+            return render(request, "photo_frame/user_ex_album.html", {"media": media})
 
         logger.warning(f"No video found for user {userid}")
         return JsonResponse({"error": "No video found"}, status=404)
