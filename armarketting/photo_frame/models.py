@@ -6,7 +6,7 @@ from django.utils import timezone
     
 class ClientInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    joined_date = models.DateTimeField(default=datetime.now, blank=True)
+    joined_date = models.DateTimeField(default=timezone.now, blank=True)
     name = models.CharField(max_length=255)
     business_name = models.CharField(max_length=255)
     email = models.EmailField(max_length = 254)
@@ -21,7 +21,7 @@ class ClientInfo(models.Model):
         return str(self.user.username) +"-"+ self.business_name
     
 class FrameUserInfo(models.Model):
-    date = models.DateTimeField(default=datetime.now, blank=True)
+    date = models.DateTimeField(default=timezone.now, blank=True)
     name = models.CharField(max_length=255)
     email = models.EmailField(max_length = 254, blank=True)
     contact = models.CharField(max_length=15, blank=True)

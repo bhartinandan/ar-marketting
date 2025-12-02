@@ -647,16 +647,19 @@ def add_frame(request, id):
             print("Video count:", video_count)
             print("Image count:", image_count)
 
-            if type_choice == "album" and video_file and reference_img:
+            if type_choice == "album" and video_count and image_count:
                 saved_count = 0
 
                 for i in range(video_count):
                     if i < image_count:  # ensure matching image exists
-                        img_key = f"albumImage{i}"
-                        vid_key = f"albumVideo{i}"
+                        img_key = f"albumImage{i+1}"
+                        vid_key = f"albumVideo{i+1}"
 
                         img = request.FILES.get(img_key)
                         vid = request.FILES.get(vid_key)
+
+                        print(img)
+                        print(vid)
 
                         # Only save if BOTH are uploaded
                         if img and vid:
@@ -677,6 +680,9 @@ def add_frame(request, id):
 
                 messages.success(request, f"Album uploaded successfully ({saved_count} items saved).")
                 return redirect("/frame/dashboard")
+            
+                print(saved_count)
+
 
             elif type_choice in ["square", "circle"] and video_file and reference_img:
                 MediaForWebExperience.objects.create(
