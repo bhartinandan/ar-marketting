@@ -865,7 +865,14 @@ def user_experience(request, hasheduserid):
         elif media[0] and media[0].web_video and media[0].type == "circle":
             return render(request, "photo_frame/user_experience_circle.html", {"media": media[0]})
         elif media[0] and media[0].web_video and media[0].type == "album":
-            return render(request, "photo_frame/user_ex_album.html", {"media": media})
+            target = None
+
+            # Loop through media list and find target_img that exists
+            for m in media:
+                if m.target_img:              # if file field is not empty
+                    target = m.target_img.url
+                    break                     # stop at first match
+            return render(request, "photo_frame/user_ex_album.html", {"media": media, "target": target})
 
         logger.warning(f"No video found for user {userid}")
         return JsonResponse({"error": "No video found"}, status=404)
