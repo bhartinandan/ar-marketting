@@ -46,7 +46,7 @@
 
   <!-- AR Scene -->
   <a-scene
-    mindar-image="imageTargetSrc: {{media[0].target_img}}; maxTrack:1;"
+    mindar-image="imageTargetSrc: {{media.0.target_img.url}}; maxTrack:1;"
     color-space="sRGB"
     renderer="logarithmicDepthBuffer:true;"
     vr-mode-ui="enabled:false"
@@ -64,7 +64,7 @@
 
     {% for item in media %}
       <a-entity id="targetAnchor{{ forloop.counter }}"
-                mindar-image-target="targetIndex: {{ item.target_img }}">
+                mindar-image-target="targetIndex: {{ item.target_img.url }}">
         
          {% if item.radius %}
           <!-- CIRCLE if radius not null -->
