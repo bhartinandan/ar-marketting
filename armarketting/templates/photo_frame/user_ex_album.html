@@ -64,7 +64,7 @@
 
     {% for item in media %}
       <a-entity id="targetAnchor{{ forloop.counter }}"
-                mindar-image-target="targetIndex: {{ item.target_img.url }}">
+                mindar-image-target="targetIndex: {{ forloop.counter }}">
         
          {% if item.radius %}
           <!-- CIRCLE if radius not null -->

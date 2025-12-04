@@ -869,7 +869,9 @@ def user_experience(request, hasheduserid):
 
             # Loop through media list and find target_img that exists
             for m in media:
+                print(m.target_img)
                 if m.target_img:              # if file field is not empty
+                    print("Target found:", m.target_img.url)
                     target = m.target_img.url
                     break                     # stop at first match
             return render(request, "photo_frame/user_ex_album.html", {"media": media, "target": target})
