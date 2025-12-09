@@ -132,10 +132,10 @@
         Object.values(elements).forEach(e => e.setAttribute("visible","false"));
       }
 
-      function setupAnchor(anchorId, el, video) {
+      function setupAnchor(anchorId, elementId, videoId) {
         const anchor = anchors[anchorId];
-        const el = elements[el];
-        const video = videos[video];
+        const el = elements[elementId];
+        const video = videos[videoId];
         anchor.addEventListener("targetFound", () => {
           stopAllVideos();
           if (!firstDetection) {
