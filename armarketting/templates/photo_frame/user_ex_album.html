@@ -97,10 +97,11 @@
       const anchors = {};
 
       for (let i = 1; i <= totalItems; i++) {
-        videos[i] = document.getElementById(`video${i}`);
-        elements[i] = document.getElementById(`plane${i}`);
-        anchors[i] = document.getElementById(`targetAnchor${i}`);
+        videos[`video${i}`] = document.getElementById(`video${i}`);
+        elements[`plane${i}`] = document.getElementById(`plane${i}`);
+        anchors[`targetAnchor${i}`] = document.getElementById(`targetAnchor${i}`);
       }
+      console.log("Total items :", videos, elements, anchors);
 
       const messageBox = document.getElementById("messageBox");
       const tapNotification = document.getElementById("tapNotification");
@@ -133,9 +134,11 @@
       }
 
       function setupAnchor(anchorId, elementId, videoId) {
+        console.log("Total items :", anchorId, elementId, videoId);
         const anchor = anchors[anchorId];
         const el = elements[elementId];
         const video = videos[videoId];
+        console.log("Total items list :", anchor, el, video);
         anchor.addEventListener("targetFound", () => {
           stopAllVideos();
           if (!firstDetection) {
@@ -158,6 +161,7 @@
       }
 
       for (let i = 1; i <= totalItems; i++) {
+        console.log("total item list1:", i, anchors[i], elements[i], videos[i]);
         setupAnchor(`targetAnchor${i}`, `plane${i}`, `video${i}`);
       }
     });
