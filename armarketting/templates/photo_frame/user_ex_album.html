@@ -52,7 +52,7 @@
   >
     <a-assets>
       {% for item in media %}
-        <video id="video{{ forloop.counter }}"
+        <video id="video{{ forloop.counter0 }}"
                src="{{ item.web_video.url }}"
                preload="auto" playsinline loop></video>
       {% endfor %}
@@ -61,23 +61,23 @@
     <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
 
     {% for item in media %}
-      <a-entity id="targetAnchor{{ forloop.counter }}"
-                mindar-image-target="targetIndex: {{ forloop.counter }}">
+      <a-entity id="targetAnchor{{ forloop.counter0 }}"
+                mindar-image-target="targetIndex: {{ forloop.counter0 }}">
         
          {% if item.radius %}
           <!-- CIRCLE if radius not null -->
-          <a-circle id="plane{{ forloop.counter }}"
+          <a-circle id="plane{{ forloop.counter0 }}"
                     radius="{{ item.radius }}"
-                    material="shader:flat;src:#video{{ forloop.counter }};transparent:true;"
+                    material="shader:flat;src:#video{{ forloop.counter0 }};transparent:true;"
                     visible="false">
           </a-circle>
         
         {% else %}
           <!-- RECTANGLE plane if radius null -->
-          <a-plane id="plane{{ forloop.counter }}"
+          <a-plane id="plane{{ forloop.counter0 }}"
                    width="{{ item.width }}"
                    height="{{ item.height }}"
-                   material="shader:flat;src:#video{{ forloop.counter }};transparent:true;"
+                   material="shader:flat;src:#video{{ forloop.counter0 }};transparent:true;"
                    visible="false">
           </a-plane>
         {% endif %}
@@ -96,7 +96,7 @@
       const elements = {};
       const anchors = {};
 
-      for (let i = 1; i <= totalItems; i++) {
+      for (let i = 0; i <= totalItems; i++) {
         videos[`video${i}`] = document.getElementById(`video${i}`);
         elements[`plane${i}`] = document.getElementById(`plane${i}`);
         anchors[`targetAnchor${i}`] = document.getElementById(`targetAnchor${i}`);
@@ -153,14 +153,14 @@
             if (audioUnlocked) video.play();
           }
         });
-        anchor.addEventListener("targetLost", () => {
+        anchor.addEventListener("targetLost", () => {[]
           video.pause(); video.currentTime = 0;
           el.setAttribute("visible","false");
           messageBox.style.display = "block";
         });
       }
 
-      for (let i = 1; i <= totalItems; i++) {
+      for (let i = 0; i <= totalItems; i++) {
         console.log("total item list1:", `targetAnchor${i}`, `plane${i}`, `video${i}`);
         setupAnchor(`targetAnchor${i}`, `plane${i}`, `video${i}`);
       }
