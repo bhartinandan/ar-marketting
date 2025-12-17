@@ -48,6 +48,21 @@ Port=SECRETS["PORT"]
 RAZOR_KEY_ID=SECRETS["razor_key_id"]
 RAZOR_KEY_SECRET=SECRETS["razor_key_secret"]
 
+
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'contactaliveframe@gmail.com'
+EMAIL_HOST_PASSWORD = 'ippucbyskmaqqddj'
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

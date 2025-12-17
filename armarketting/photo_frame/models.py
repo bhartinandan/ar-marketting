@@ -49,7 +49,7 @@ class MediaForWebExperience(models.Model):
     )
 
     def __str__(self):
-        return str(self.user.client_id.user.username) + "-" + str(self.user.name) +"-"+ str(self.id)
+        return str(self.user.client_id.user.username) + ", " + "FrameId:"+ str(self.user.id) + ", "+"Type: "+str(self.type) +"-"+ str(self.id)
     
 class FrameCount(models.Model):
     client_id = models.ForeignKey(ClientInfo, on_delete=models.CASCADE, related_name='clientid')
