@@ -680,9 +680,6 @@ def add_frame(request, id):
 
                 messages.success(request, f"Album uploaded successfully ({saved_count} items saved).")
                 return redirect("/frame/dashboard")
-            
-                print(saved_count)
-
 
             elif type_choice in ["square", "circle"] and video_file and reference_img:
                 MediaForWebExperience.objects.create(
@@ -691,10 +688,9 @@ def add_frame(request, id):
                     reference_img=reference_img,
                     type=type_choice,
                 )
+                frame_count_item.frame_count = frame_count_item.frame_count - 1
+                frame_count_item.save()
             # Save Media if uploaded
-
-            if video_file and reference_img:
-                MediaForWebExperience.objects.create(user=frame_user, web_video=video_file, reference_img=reference_img,  type=type_choice,)
 
             logger.info("New frame user '%s' added for client '%s'.", name, cli_id)
             messages.success(request, "Frame user added successfully!")
