@@ -88,10 +88,10 @@ def main():
     print("Hello, this is the main function!")
 
 if __name__ == "__main__":
-    hashed_id = encode_primary_key(2)
+    hashed_id = encode_primary_key(1)
     print(hashed_id)  # Example: 'x9J3yK8d'
 
-    original_id = decode_primary_key("rNkKLOMW")
+    original_id = decode_primary_key("p2lwYO08")
     print(original_id)  # Output: 123
     
 

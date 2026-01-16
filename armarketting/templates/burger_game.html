@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {% load static %}
+  <title>AR.js – Pop Burgers Game with Red Scope</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
+
+  <!-- A-Frame & AR.js -->
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/three.js/build/ar-threex-location-only.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    /* SCOREBOARD */
+    #scoreboard {
+      position: fixed;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-family: Arial, sans-serif;
+      z-index: 999;
+    }
+
+    /* TIMER */
+    #timer {
+      position: fixed;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-family: Arial, sans-serif;
+      z-index: 999;
+      margin-top: 10px;
+    }
+
+    /* RED DOT + BROKEN SQUARE SCOPE */
+    #scope {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    #scope::before,
+    #scope::after,
+    #scope div::before,
+    #scope div::after {
+      content: '';
+      position: absolute;
+      border: 2px solid red;
+      width: 6px;
+      height: 6px;
+    }
+
+    #scope::before { top:0; left:0; border-right:none; border-bottom:none; }
+    #scope::after { top:0; right:0; border-left:none; border-bottom:none; }
+    #scope div::before { bottom:0; left:0; border-right:none; border-top:none; }
+    #scope div::after { bottom:0; right:0; border-left:none; border-top:none; }
+
+    #scope .dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: red;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* GAME OVER DIALOG */
+    #gameOverDialog {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #0d1b2a;
+      color: #fff;
+      border-radius: 15px;
+      padding: 30px 40px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      z-index: 1000;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    #gameOverDialog h2 {
+      margin: 0 0 15px 0;
+      font-size: 28px;
+      color: #00d4ff;
+    }
+
+    #gameOverDialog p {
+      font-size: 20px;
+      margin: 10px 0;
+    }
+
+    #gameOverDialog button {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 18px;
+      background: #0066cc;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #gameOverDialog button:hover {
+      background: #004a99;
+    }
+  </style>
+</head>
+
+<body style="margin:0; overflow:hidden;">
+
+  <!-- SCORE -->
+  <div id="scoreboard">Score: <span id="score">0</span></div>
+  <!-- TIMER -->
+  <div id="timer">Time: <span id="time">60</span>s</div>
+
+  <!-- RED DOT + BROKEN SQUARE SCOPE -->
+  <div id="scope">
+    <div></div>
+    <div class="dot"></div>
+  </div>
+
+  <!-- GAME OVER DIALOG -->
+  <div id="gameOverDialog">
+    <h2>Game Over!</h2>
+    <p><span id="congrats"></span></p>
+    <p>Your Score: <span id="finalScore">0</span></p>
+    <p>High Score: <span id="highScore">0</span></p>
+    <button id="playAgainBtn">Play Again</button>
+  </div>
+
+  <!-- GUN SOUND -->
+  <audio id="popSound" preload="auto">
+    <source src="{% static 'pop.mp3' %}" type="audio/mpeg">
+  </audio>
+
+  <a-scene
+    vr-mode-ui="enabled:false"
+    arjs="sourceType:webcam; videoTexture:true; debugUIEnabled:false"
+    renderer="antialias:true; alpha:true">
+
+    <a-camera gps-new-camera="gpsMinDistance:1" look-controls="enabled: false">
+      <a-cursor fuse="false" raycaster="objects: .clickable"></a-cursor>
+    </a-camera>
+
+  </a-scene>
+  <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+  <input type="hidden" id="lat" value="{{ burgergame.lat }}">
+  <input type="hidden" id="lon" value="{{ burgergame.lon }}">
+
+
+  <script>
+
+    const scene = document.querySelector("a-scene");
+    const scoreEl = document.getElementById("score");
+    const timerEl = document.getElementById("time");
+    const congrats = document.getElementById("congrats");
+    const gameOverDialog = document.getElementById("gameOverDialog");
+    const finalScoreEl = document.getElementById("finalScore");
+    const highScoreEl = document.getElementById("highScore");
+    const playAgainBtn = document.getElementById("playAgainBtn");
+    const popSound = document.getElementById("popSound");
+    const latitude = document.getElementById("lat");
+    const longitude = document.getElementById("lon");
+
+    let score = 0;
+    let gameOver = false;
+    let spawnInterval = null;
+    let timerInterval = null;
+
+
+    const CENTER_LAT = latitude.value;
+    const CENTER_LON = longitude.value;
+    console.log("CENTER_LAT", CENTER_LAT);
+    const MIN_RADIUS = 40;
+    const MAX_RADIUS = 100;
+    const MIN_HEIGHT = 5;
+    const MAX_HEIGHT = 15;
+    const MIN_SCALE = 1;
+    const MAX_SCALE = 3;
+
+    function metersToLat(m) { return m / 111111; }
+    function metersToLon(m, lat) { return m / (111111 * Math.cos(lat * Math.PI / 180)); }
+    function rand(min, max) { return min + Math.random() * (max - min); }
+
+    function createBurger() {
+      if (gameOver) return;
+
+      const angle = Math.random() * Math.PI * 2;
+      
+
+      const radius = Math.sqrt(Math.random()) * rand(MIN_RADIUS, MAX_RADIUS);
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      const latOffset = metersToLat(z);
+      const lonOffset = metersToLon(x, CENTER_LAT);
+      const height = rand(MIN_HEIGHT, MAX_HEIGHT);
+      const scale = rand(MIN_SCALE, MAX_SCALE);
+
+      const burger = document.createElement("a-entity");
+      burger.classList.add("clickable");
+      burger.setAttribute("gltf-model", "{% static 'burger.glb' %}"); // local burger model
+      burger.setAttribute("scale", `${scale} ${scale} ${scale}`);
+      burger.setAttribute("position", `0 ${height} 0`);
+      burger.setAttribute("gps-new-entity-place", {
+        latitude: CENTER_LAT + latOffset,
+        longitude: CENTER_LON + lonOffset
+      });
+
+      // Animate appearing
+      burger.setAttribute("animation", {
+        property: "scale",
+        to: `${scale} ${scale} ${scale}`,
+        dur: 1000,
+        easing: "easeOutElastic"
+      });
+
+      // Rotate continuously
+      burger.setAttribute("animation__rotate", {
+        property: "rotation",
+        to: "0 360 0",
+        loop: true,
+        dur: 4000,
+        easing: "linear"
+      });
+
+      // Click → POP
+      burger.addEventListener("click", () => {
+        if (gameOver) return;
+        popSound.currentTime = 0;
+        popSound.play();
+        score++;
+        scoreEl.textContent = score;
+
+        burger.setAttribute("animation", {
+          property: "scale",
+          to: "0 0 0",
+          dur: 250,
+          easing: "easeOutQuad"
+        });
+        setTimeout(() => burger.remove(), 260);
+      });
+
+      // Auto disappear after 2 sec
+      setTimeout(() => {
+        if (scene.contains(burger)) {
+          burger.setAttribute("animation", {
+            property: "scale",
+            to: "0 0 0",
+            dur: 250,
+            easing: "easeOutQuad"
+          });
+          setTimeout(() => burger.remove(), 260);
+        }
+      }, 2000);
+
+      scene.appendChild(burger);
+    }
+
+    function startSpawning() {
+      const MAX_BURGERS = 10;
+
+      spawnInterval = setInterval(() => {
+        if (gameOver) return;
+
+        if (document.querySelectorAll('.clickable').length < MAX_BURGERS) {
+          createBurger();
+        }
+      }, 1200);
+    }
+
+    let timeLeft = 60;
+    function startTimer() {
+      const timer = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          gameOver = true;
+          clearInterval(spawnInterval);
+          showGameOver();
+        }
+      }, 1000);
+    }
+
+    function updateHighScoreAPI(score) {
+      const csrfToken = document.getElementById("csrf-token").value;
+      console.log("Updating high score via API:", score);
+
+      fetch("{% url 'update-high-score' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        },
+        body: JSON.stringify({
+          score: score,
+          name: "{{ name }}"
+        })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("High score update failed");
+        return res.json();
+      })
+      .then(data => {
+        console.log("High score saved:", data);
+      })
+      .catch(err => {
+        console.error("API error:", err);
+      });
+    }
+
+
+    function showGameOver() {
+      finalScoreEl.textContent = score;
+      const highScore = localStorage.getItem("highScore") || 0;
+      if (score > highScore) {
+        localStorage.setItem("highScore", score);
+        highScoreEl.textContent = score;
+        // 🔥 Django API hit
+        updateHighScoreAPI(score);
+        congrats.textContent = "    🎉 New High Score! 🎉";
+        
+      } else {
+        highScoreEl.textContent = highScore;
+      }
+      gameOverDialog.style.display = "block";
+    }
+
+    playAgainBtn.addEventListener("click", () => {
+      gameOverDialog.style.display = "none";
+      document.querySelectorAll(".clickable").forEach(b => b.remove());
+
+      score = 0;
+      scoreEl.textContent = score;
+      timeLeft = 60;
+      timerEl.textContent = timeLeft;
+      gameOver = false;
+      startSpawning();
+      startTimer();
+    });
+
+    scene.addEventListener("loaded", () => {
+      startSpawning();
+      startTimer();
+    });
+    
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
+<title>Burger Quest – Play While You Wait</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #ff9f1c, #ffbf69);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #222;
+    }
+
+    .container {
+        background: #ffffff;
+        width: 95%;
+        max-width: 420px;
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    }
+
+    .logo {
+        width: 110px;
+        margin-bottom: 8px;
+    }
+
+    h1 {
+        font-size: 1.7rem;
+        margin-bottom: 4px;
+    }
+
+    .tagline {
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 14px;
+    }
+
+    .video-box {
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 14px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    video {
+        width: 100%;
+        display: block;
+    }
+
+    .name-input {
+        margin-bottom: 14px;
+    }
+
+    .name-input input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 25px;
+        border: 2px solid #ddd;
+        font-size: 1rem;
+        text-align: center;
+        outline: none;
+    }
+
+    .name-input input:focus {
+        border-color: #e63946;
+    }
+
+    .score-card {
+        background: #fff3cd;
+        border-radius: 14px;
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+
+    .score-card h3 {
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+
+    .score {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #e63946;
+    }
+
+    .player {
+        font-size: 0.95rem;
+        color: #333;
+    }
+
+    .play-now-btn {
+        background: linear-gradient(135deg, #06d6a0, #1b9aaa);
+        color: #fff;
+        padding: 16px;
+        border-radius: 40px;
+        border: none;
+        width: 100%;
+        font-size: 1.2rem;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .play-now-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    }
+
+    .play-btn {
+        background: #1d8705;
+        color: #fff;
+        padding: 14px;
+        border-radius: 30px;
+        border: none;
+        width: 100%;
+        font-size: 1.05rem;
+        cursor: pointer;
+        transition: transform 0.2s, background 0.3s;
+    }
+
+    .play-btn:hover {
+        background: #d62828;
+        transform: scale(1.03);
+    }
+
+    .footer {
+        margin-top: 12px;
+        font-size: 0.75rem;
+        color: #777;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Logo -->
+    <img src="{{burgergame.logo.url}}" alt="Company Logo" class="logo">
+    <h2>Welcome to {{burgergame.company_name}}!</h2>
+
+    <h1>Burger Quest 🍔</h1>
+    <p class="tagline">Enter your name & play while you wait!</p>
+
+    <!-- How To Play Video -->
+    <div class="video-box">
+        <video autoplay muted loop playsinline>
+            <source src="{% static 'reel1.mp4' %}" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- High Score -->
+    <div class="score-card">
+        <h3>🏆 High Score</h3>
+        <div class="score" id="highScore">{{score}}</div>
+        <div class="player">
+            Player: <strong id="playerName">{{player_name}}</strong>
+        </div>
+    </div>
+
+    <!-- Player Name Input -->
+    <div class="name-input">
+        <input type="text" id="playerInput" placeholder="Enter your name" maxlength="12">
+        <input type="hidden" id="hashid" value="{{ hashid }}">
+    </div>
+
+    <!-- Buttons -->
+    <button class="play-btn" onclick="startGame()">▶ Start Game</button>
+
+    <div class="footer">
+        Powered by AliveFrame AR
+    </div>
+
+</div>
+
+<script>
+    
+    function playNow() {
+        const name = document.getElementById("playerInput").value.trim();
+        const hashid = document.getElementById("hashid").value.trim();
+
+        if (!name) {
+            alert("Please enter your name to play 🍔");
+            return;
+        }
+
+        localStorage.setItem("burgerPlayer", name);
+        document.getElementById("playerName").innerText = name;
+
+        window.location.href = "/burger-game/" + name +"/" + hashid;
+    }
+
+    function startGame() {
+        playNow();
+    }
+</script>
+
+</body>
+</html>

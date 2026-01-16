@@ -1019,6 +1019,78 @@ def logout_view(request):
             "error_message": "An unexpected error occurred. Please try again later."
         })
 
+# Aliveframe AR Games
+
+def ar_burger_game_landing(request,hashid):
+    print("hasheduserid",hashid)
+    """
+    Renders the AR games page.
+    """
+    try:
+        userid = decode_primary_key(hashid)
+        print("userid", userid)
+        burgergame = BurgerGame.objects.filter(id=userid).first()
+        print("burgergame", burgergame)
+        burgerscore = BurgerScore.objects.filter(game=burgergame).first()
+        print("burgerscore", burgerscore)
+        player_name="----"
+        score=0
+
+        if burgerscore:
+            player_name=burgerscore.player_name
+            score=burgerscore.score
+
+        return render(request, "burger_game_landing.html",context={
+                "burgergame": burgergame,
+                "player_name": player_name,
+                "score": score,
+                "hashid": hashid,
+            })
+    except Exception as e:
+        logger.exception("Error while loading AR games page")
+        return render(request, "client_error.html", {
+            "error_message": "An unexpected error occurred. Please try again later."
+        })
+
+def burger_game(request, name, hashid):
+    """
+    Renders the AR games page.
+    """
+    try:
+        userid = decode_primary_key(hashid)
+        print("userid", userid)
+        burgergame = BurgerGame.objects.filter(id=userid).first()
+        print("burgergame", burgergame)
+
+        return render(request, "burger_game.html",context={
+                "burgergame": burgergame,
+                "player_name": name,
+            })
+    except Exception as e:
+        logger.exception("Error while loading AR games page")
+        return render(request, "client_error.html", {
+            "error_message": "An unexpected error occurred. Please try again later."
+        })
+
+def update_burger_score(request):
+    """
+    Updates the burger game score.
+    """
+    try:
+        if request.method == "POST":
+            data = json.loads(request.body)
+            score = data.get("score")
+            name = data.get("name")
+            print("score", score)
+            print("name", name)
+
+            logger.info("Burger game score updated successfully for player: %s", name)
+            return JsonResponse({"message": "Score updated successfully"}, status=200)
+
+    except Exception as e:
+        logger.exception("Error while updating burger game score")
+        return JsonResponse({"error": "An unexpected error occurred."}, status=500)
+
 def contact(request):
     """
     Handles the contact form submission.

@@ -71,6 +71,25 @@ class ServiceStatistics(models.Model):
     def __str__(self):
         return str(self.service_id.client_id.user.username) + "-" + str(self.id)
 
+class BurgerGame(models.Model):
+    company_name = models.CharField(max_length=255)
+    lat = models.DecimalField(max_digits=50, decimal_places=20)
+    lon = models.DecimalField(max_digits=50, decimal_places=20)
+    logo = models.ImageField(upload_to='burger_logo_images/')
+    timestamp = models.DateTimeField(default=datetime.now, blank=True)
+
+    def __str__(self):
+        return self.company_name
+    
+class BurgerScore(models.Model):
+    game = models.ForeignKey(BurgerGame, on_delete=models.CASCADE, related_name='gameid')
+    player_name = models.CharField(max_length=255)
+    score = models.IntegerField(default=0)
+    timestamp = models.DateTimeField(default=datetime.now, blank=True)
+
+    def __str__(self):
+        return self.player_name + "-" + str(self.id)
+    
 class ContactUs(models.Model):
     name = models.CharField(max_length=255)
     business_name = models.CharField(max_length=255)

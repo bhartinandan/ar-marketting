@@ -42,6 +42,11 @@ urlpatterns = [
     path('create-service/<str:id>', views.create_service, name='create-service'),
     path('staff-logout', views.staff_logout, name='staff-logout'),
 
+    # Aliveframe AR Games
+    path('ar-burger-game-landing/<slug:hashid>', views.ar_burger_game_landing, name='ar-burger-game-landing'),
+    path('burger-game/<slug:name>/<slug:hashid>', views.burger_game, name='burger-game'),
+    path('update-high-score', views.update_burger_score, name='update-high-score'),
+
 
     #client signin urls 
     path('signin', views.client_signin, name='signin'),
