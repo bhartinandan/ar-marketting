@@ -166,6 +166,7 @@
   <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
   <input type="hidden" id="lat" value="{{ burgergame.lat }}">
   <input type="hidden" id="lon" value="{{ burgergame.lon }}">
+  <input type="hidden" id="glb-file-url" value="{{ burgergame.glb_file.url }}">
 
 
   <script>
@@ -181,6 +182,7 @@
     const popSound = document.getElementById("popSound");
     const latitude = document.getElementById("lat");
     const longitude = document.getElementById("lon");
+    const glbFileUrl = document.getElementById("glb-file-url");
 
     let score = 0;
     let gameOver = false;
@@ -190,7 +192,7 @@
 
     const CENTER_LAT = latitude.value;
     const CENTER_LON = longitude.value;
-    console.log("CENTER_LAT", CENTER_LAT);
+    const GLB = glbFileUrl.value;
     const MIN_RADIUS = 40;
     const MAX_RADIUS = 100;
     const MIN_HEIGHT = 5;
@@ -218,7 +220,7 @@
 
       const burger = document.createElement("a-entity");
       burger.classList.add("clickable");
-      burger.setAttribute("gltf-model", "{% static 'burger.glb' %}"); // local burger model
+      burger.setAttribute("gltf-model", GLB); // local burger model
       burger.setAttribute("scale", `${scale} ${scale} ${scale}`);
       burger.setAttribute("position", `0 ${height} 0`);
       burger.setAttribute("gps-new-entity-place", {

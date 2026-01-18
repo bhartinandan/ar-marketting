@@ -77,6 +77,12 @@ class BurgerGame(models.Model):
     lon = models.DecimalField(max_digits=50, decimal_places=20)
     logo = models.ImageField(upload_to='burger_logo_images/')
     timestamp = models.DateTimeField(default=datetime.now, blank=True)
+    glb_file = models.FileField(
+        upload_to="models/glb/",
+        null=True,
+        blank=True
+    )
+    enabled = models.BooleanField(default=True)
 
     def __str__(self):
         return self.company_name
