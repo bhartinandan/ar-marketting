@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %} 
+  <meta charset="UTF-8" />
+  <title>AliveFrame AR Experience</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar/dist/mindar-image-aframe.prod.js"></script>
+  <style>
+    body { margin:0; overflow:hidden; height:100vh; font-family:'Poppins',sans-serif; background:#000; }
+    #messageBox, #tapNotification {
+      z-index: 100; background:rgb(7,15,96); text-align:center; color:#fff;
+      padding:.3rem .6rem; border-radius:.2rem; margin-top:.2rem;
+      font-size:1.4rem; font-weight:600;
+    }
+    #tapNotification { display:none; } /* hidden initially */
+    .grid{display:flex;justify-content:center;flex-direction:column;align-items:center;height:80vh;position:absolute;top:0;width:100%;}
+    .footer{position:absolute;bottom:0;width:100%;text-align:center;color:#aaa;font-size:12px;background:rgba(0,0,0,0.4);padding:4px 0;z-index:101;}
+    a-scene{height:100vh;width:100vw;}
+    .a-loader{display:none!important;}
+    #customLoader{position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;}
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <div id="tapNotification">👆 Tap To Start The AR</div>
+    <div id="messageBox">Place Camera On Poster</div>
+  </div>
+  <div class="footer">Powered by Aliveframe</div>
+
+  <div id="customLoader">
+    <img src="logo.jpg" alt="AliveFrame Logo" style="width:194px; animation:pulse 1.4s infinite ease-in-out;" />
+    <p style="margin-top:0.8rem;font-weight:500;color:white;">Loading AR Experience...</p>
+  </div>
+
+  <a-scene
+    mindar-image="imageTargetSrc: multipletarget.mind; filterMinCF:0.1; filterBeta:0.9; warmupTolerance:1; missTolerance:5; maxTrack:1; uiScanning:false;"
+    color-space="sRGB"
+    renderer="logarithmicDepthBuffer:true;"
+    vr-mode-ui="enabled:false"
+    device-orientation-permission-ui="enabled:false"
+    embedded
+  >
+    <a-assets>
+      <video id="video1" src="card.mp4" preload="auto" playsinline crossorigin="anonymous" loop ></video>
+      <video id="video2" src="prashant.mp4" preload="auto" playsinline crossorigin="anonymous" loop ></video>
+      <video id="video3" src="roundvideo.mp4" preload="auto" playsinline crossorigin="anonymous" loop ></video>
+      <video id="video1" src="card.mp4" preload="auto" playsinline crossorigin="anonymous" loop ></video>
+      <video id="video2" src="prashant.mp4" preload="auto" playsinline crossorigin="anonymous" loop ></video>
+      <video id="video3" src="roundvideo.mp4" preload="auto" playsinline crossorigin="anonymous" loop ></video>
+      <video id="video1" src="card.mp4" preload="auto" playsinline crossorigin="anonymous" loop ></video>
+      <video id="video2" src="prashant.mp4" preload="auto" playsinline crossorigin="anonymous" loop ></video>
+      <video id="video3" src="roundvideo.mp4" preload="auto" playsinline crossorigin="anonymous" loop ></video>
+      <video id="video1" src="card.mp4" preload="auto" playsinline crossorigin="anonymous" loop ></video>
+
+    </a-assets>
+
+    <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+
+    <a-entity id="targetAnchor1" mindar-image-target="targetIndex:0">
+      <a-plane id="plane1" width="1" height="0.6" material="shader:flat;src:#video1;transparent:true;" visible="false"></a-plane>
+    </a-entity>
+
+    <a-entity id="targetAnchor2" mindar-image-target="targetIndex:1">
+      <a-plane id="plane2" width="1" height="1.5" material="shader:flat;src:#video2;transparent:true;" visible="false"></a-plane>
+    </a-entity>
+
+    <a-entity id="targetAnchor1" mindar-image-target="targetIndex:0">
+      <a-plane id="plane1" width="1" height="0.6" material="shader:flat;src:#video1;transparent:true;" visible="false"></a-plane>
+    </a-entity>
+
+    <a-entity id="targetAnchor2" mindar-image-target="targetIndex:1">
+      <a-plane id="plane2" width="1" height="1.5" material="shader:flat;src:#video2;transparent:true;" visible="false"></a-plane>
+    </a-entity>
+
+    <a-entity id="targetAnchor1" mindar-image-target="targetIndex:0">
+      <a-plane id="plane1" width="1" height="0.6" material="shader:flat;src:#video1;transparent:true;" visible="false"></a-plane>
+    </a-entity>
+
+    <a-entity id="targetAnchor2" mindar-image-target="targetIndex:1">
+      <a-plane id="plane2" width="1" height="1.5" material="shader:flat;src:#video2;transparent:true;" visible="false"></a-plane>
+    </a-entity>
+
+    <a-entity id="targetAnchor1" mindar-image-target="targetIndex:0">
+      <a-plane id="plane1" width="1" height="0.6" material="shader:flat;src:#video1;transparent:true;" visible="false"></a-plane>
+    </a-entity>
+
+    <a-entity id="targetAnchor2" mindar-image-target="targetIndex:1">
+      <a-plane id="plane2" width="1" height="1.5" material="shader:flat;src:#video2;transparent:true;" visible="false"></a-plane>
+    </a-entity>
+
+    <a-entity id="targetAnchor1" mindar-image-target="targetIndex:0">
+      <a-plane id="plane1" width="1" height="0.6" material="shader:flat;src:#video1;transparent:true;" visible="false"></a-plane>
+    </a-entity>
+
+    <a-entity id="targetAnchor2" mindar-image-target="targetIndex:1">
+      <a-plane id="plane2" width="1" height="1.5" material="shader:flat;src:#video2;transparent:true;" visible="false"></a-plane>
+    </a-entity>
+
+  </a-scene>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const videos = {
+        video1: document.getElementById("video1"),
+        video2: document.getElementById("video2"),
+        video3: document.getElementById("video3"),
+      };
+      const elements = {
+        plane1: document.getElementById("plane1"),
+        plane2: document.getElementById("plane2"),
+        circle1: document.getElementById("circle1"),
+      };
+      const anchors = {
+        targetAnchor1: document.getElementById("targetAnchor1"),
+        targetAnchor2: document.getElementById("targetAnchor2"),
+        targetAnchor3: document.getElementById("targetAnchor3"),
+      };
+
+      const messageBox = document.getElementById("messageBox");
+      const tapNotification = document.getElementById("tapNotification");
+
+      let audioUnlocked = false;
+      let firstDetection = false;
+      let pendingVideo = null;
+      let pendingElement = null;
+
+      // one tap after first detection unlocks audio and starts video
+      document.body.addEventListener("click", () => {
+        if (firstDetection && !audioUnlocked) {
+          Object.values(videos).forEach(v => v.muted = false);
+          audioUnlocked = true;
+          tapNotification.style.display = "none";
+          console.log("🔓 Audio unlocked");
+          if (pendingVideo) {
+            pendingElement.setAttribute("visible","true");
+            pendingVideo.play();
+            messageBox.style.display = "none";
+            pendingVideo = null;
+            pendingElement = null;
+          }
+        }
+      });
+
+      function stopAllVideos() {
+        Object.values(videos).forEach(v => { v.pause(); v.currentTime = 0; });
+        Object.values(elements).forEach(e => e.setAttribute("visible","false"));
+      }
+
+      function setupAnchor(anchorId, el, video) {
+        const anchor = anchors[anchorId];
+        anchor.addEventListener("targetFound", () => {
+          stopAllVideos();
+          if (!firstDetection) {
+            // first target found, wait for user tap
+            firstDetection = true;
+            tapNotification.style.display = "block";
+            pendingVideo = video;
+            pendingElement = el;
+          } else {
+            messageBox.style.display = "none";
+            el.setAttribute("visible","true");
+            if (audioUnlocked) video.play();
+          }
+        });
+        anchor.addEventListener("targetLost", () => {
+          video.pause(); video.currentTime = 0;
+          el.setAttribute("visible","false");
+          messageBox.style.display = "block";
+        });
+      }
+
+      setupAnchor("targetAnchor1", elements.plane1, videos.video1);
+      setupAnchor("targetAnchor2", elements.plane2, videos.video2);
+      setupAnchor("targetAnchor3", elements.circle1, videos.video3);
+    });
+
+    window.addEventListener("load", () => {
+      document.querySelector('a-scene').addEventListener("arReady", () => {
+        const loader = document.getElementById("customLoader");
+        if (loader) loader.style.display = "none";
+      });
+    });
+  </script>
+</body>
+</html>
