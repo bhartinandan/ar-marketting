@@ -143,11 +143,11 @@
     <h1>AR Quest Leaderboard</h1>
 
     <!-- Current Player Score Display -->
-    {% if current_player %}
+    {% if current_player_score %}
         <div class="current-player">
-            🎯 Your Score: {{ current_player.score }} pts
-            {% if current_player.rank %}
-                | Rank: #{{ current_player.rank }}
+            🎯 Your Score: {{ current_player_score }} pts
+            {% if current_player_name %}
+                | Player: {{ current_player_name }}
             {% endif %}
         </div>
     {% endif %}

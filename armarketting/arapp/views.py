@@ -1153,9 +1153,32 @@ def update_ar_game_score(request):
         if request.method == "POST":
             data = json.loads(request.body)
             score = data.get("score")
-            name = data.get("name")
+            name = request.session.get("name", "Anonymous")
+            mobile = request.session.get("mobile", "Unknown")
+            score = int(score) if score is not None else 0
+            request.session["score"] = score
+
             print("score", score)
             print("name", name)
+            print("mobile", mobile)
+
+            hashid = data.get("hashid")
+            userid = decode_primary_key(hashid)
+
+            # Save the score to the database
+
+            existing_score = ArGameScore.objects.filter(game_id=userid, mobile=mobile).first()
+            if existing_score :
+                ArGameScore.objects.filter(game_id=userid, mobile=mobile).update(score=F('score') + score)
+                return JsonResponse({"message": "Score not updated because it's lower than or equal to existing score"}, status=200)
+            
+            else:
+                ArGameScore.objects.create(
+                    player_name=name,
+                    mobile=mobile,
+                    score=score,
+                    game_id=userid
+                )
 
             logger.info("AR game score updated successfully for player: %s", name)
             return JsonResponse({"message": "Score updated successfully"}, status=200)
@@ -1171,11 +1194,18 @@ def ar_game_leaderboard(request, hashid):
     try:
         userid = decode_primary_key(hashid)
         print("userid", userid)
+        current_player_score = None
+        current_player_name = None
+        if request.session.get("score") is not None:
+            current_player_score = request.session.get("score")
+            current_player_name = request.session.get("name", "Anonymous")
         argame = ArGame.objects.filter(id=userid).first()
         top_players = ArGameScore.objects.filter(game=argame).order_by('-score')[:10]
         return render(request, "game/leaderboard.html", context={
             "top_players": top_players,
             "argame": argame,
+            "current_player_score": current_player_score,
+            "current_player_name": current_player_name,
         })
     except Exception as e:
         logger.exception("Error while loading AR game leaderboard page")

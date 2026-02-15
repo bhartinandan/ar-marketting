@@ -50,7 +50,7 @@ urlpatterns = [
     # AR Game
     path('ar-game-landing/<slug:hashid>', views.ar_game_landing, name='ar-game-landing'),
     path('play-ar-game/<slug:hashid>', views.play_ar_game, name='play-ar-game'),
-    path('update_ar_game_score', views.update_ar_game_score, name='update_ar_game_score'),
+    path('update-ar-game-score', views.update_ar_game_score, name='update-ar-game-score'),
     path('ar-game-leaderboard/<slug:hashid>', views.ar_game_leaderboard, name='ar-game-leaderboard'),
 
 

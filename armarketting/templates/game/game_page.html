@@ -106,6 +106,7 @@
     <input type="hidden" id="glb-file-url" value="{{ glb_file }}">
     <input type="hidden" id="mindistance" value="{{ min_distance }}">
     <input type="hidden" id="maxdistance" value="{{ max_distance }}">
+    <input type="hidden" id="hashid" value="{{ hashid }}">
 
 <script>
 const scene = document.querySelector("a-scene");
@@ -115,6 +116,7 @@ const reticle = document.getElementById("reticle");
 const ring = document.getElementById("ring");
 const vLine = document.getElementById("vLine");
 const hLine = document.getElementById("hLine");
+const hashid = document.getElementById("hashid").value;
 
 const scoreEl = document.getElementById("score");
 const timerEl = document.getElementById("time");
@@ -266,16 +268,17 @@ const timerInterval = setInterval(() => {
 }, 1000);
 
 /* 🚀 Send Score to Django */
-function submitScore(finalScore) {
+function submitScore(finalScore, hashid) {
 
-  fetch("/update_ar_game_score/", {
+  fetch("/update-ar-game-score/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "X-CSRFToken": getCSRFToken()
     },
     body: JSON.stringify({
-      score: finalScore
+      score: finalScore,
+      hashid: hashid
     })
   })
   .then(response => response.json())
