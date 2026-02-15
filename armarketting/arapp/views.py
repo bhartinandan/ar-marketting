@@ -1138,6 +1138,7 @@ def play_ar_game(request, hashid):
             "max_distance": argame.max_distance,
             "glb_file": argame.glb_file.url if argame.glb_file else None,
             "fixed_value": argame.fixed_value,
+            "hashid": hashid,
         })
     except Exception as e:
         logger.exception("Error while loading AR games page")
