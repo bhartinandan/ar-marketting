@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ company.name }} - Leaderboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            color: #fff;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: rgba(255,255,255,0.08);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .company-name {
+            font-size: 18px;
+            color: #00ffd5;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: rgba(255,255,255,0.1);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .rank {
+            font-weight: bold;
+            color: #00ffd5;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            background: #00ffd5;
+            color: #000;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .watermark {
+            margin-top: 25px;
+            font-size: 12px;
+            opacity: 0.6;
+        }
+
+        .watermark a {
+            color: #00ffd5;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Company Name -->
+    <h1>Top 10 Leaderboard</h1>
+    <div class="company-name">{{ company.name }}</div>
+
+    <!-- Leaderboard Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in top_players %}
+            <tr>
+                <td class="rank">{{ forloop.counter }}</td>
+                <td>{{ player.player_name }}</td>
+                <td>{{ player.score }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No players yet</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Back Button -->
+    <a href="{% url 'landing_page' company.id %}">
+        <button class="back-btn">Back to Game</button>
+    </a>
+
+</div>
+
+<div class="watermark">
+    Powered by <a href="https://aliveframe.com" target="_blank">aliveframe.com</a>
+</div>
+
+</body>
+</html>

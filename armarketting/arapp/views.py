@@ -1172,9 +1172,9 @@ def ar_game_leaderboard(request, hashid):
         userid = decode_primary_key(hashid)
         print("userid", userid)
         argame = ArGame.objects.filter(id=userid).first()
-        scores = ArGameScore.objects.filter(game=argame).order_by('-score')[:10]
+        top_players = ArGameScore.objects.filter(game=argame).order_by('-score')[:10]
         return render(request, "game/leaderboard.html", context={
-            "scores": scores,
+            "top_players": top_players,
             "company_name": argame.company_name,
         })
     except Exception as e:
