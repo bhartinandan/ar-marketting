@@ -157,8 +157,9 @@
   <p>Experience the Ar game {{ company_name }} offers!</p>
 
   <!-- Promotional Video -->
-  <div class="video-wrapper">
-    <iframe src="{{ video_file }}" allowfullscreen></iframe>
+  <div class="video-wrapper" id="promoVideo" autoplay muted playsinline>
+    <source src="{{ video_file }}" type="video/mp4">
+    Your browser does not support the video tag.
   </div>
 
   <!-- User Form -->
@@ -191,4 +192,17 @@
 </div>
 
 </body>
+
+<script>
+    const video = document.getElementById("promoVideo");
+
+  function enableSound() {
+    video.muted = false;   // Enable audio
+    video.play();          // Ensure video continues playing
+    document.removeEventListener("click", enableSound);
+  }
+
+  document.addEventListener("click", enableSound);
+</script>
+
 </html>
