@@ -133,6 +133,19 @@ const glbFileUrl = document.getElementById("glb-file-url");
 
 const GLB = glbFileUrl.value;
 
+min_size = parseFloat(minimum.value);
+max_size = parseFloat(maximum.value);
+
+fixed = parseInt(fixed.value);
+
+minimumDistance = parseFloat(minimumDistance.value);
+maximumDistance = parseFloat(maximumDistance.value);
+
+console.log("Min Size:", min_size);
+console.log("Max Size:", max_size);
+
+console.log("GLB URL::", GLB);
+
 let score = 0;
 let timeLeft = 60;
 let gameOver = false;
@@ -195,7 +208,7 @@ function createBurger() {
   burger.classList.add("clickable");
   burger.setAttribute("gltf-model", GLB);
 
-  const scale = (Math.random() * minimum + maximum).toFixed(fixed);
+  const scale = (Math.random() * min_size + max_size).toFixed(fixed);
   burger.setAttribute("scale", `${scale} ${scale} ${scale}`);
 
   const distance = Math.random() * maximumDistance + minimumDistance;
