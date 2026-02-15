@@ -286,11 +286,11 @@ function submitScore(finalScore, hashId) {
   })
   .then(response => response.json())
   .then(data => {
-      window.location.href = "/leaderboard/"+ hashId;
+      window.location.href = "/ar-game-leaderboard/"+ hashId;
   })
   .catch(error => {
       console.error("Error:", error);
-      window.location.href = "/leaderboard/"+ hashId;
+      window.location.href = "/ar-game-leaderboard/"+ hashId;
   });
 }
 
