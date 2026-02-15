@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ company.name }} - AR Quest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      text-align: center;
+    }
+
+    .logo img {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+
+    .company-name {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #00ffd5;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-top: 56.25%;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 30px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    .play-btn {
+      background: #00ffd5;
+      color: #000;
+    }
+
+    .leaderboard-btn {
+      background: transparent;
+      border: 2px solid #fff;
+      color: #fff;
+    }
+
+    .visit-btn {
+      background: #ff9800;
+      color: #000;
+    }
+
+    .watermark {
+      margin-top: 20px;
+      font-size: 12px;
+      opacity: 0.6;
+      text-align: center;
+    }
+
+    .watermark a {
+      color: #00ffd5;
+      text-decoration: none;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Company Logo -->
+  <div class="logo">
+    <img src="{{ logo }}" alt="{{ company_name }}">
+  </div>
+
+  <!-- Company Name -->
+  <div class="company-name">
+    {{ company_name }}
+  </div>
+
+  <!-- Welcome Message -->
+  <h1>Welcome to AR Quest Challenge!</h1>
+  <p>Experience the Ar game {{ company_name }} offers!</p>
+
+  <!-- Promotional Video -->
+  <div class="video-wrapper">
+    <iframe src="{{ video_file }}" allowfullscreen></iframe>
+  </div>
+
+  <!-- User Form -->
+  <form method="POST">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <input type="text" name="name" placeholder="Enter Your Name" required>
+    </div>
+
+    <div class="form-group">
+      <input type="tel" name="mobile" placeholder="Enter Mobile Number" required>
+    </div>
+
+    <button type="submit" class="btn play-btn">Play AR Game</button>
+  </form>
+
+  <a onclick="window.location.href ='/ar-game-leaderboard/{{hashid}}'">
+    <button class="btn leaderboard-btn">View Leaderboard</button>
+  </a>
+
+  <a href="{{ website_url }}" target="_blank">
+    <button class="btn visit-btn">Visit Official Website</button>
+  </a>
+
+</div>
+
+<div class="watermark">
+  Powered by <a href="https://aliveframe.com" target="_blank">Aliveframe.com</a>
+</div>
+
+</body>
+</html>

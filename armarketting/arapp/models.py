@@ -113,10 +113,21 @@ class ArGame(models.Model):
         upload_to="product_videos/")
     fixed_value = models.IntegerField(default=2)
     enabled = models.BooleanField(default=True)
+    website_url = models.URLField(default=None, null=True, blank=True)
 
 
     def __str__(self):
         return self.company_name
+    
+class ArGameScore(models.Model):
+    game = models.ForeignKey(ArGame, on_delete=models.CASCADE, related_name='argameid')
+    player_name = models.CharField(max_length=20)
+    contact = models.CharField(max_length=15)
+    score = models.IntegerField(default=0)
+    timestamp = models.DateTimeField(default=datetime.now, blank=True)
+
+    def __str__(self):
+        return self.player_name + "-" + str(self.id)
     
 class ContactUs(models.Model):
     name = models.CharField(max_length=255)

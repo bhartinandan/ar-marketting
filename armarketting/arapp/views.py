@@ -1098,11 +1098,23 @@ def ar_game_landing(request,hashid):
     try:
         userid = decode_primary_key(hashid)
         print("userid", userid)
+        if request.method == "POST":
+            name = request.POST.get("name", "").strip()
+            mobile = request.POST.get("mobile", "").strip()
+            print("name", name)
+            print("mobile", mobile)
+
+            request.session["name"] = name
+            request.session["mobile"] = mobile
+
+            return redirect(f"/play-ar-game/{hashid}")
+
         argame = ArGame.objects.filter(id=userid).first()
-        return render(request, "game/game_page.html", context={
+        return render(request, "game/landing.html", context={
             "logo": argame.logo.url if argame.logo else None,
             "company_name": argame.company_name,
             "video_file": argame.video_file.url if argame.video_file else None,
+            "website_url": argame.website_url,
             "hashid": hashid,
         })
     except Exception as e:
@@ -1151,6 +1163,26 @@ def update_ar_game_score(request):
     except Exception as e:
         logger.exception("Error while updating AR game score")
         return JsonResponse({"error": "An unexpected error occurred."}, status=500)
+    
+def ar_game_leaderboard(request, hashid):
+    """
+    Renders the AR game leaderboard page.
+    """
+    try:
+        userid = decode_primary_key(hashid)
+        print("userid", userid)
+        argame = ArGame.objects.filter(id=userid).first()
+        scores = ArGameScore.objects.filter(game=argame).order_by('-score')[:10]
+        return render(request, "game/leaderboard.html", context={
+            "scores": scores,
+            "company_name": argame.company_name,
+        })
+    except Exception as e:
+        logger.exception("Error while loading AR game leaderboard page")
+        return render(request, "client_error.html", {
+            "error_message": "An unexpected error occurred. Please try again later."
+        })
+    
 
     
 def contact(request):
