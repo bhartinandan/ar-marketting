@@ -116,7 +116,7 @@ const reticle = document.getElementById("reticle");
 const ring = document.getElementById("ring");
 const vLine = document.getElementById("vLine");
 const hLine = document.getElementById("hLine");
-const hashid = document.getElementById("hashid").value;
+const hashid = document.getElementById("hashid");
 
 const scoreEl = document.getElementById("score");
 const timerEl = document.getElementById("time");
@@ -143,11 +143,14 @@ fixed_val = parseInt(fixed.value);
 minDistance = parseFloat(minimumDistance.value);
 maxDistance = parseFloat(maximumDistance.value);
 
+hashId = hashid.value;
+
 console.log("Min Size:", min_size);
 console.log("Max Size:", max_size);
 console.log("Fixed Value:", fixed_val);
 console.log("Min Distance:", minDistance);
 console.log("Max Distance:", maxDistance); 
+console.log("Hash ID:", hashId);
 
 
 console.log("GLB URL::", GLB);
@@ -263,12 +266,12 @@ const timerInterval = setInterval(() => {
   if (timeLeft <= 0) {
     gameOver = true;
     clearInterval(timerInterval);
-    submitScore(score);
+    submitScore(score, hashId);
   }
 }, 1000);
 
 /* 🚀 Send Score to Django */
-function submitScore(finalScore, hashid) {
+function submitScore(finalScore, hashId) {
 
   fetch("/update-ar-game-score/", {
     method: "POST",
@@ -278,16 +281,16 @@ function submitScore(finalScore, hashid) {
     },
     body: JSON.stringify({
       score: finalScore,
-      hashid: hashid
+      hashid: hashId
     })
   })
   .then(response => response.json())
   .then(data => {
-      window.location.href = "/leaderboard/"+ hashid;
+      window.location.href = "/leaderboard/"+ hashId;
   })
   .catch(error => {
       console.error("Error:", error);
-      window.location.href = "/leaderboard/"+ hashid;
+      window.location.href = "/leaderboard/"+ hashId;
   });
 }
 
