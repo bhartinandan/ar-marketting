@@ -95,6 +95,28 @@ class BurgerScore(models.Model):
 
     def __str__(self):
         return self.player_name + "-" + str(self.id)
+
+class ArGame(models.Model):
+    company_name = models.CharField(max_length=255)
+    max_size = models.DecimalField(max_digits=50, decimal_places=20)
+    min_size = models.DecimalField(max_digits=50, decimal_places=20)
+    min_distance = models.DecimalField(max_digits=50, decimal_places=20)
+    max_distance = models.DecimalField(max_digits=50, decimal_places=20)
+    logo = models.ImageField(upload_to='burger_logo_images/')
+    timestamp = models.DateTimeField(default=datetime.now, blank=True)
+    glb_file = models.FileField(
+        upload_to="models/glb/",
+        null=True,
+        blank=True
+    )
+    video_file = models.FileField(
+        upload_to="product_videos/")
+    fixed_value = models.IntegerField(default=2)
+    enabled = models.BooleanField(default=True)
+
+
+    def __str__(self):
+        return self.company_name
     
 class ContactUs(models.Model):
     name = models.CharField(max_length=255)
