@@ -176,10 +176,18 @@
   <p>Experience the Ar game {{ company_name }} offers!</p>
 
   <!-- Promotional Video -->
-  <div class="video-wrapper" id="promoVideo" autoplay muted playsinline>
-    <source src="{{ video_file }}" type="video/mp4">
-    Your browser does not support the video tag.
-  </div>
+    <div class="video-wrapper">
+    <video id="promoVideo" autoplay muted playsinline>
+        <source src="{{ video_file }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Tap to enable sound badge -->
+    <div id="soundHint" class="sound-hint">
+        🔊 Tap anywhere to enable sound
+    </div>
+    </div>
+
 
   <!-- User Form -->
   <form method="POST">
