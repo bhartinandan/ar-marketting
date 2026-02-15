@@ -1175,7 +1175,7 @@ def ar_game_leaderboard(request, hashid):
         top_players = ArGameScore.objects.filter(game=argame).order_by('-score')[:10]
         return render(request, "game/leaderboard.html", context={
             "top_players": top_players,
-            "company_name": argame.company_name,
+            "argame": argame,
         })
     except Exception as e:
         logger.exception("Error while loading AR game leaderboard page")

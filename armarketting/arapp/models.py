@@ -121,7 +121,7 @@ class ArGame(models.Model):
     
 class ArGameScore(models.Model):
     game = models.ForeignKey(ArGame, on_delete=models.CASCADE, related_name='argameid')
-    player_name = models.CharField(max_length=20)
+    player_name = models.CharField(max_length=10)
     contact = models.CharField(max_length=15)
     score = models.IntegerField(default=0)
     timestamp = models.DateTimeField(default=datetime.now, blank=True)

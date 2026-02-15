@@ -1,8 +1,9 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>{{ company.name }} - Leaderboard</title>
+    <title>{{ argame.company_name }} | Leaderboard</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -10,39 +11,48 @@
     <style>
         body {
             margin: 0;
-            padding: 20px;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #141e30, #243b55);
-            color: #fff;
+            background: linear-gradient(135deg, #111, #1e1e1e);
+            color: white;
             text-align: center;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 900px;
             margin: auto;
-            background: rgba(255,255,255,0.08);
-            padding: 25px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
+            padding: 30px 20px 80px;
+        }
+
+        .logo {
+            width: 120px;
+            margin-bottom: 10px;
         }
 
         h1 {
-            margin-bottom: 5px;
+            margin: 5px 0 25px;
+            font-size: 28px;
         }
 
-        .company-name {
-            font-size: 18px;
-            color: #00ffd5;
+        /* Current Player Card */
+        .current-player {
+            background: linear-gradient(90deg, #00ffd5, #00c3ff);
+            color: black;
+            padding: 15px;
+            border-radius: 12px;
             margin-bottom: 20px;
+            font-weight: 600;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         th, td {
-            padding: 10px;
+            padding: 15px;
             text-align: center;
         }
 
@@ -51,17 +61,47 @@
             font-weight: 600;
         }
 
-        tr:nth-child(even) {
-            background: rgba(255,255,255,0.05);
+        tr {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
         }
 
-        .rank {
-            font-weight: bold;
-            color: #00ffd5;
+        tr:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* Highlight current player in table */
+        .current-row {
+            outline: 2px solid #00ffd5;
+            background: rgba(0,255,213,0.1);
+        }
+
+        /* Top 3 Styling */
+        .rank-1 {
+            background: linear-gradient(90deg, gold, #ffd700);
+            color: black;
+            font-weight: 700;
+        }
+
+        .rank-2 {
+            background: linear-gradient(90deg, silver, #c0c0c0);
+            color: black;
+            font-weight: 700;
+        }
+
+        .rank-3 {
+            background: linear-gradient(90deg, #cd7f32, #b87333);
+            color: white;
+            font-weight: 700;
+        }
+
+        .trophy {
+            font-size: 18px;
+            margin-right: 5px;
         }
 
         .back-btn {
-            margin-top: 20px;
+            margin-top: 25px;
             padding: 10px 20px;
             border-radius: 25px;
             border: none;
@@ -72,14 +112,22 @@
         }
 
         .watermark {
-            margin-top: 25px;
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
             font-size: 12px;
             opacity: 0.6;
         }
 
-        .watermark a {
-            color: #00ffd5;
-            text-decoration: none;
+        @media (max-width: 600px) {
+            th, td {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
@@ -87,43 +135,65 @@
 
 <div class="container">
 
-    <!-- Company Name -->
-    <h1>Top 10 Leaderboard</h1>
-    <div class="company-name">{{ company.name }}</div>
+    {% if argame.logo %}
+        <img src="{{ argame.logo.url }}" class="logo" alt="Company Logo">
+    {% endif %}
+
+    <h2>{{ argame.company_name }}</h2>
+    <h1>AR Quest Leaderboard</h1>
+
+    <!-- Current Player Score Display -->
+    {% if current_player %}
+        <div class="current-player">
+            🎯 Your Score: {{ current_player.score }} pts
+            {% if current_player.rank %}
+                | Rank: #{{ current_player.rank }}
+            {% endif %}
+        </div>
+    {% endif %}
 
     <!-- Leaderboard Table -->
     <table>
         <thead>
             <tr>
                 <th>Rank</th>
-                <th>Name</th>
+                <th>Player Name</th>
                 <th>Score</th>
             </tr>
         </thead>
         <tbody>
             {% for player in top_players %}
-            <tr>
-                <td class="rank">{{ forloop.counter }}</td>
-                <td>{{ player.player_name }}</td>
-                <td>{{ player.score }}</td>
-            </tr>
+                <tr class="
+                    {% if forloop.counter == 1 %}rank-1{% endif %}
+                    {% if forloop.counter == 2 %}rank-2{% endif %}
+                    {% if forloop.counter == 3 %}rank-3{% endif %}
+                    {% if current_player and player.id == current_player.id %} current-row {% endif %}
+                ">
+                    <td>
+                        {% if forloop.counter <= 3 %}
+                            <span class="trophy">🏆</span>
+                        {% endif %}
+                        #{{ forloop.counter }}
+                    </td>
+                    <td>{{ player.player_name }}</td>
+                    <td>{{ player.score }} pts</td>
+                </tr>
             {% empty %}
-            <tr>
-                <td colspan="3">No players yet</td>
-            </tr>
+                <tr>
+                    <td colspan="3">No players yet.</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <!-- Back Button -->
-    <a href="{% url 'landing_page' company.id %}">
-        <button class="back-btn">Back to Game</button>
-    </a>
+    <button class="back-btn" onclick="window.history.back()">
+        Back to Game
+    </button>
 
 </div>
 
 <div class="watermark">
-    Powered by <a href="https://aliveframe.com" target="_blank">aliveframe.com</a>
+    Powered by aliveframe.com
 </div>
 
 </body>
