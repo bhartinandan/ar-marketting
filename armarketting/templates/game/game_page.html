@@ -50,7 +50,7 @@
 <div id="zoomOverlay"></div>
 
 <audio id="popSound">
-  <source src="gun.mp3" type="audio/mpeg">
+  <source src="{% static 'pop.mp3' %}" type="audio/mpeg">
 </audio>
 
 <a-scene
@@ -136,13 +136,17 @@ const GLB = glbFileUrl.value;
 min_size = parseFloat(minimum.value);
 max_size = parseFloat(maximum.value);
 
-fixed = parseInt(fixed.value);
+fixed_val = parseInt(fixed.value);
 
-minimumDistance = parseFloat(minimumDistance.value);
-maximumDistance = parseFloat(maximumDistance.value);
+minDistance = parseFloat(minimumDistance.value);
+maxDistance = parseFloat(maximumDistance.value);
 
 console.log("Min Size:", min_size);
 console.log("Max Size:", max_size);
+console.log("Fixed Value:", fixed_val);
+console.log("Min Distance:", minDistance);
+console.log("Max Distance:", maxDistance); 
+
 
 console.log("GLB URL::", GLB);
 
@@ -208,10 +212,10 @@ function createBurger() {
   burger.classList.add("clickable");
   burger.setAttribute("gltf-model", GLB);
 
-  const scale = (Math.random() * min_size + max_size).toFixed(fixed);
+  const scale = (Math.random() * min_size + max_size).toFixed(fixed_val);
   burger.setAttribute("scale", `${scale} ${scale} ${scale}`);
 
-  const distance = Math.random() * maximumDistance + minimumDistance;
+  const distance = Math.random() * maxDistance + minDistance;
   const camObj = camera.object3D;
 
   const forward = new THREE.Vector3(0, 0, -1)
