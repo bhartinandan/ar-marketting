@@ -283,11 +283,11 @@ function submitScore(finalScore, hashid) {
   })
   .then(response => response.json())
   .then(data => {
-      window.location.href = "/leaderboard/";
+      window.location.href = "/leaderboard/"+ hashid;
   })
   .catch(error => {
       console.error("Error:", error);
-      window.location.href = "/leaderboard/";
+      window.location.href = "/leaderboard/"+ hashid;
   });
 }
 
