@@ -1091,6 +1091,7 @@ def update_burger_score(request):
         logger.exception("Error while updating burger game score")
         return JsonResponse({"error": "An unexpected error occurred."}, status=500)
 
+@csrf_exempt
 def ar_game_landing(request,hashid):
     """
     Renders the AR games page.
@@ -1155,9 +1156,10 @@ def update_ar_game_score(request):
         if request.method == "POST":
             data = json.loads(request.body)
             score = data.get("score")
+            print("score", score)
             name = request.session.get("name", "Anonymous")
             mobile = request.session.get("mobile", "Unknown")
-            score = int(score) if score is not None else 0
+            score = int(score)
             request.session["score"] = score
 
             hashid = data.get("hashid")
