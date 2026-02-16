@@ -1208,6 +1208,7 @@ def ar_game_leaderboard(request, hashid):
             "argame": argame,
             "current_player_score": current_player_score,
             "current_player_name": current_player_name,
+            "hashid": hashid,
         })
     except Exception as e:
         logger.exception("Error while loading AR game leaderboard page")
