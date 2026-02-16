@@ -286,12 +286,8 @@ function submitScore(finalScore, hashId, csrfToken) {
   })
   .then(response => response.json())
   .then(data => {
-      window.location.href = "/ar-game-leaderboard/"+ hashId;
+    console.log("Score submitted successfully:", data);
   })
-  .catch(error => {
-      console.error("Error:", error);
-      window.location.href = "/ar-game-leaderboard/"+ hashId;
-  });
 }
 
 /* 🔐 CSRF */
