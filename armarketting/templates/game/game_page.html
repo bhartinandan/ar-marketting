@@ -271,13 +271,13 @@ const timerInterval = setInterval(() => {
 }, 1000);
 
 /* 🚀 Send Score to Django */
-function submitScore(finalScore, hashId) {
+function submitScore(finalScore, hashId, csrfToken) {
 
   fetch("/update-ar-game-score/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-CSRFToken": getCSRFToken()
+      "X-CSRFToken": csrfToken
     },
     body: JSON.stringify({
       score: finalScore,
