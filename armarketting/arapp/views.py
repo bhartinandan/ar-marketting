@@ -1160,10 +1160,6 @@ def update_ar_game_score(request):
             score = int(score) if score is not None else 0
             request.session["score"] = score
 
-            print("score", score)
-            print("name", name)
-            print("mobile", mobile)
-
             hashid = data.get("hashid")
             userid = decode_primary_key(hashid)
 
@@ -1171,8 +1167,10 @@ def update_ar_game_score(request):
 
             existing_score = ArGameScore.objects.filter(game_id=userid, mobile=mobile).first()
             if existing_score :
-                ArGameScore.objects.filter(game_id=userid, mobile=mobile).update(score=F('score') + score)
-                return JsonResponse({"message": "Score not updated because it's lower than or equal to existing score"}, status=200)
+                existing_score.score = score  # Update only if the new score is higher
+                existing_score.player_name = name  # Update player name as well
+                existing_score.save()
+                return JsonResponse({"message": "Score updated successfully"}, status=200)
             
             else:
                 ArGameScore.objects.create(
