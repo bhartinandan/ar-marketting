@@ -151,6 +151,7 @@ console.log("Fixed Value:", fixed_val);
 console.log("Min Distance:", minDistance);
 console.log("Max Distance:", maxDistance); 
 console.log("Hash ID:", hashId);
+console.log("CSRF Token:", csrfToken);
 
 
 console.log("GLB URL::", GLB);
@@ -272,6 +273,7 @@ const timerInterval = setInterval(() => {
 
 /* 🚀 Send Score to Django */
 function submitScore(finalScore, hashId, csrfToken) {
+  console.log("Submitting score:", finalScore, "Hash ID:", hashId);
 
   fetch("/update-ar-game-score", {
     method: "POST",
