@@ -1091,7 +1091,7 @@ def update_burger_score(request):
         logger.exception("Error while updating burger game score")
         return JsonResponse({"error": "An unexpected error occurred."}, status=500)
 
-@csrf_exempt
+
 def ar_game_landing(request,hashid):
     """
     Renders the AR games page.
