@@ -273,7 +273,7 @@ const timerInterval = setInterval(() => {
 /* 🚀 Send Score to Django */
 function submitScore(finalScore, hashId, csrfToken) {
 
-  fetch("/update-ar-game-score/", {
+  fetch("/update-ar-game-score", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
