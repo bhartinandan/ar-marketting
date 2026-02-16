@@ -37,8 +37,8 @@ ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = SECRETS["csrf_trusted_origin"]
 LOGIN_URL = '/signin'
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True   # if using HTTPS
+SESSION_COOKIE_SECURE = True
 
 Name=SECRETS["NAME"]
 User=SECRETS["USER"]
