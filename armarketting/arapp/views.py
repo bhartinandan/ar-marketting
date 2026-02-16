@@ -1091,6 +1091,7 @@ def update_burger_score(request):
         logger.exception("Error while updating burger game score")
         return JsonResponse({"error": "An unexpected error occurred."}, status=500)
 
+@csrf_exempt
 def ar_game_landing(request,hashid):
     """
     Renders the AR games page.
@@ -1165,7 +1166,7 @@ def update_ar_game_score(request):
 
             # Save the score to the database
 
-            existing_score = ArGameScore.objects.filter(game_id=userid, mobile=mobile).first()
+            existing_score = ArGameScore.objects.filter(game_id=userid, contact=mobile).first()
             if existing_score :
                 existing_score.score = score  # Update only if the new score is higher
                 existing_score.player_name = name  # Update player name as well
@@ -1175,7 +1176,7 @@ def update_ar_game_score(request):
             else:
                 ArGameScore.objects.create(
                     player_name=name,
-                    mobile=mobile,
+                    contact=mobile,
                     score=score,
                     game_id=userid
                 )
