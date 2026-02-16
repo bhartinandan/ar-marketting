@@ -284,10 +284,18 @@ function submitScore(finalScore, hashId, csrfToken) {
       hashid: hashId
     })
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
   .then(data => {
     console.log("Score submitted successfully:", data);
   })
+  .catch(error => {
+    console.error("Error submitting score:", error);
+  });
 }
 
 /* 🔐 CSRF */
