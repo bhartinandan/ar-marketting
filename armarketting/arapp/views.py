@@ -1145,7 +1145,8 @@ def play_ar_game(request, hashid):
         return render(request, "client_error.html", {
             "error_message": "An unexpected error occurred. Please try again later."
         })
-    
+
+@csrf_exempt
 def update_ar_game_score(request):
     """
     Updates the AR game score.
