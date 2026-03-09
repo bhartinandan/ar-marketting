@@ -248,8 +248,8 @@ function createBurger() {
     .copy(camObj.position)
     .add(forward);
 
-  worldPos.x += (Math.random() - 0.9) * 10;
-  worldPos.y += (Math.random() - 0.9) * 10;
+  worldPos.x += (Math.random() - 0.9) * 8;
+  worldPos.y += (Math.random() - 0.9) * 5;
 
  
   burger.setAttribute("position", worldPos);
@@ -280,7 +280,7 @@ function createBurger() {
 
   burger.addEventListener("click", (e) => {
 
-    
+    e.stopPropagation();   // VERY IMPORTANT
     popSound.currentTime = 0;
     popSound.play();
     triggerHitEffect();
@@ -298,7 +298,7 @@ function createBurger() {
 
 setInterval(() => {
 
-  const spawnCount = Math.floor(Math.random() * 2) + 3;
+  const spawnCount = Math.floor(Math.random() * 2) + 1;
 
   for (let i = 0; i < spawnCount; i++) {
 
@@ -310,20 +310,24 @@ setInterval(() => {
 
 }, 1200);
 
-cursor.addEventListener("click", () => {
+window.addEventListener("click", () => {
 
   if (gameOver) return;
 
   const intersected = cursor.components.raycaster.intersectedEls;
 
-  if (intersected.length === 0) {
+  let hitBurger = false;
 
+  intersected.forEach(el => {
+    if (el.classList.contains("clickable")) {
+      hitBurger = true;
+    }
+  });
+
+  if (!hitBurger) {
     score--;
-
     if (score < 0) score = 0;
-
     scoreEl.textContent = score;
-
   }
 
 });
