@@ -280,12 +280,12 @@ function createBurger() {
     burger.remove();
   });
 
-  setTimeout(() => burger.remove(), 4000);
+  setTimeout(() => burger.remove(), 1000);
 
   scene.appendChild(burger);
 }
 
-setInterval(createBurger, 1800);
+setInterval(createBurger, 1000);
 
 /* ⏱ Timer */
 const timerInterval = setInterval(() => {
