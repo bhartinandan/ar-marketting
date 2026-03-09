@@ -278,7 +278,7 @@ function createBurger() {
     easing: "linear"
   });
 
-  burger.addEventListener("click", () => {
+  burger.addEventListener("click", (e) => {
 
     hitTarget = true;   // mark hit for better UX
     e.stopPropagation(); // prevent miss trigger
