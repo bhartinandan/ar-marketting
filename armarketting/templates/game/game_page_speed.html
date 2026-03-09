@@ -169,6 +169,7 @@ hashId = hashid.value;
 let score = 0;
 let timeLeft = 60;
 let gameOver = false;
+let hitTarget = false;
 
 /* 🎯 Aim Detection */
 cursor.addEventListener("raycaster-intersection", () => {
@@ -278,6 +279,9 @@ function createBurger() {
   });
 
   burger.addEventListener("click", () => {
+
+    hitTarget = true;   // mark hit for better UX
+    e.stopPropagation(); // prevent miss trigger
     popSound.currentTime = 0;
     popSound.play();
     triggerHitEffect();
@@ -295,7 +299,7 @@ function createBurger() {
 
 setInterval(() => {
 
-  const spawnCount = Math.floor(Math.random() * 5) + 3;
+  const spawnCount = Math.floor(Math.random() * 2) + 3;
 
   for (let i = 0; i < spawnCount; i++) {
 
@@ -306,6 +310,23 @@ setInterval(() => {
   }
 
 }, 1200);
+
+
+window.addEventListener("click", () => {
+
+  if (!hitTarget && !gameOver) {
+
+    score--;
+
+    if (score < 0) score = 0;
+
+    scoreEl.textContent = score;
+
+  }
+
+  hitTarget = false;
+
+});
 
 /* ⏱ Timer */
 const timerInterval = setInterval(() => {
