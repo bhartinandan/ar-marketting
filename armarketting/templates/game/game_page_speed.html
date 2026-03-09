@@ -169,7 +169,7 @@ hashId = hashid.value;
 let score = 0;
 let timeLeft = 60;
 let gameOver = false;
-let hitTarget = false;
+
 
 /* 🎯 Aim Detection */
 cursor.addEventListener("raycaster-intersection", () => {
@@ -280,8 +280,7 @@ function createBurger() {
 
   burger.addEventListener("click", (e) => {
 
-    hitTarget = true;   // mark hit for better UX
-    e.stopPropagation(); // prevent miss trigger
+    
     popSound.currentTime = 0;
     popSound.play();
     triggerHitEffect();
@@ -311,26 +310,24 @@ setInterval(() => {
 
 }, 1200);
 
+cursor.addEventListener("click", () => {
 
-scene.addEventListener("click", () => {
+  if (gameOver) return;
 
-  setTimeout(() => {
+  const intersected = cursor.components.raycaster.intersectedEls;
 
-    if (!hitTarget && !gameOver) {
+  if (intersected.length === 0) {
 
-      score--;
+    score--;
 
-      if (score < 0) score = 0;
+    if (score < 0) score = 0;
 
-      scoreEl.textContent = score;
+    scoreEl.textContent = score;
 
-    }
-
-    hitTarget = false;
-
-  }, 40);
+  }
 
 });
+
 
 /* ⏱ Timer */
 const timerInterval = setInterval(() => {
