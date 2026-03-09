@@ -256,6 +256,10 @@ do {
 
   worldPos.x += x //(Math.random() - 0.9) * 10;
   worldPos.y += y //(Math.random() - 0.9) * 6;
+
+  // save position
+    lastSpawn.x = x;
+    lastSpawn.y = y;
  
   burger.setAttribute("position", worldPos);
 
@@ -297,7 +301,21 @@ do {
   scene.appendChild(burger);
 }
 
-setInterval(createBurger, 1000);
+// setInterval(createBurger, 1000);
+
+setInterval(() => {
+
+  const spawnCount = Math.floor(Math.random() * 5) + 3;
+
+  for (let i = 0; i < spawnCount; i++) {
+
+    setTimeout(() => {
+      createBurger();
+    }, i * 150); // small stagger
+
+  }
+
+}, 1200);
 
 /* ⏱ Timer */
 const timerInterval = setInterval(() => {

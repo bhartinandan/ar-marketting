@@ -226,6 +226,21 @@
   }
 
   document.addEventListener("click", enableSound);
+
+  const form = document.querySelector("form");
+
+  form.addEventListener("submit", function(e){
+
+  const mobile = document.querySelector("input[name='mobile']").value;
+
+  const mobilePattern = /^[6-9][0-9]{9}$/;
+
+  if(!mobilePattern.test(mobile)){
+    alert("Please enter a valid 10 digit Indian mobile number");
+    e.preventDefault();
+  }
+
+});
 </script>
 
 </html>
