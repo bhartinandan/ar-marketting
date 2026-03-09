@@ -300,7 +300,7 @@ function createBurger() {
 
 setInterval(() => {
 
-  const spawnCount = Math.floor(Math.random() * 2) + 1;
+  const spawnCount = Math.floor(Math.random() * 2) + 2;
 
   for (let i = 0; i < spawnCount; i++) {
 
@@ -312,27 +312,6 @@ setInterval(() => {
 
 }, 1200);
 
-cursor.addEventListener("click", () => {
-
-  if (gameOver) return;
-
-  hitDetected = false;
-
-  setTimeout(() => {
-
-    if (!hitDetected) {
-
-      score--;
-
-      if (score < 0) score = 0;
-
-      scoreEl.textContent = score;
-
-    }
-
-  }, 10);
-
-});
 
 /* ⏱ Timer */
 const timerInterval = setInterval(() => {
