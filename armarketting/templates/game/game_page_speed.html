@@ -235,10 +235,16 @@ function createBurger() {
     // random distance
     const distance = THREE.MathUtils.randFloat(minDistance, maxDistance);
 
-    // random horizontal spread
-    const spreadX = THREE.MathUtils.randFloatSpread(8);
-    const spreadY = THREE.MathUtils.randFloatSpread(4);
-  const camObj = camera.object3D;
+    let x, y;
+
+do {
+
+  x = THREE.MathUtils.randFloatSpread(12); // -6 to +6
+  y = THREE.MathUtils.randFloatSpread(12);
+
+} while (Math.abs(x - lastSpawn.x) < 6 && Math.abs(y - lastSpawn.y) < 6);
+
+    const camObj = camera.object3D;
 
   const forward = new THREE.Vector3(0, 0, -1)
     .applyQuaternion(camObj.quaternion)
@@ -248,8 +254,8 @@ function createBurger() {
     .copy(camObj.position)
     .add(forward);
 
-  worldPos.x += spreadX //(Math.random() - 0.9) * 10;
-  worldPos.y += spreadY //(Math.random() - 0.9) * 6;
+  worldPos.x += x //(Math.random() - 0.9) * 10;
+  worldPos.y += y //(Math.random() - 0.9) * 6;
  
   burger.setAttribute("position", worldPos);
 
