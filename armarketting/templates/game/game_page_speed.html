@@ -312,7 +312,7 @@ setInterval(() => {
 
 }, 1200);
 
-window.addEventListener("click", () => {
+cursor.addEventListener("click", () => {
 
   if (gameOver) return;
 
@@ -321,17 +321,18 @@ window.addEventListener("click", () => {
   setTimeout(() => {
 
     if (!hitDetected) {
+
       score--;
 
       if (score < 0) score = 0;
 
       scoreEl.textContent = score;
+
     }
 
-  }, 50);
+  }, 10);
 
 });
-
 
 /* ⏱ Timer */
 const timerInterval = setInterval(() => {
