@@ -1132,7 +1132,7 @@ def play_ar_game(request, hashid):
         userid = decode_primary_key(hashid)
         print("userid", userid)
         argame = ArGame.objects.filter(id=userid).first()
-        return render(request, "game/game_page.html", context={
+        return render(request, "game/game_page_speed.html", context={
             "max_size": argame.max_size,
             "min_size": argame.min_size,
             "min_distance": argame.min_distance,

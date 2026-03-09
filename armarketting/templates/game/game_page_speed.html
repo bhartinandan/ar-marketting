@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+  <title>AR Sniper Burger Shooter</title>
+
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    body { margin:0; overflow:hidden; }
+
+    #scoreboard, #timer {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      font-size: 18px;
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-family: Arial;
+      z-index: 999;
+    }
+
+    #scoreboard { top: 15px; }
+    #timer { top: 55px; }
+
+    #zoomOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      z-index: 997;
+      pointer-events: none;
+    }
+
+    #gameOverDialog {
+      display:none;
+      position: fixed;
+      top:50%;
+      left:50%;
+      transform: translate(-50%,-50%);
+      background:#0d1b2a;
+      color:white;
+      padding:30px;
+      border-radius:15px;
+      text-align:center;
+      z-index:1000;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="scoreboard">Score: <span id="score">0</span></div>
+<div id="timer">Time: <span id="time">60</span>s</div>
+<div id="zoomOverlay"></div>
+
+<div id="gameOverDialog">
+  <h2>Game Over</h2>
+  <p>Your Score: <span id="finalScore">0</span></p>
+  <button onclick="location.reload()">Play Again</button>
+</div>
+
+<audio id="popSound">
+  <source src="{% static 'pop.mp3' %}" type="audio/mpeg">
+</audio>
+
+<a-scene
+  vr-mode-ui="enabled:false"
+  embedded
+  arjs="sourceType:webcam; debugUIEnabled:false"
+  renderer="antialias:true; alpha:true">
+
+  <a-camera id="camera" position="0 1.6 0" look-controls>
+
+    <!-- Invisible Raycaster -->
+    <a-cursor
+      id="cursor"
+      fuse="false"
+      raycaster="objects: .clickable"
+      geometry="primitive:ring; radiusInner:0.0001; radiusOuter:0.0002"
+      material="opacity:0">
+    </a-cursor>
+
+    <!-- RETICLE -->
+    <a-entity id="reticle" position="0 0 -1">
+
+      <!-- Circle -->
+      <a-ring
+        id="ring"
+        radius-inner="0.010"
+        radius-outer="0.015"
+        color="red"
+        material="shader:flat; emissive:red; emissiveIntensity:1.5">
+      </a-ring>
+
+      <!-- Vertical Line -->
+      <a-plane
+        id="vLine"
+        width="0.002"
+        height="0.025"
+        color="red"
+        material="shader:flat; emissive:red; emissiveIntensity:1.5">
+      </a-plane>
+
+      <!-- Horizontal Line -->
+      <a-plane
+        id="hLine"
+        width="0.025"
+        height="0.002"
+        color="red"
+        material="shader:flat; emissive:red; emissiveIntensity:1.5">
+      </a-plane>
+
+    </a-entity>
+
+  </a-camera>
+
+</a-scene>
+
+    <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+    <input type="hidden" id="minSize" value="{{ min_size }}">
+    <input type="hidden" id="maxSize" value="{{ max_size }}">
+    <input type="hidden" id="fixed" value="{{ fixed_value }}">
+    <input type="hidden" id="glb-file-url" value="{{ glb_file }}">
+    <input type="hidden" id="mindistance" value="{{ min_distance }}">
+    <input type="hidden" id="maxdistance" value="{{ max_distance }}">
+    <input type="hidden" id="hashid" value="{{ hashid }}">
+
+<script>
+const scene = document.querySelector("a-scene");
+const camera = document.getElementById("camera");
+const cursor = document.getElementById("cursor");
+const reticle = document.getElementById("reticle");
+const ring = document.getElementById("ring");
+const vLine = document.getElementById("vLine");
+const hLine = document.getElementById("hLine");
+const hashid = document.getElementById("hashid");
+
+const scoreEl = document.getElementById("score");
+const timerEl = document.getElementById("time");
+const zoomOverlay = document.getElementById("zoomOverlay");
+const popSound = document.getElementById("popSound");
+
+const minimum = document.getElementById("minSize");
+const maximum = document.getElementById("maxSize");
+const fixed = document.getElementById("fixed");
+
+const csrfToken = document.getElementById("csrf-token").value;
+const minimumDistance = document.getElementById("mindistance");
+const maximumDistance = document.getElementById("maxdistance");
+
+const glbFileUrl = document.getElementById("glb-file-url");
+
+const GLB = glbFileUrl.value;
+
+min_size = parseFloat(minimum.value);
+max_size = parseFloat(maximum.value);
+
+fixed_val = parseInt(fixed.value);
+
+minDistance = parseFloat(minimumDistance.value);
+maxDistance = parseFloat(maximumDistance.value);
+
+hashId = hashid.value;
+
+let score = 0;
+let timeLeft = 60;
+let gameOver = false;
+
+/* 🎯 Aim Detection */
+cursor.addEventListener("raycaster-intersection", () => {
+  [ring, vLine, hLine].forEach(el => {
+    el.setAttribute("color", "lime");
+    el.setAttribute("material", "emissive:lime; emissiveIntensity:1.5");
+  });
+});
+
+cursor.addEventListener("raycaster-intersection-cleared", () => {
+  [ring, vLine, hLine].forEach(el => {
+    el.setAttribute("color", "red");
+    el.setAttribute("material", "emissive:red; emissiveIntensity:1.5");
+  });
+});
+
+/* 💥 Hit Effect */
+function triggerHitEffect() {
+  reticle.setAttribute("animation__shrink", {
+    property: "scale",
+    to: "0.7 0.7 0.7",
+    dur: 70,
+    dir: "alternate",
+    loop: 1
+  });
+
+  camera.setAttribute("animation__recoil", {
+    property: "position",
+    to: "0 1.63 0.04",
+    dur: 70,
+    dir: "alternate",
+    loop: 1
+  });
+}
+
+/* 🔭 Zoom (Mouse + Touch Support) */
+function enableZoom() {
+  camera.setAttribute("camera", "fov", 40);
+  zoomOverlay.style.display = "block";
+}
+
+function disableZoom() {
+  camera.setAttribute("camera", "fov", 80);
+  zoomOverlay.style.display = "none";
+}
+
+window.addEventListener("mousedown", enableZoom);
+window.addEventListener("mouseup", disableZoom);
+window.addEventListener("touchstart", enableZoom);
+window.addEventListener("touchend", disableZoom);
+
+/* 🍔 Spawn Moving Burger */
+function createBurger() {
+  if (gameOver) return;
+
+  const burger = document.createElement("a-entity");
+  burger.classList.add("clickable");
+  burger.setAttribute("gltf-model", GLB);
+
+  const scale = (Math.random() * min_size + max_size).toFixed(fixed_val);
+  burger.setAttribute("scale", `${scale} ${scale} ${scale}`);
+
+  const distance = Math.random() * maxDistance + minDistance;
+  const camObj = camera.object3D;
+
+  const forward = new THREE.Vector3(0, 0, -1)
+    .applyQuaternion(camObj.quaternion)
+    .multiplyScalar(distance);
+
+  const worldPos = new THREE.Vector3()
+    .copy(camObj.position)
+    .add(forward);
+
+  worldPos.x += (Math.random() - 0.5) * 10;
+  worldPos.y += (Math.random() - 0.3) * 3;
+
+  burger.setAttribute("position", worldPos);
+
+  burger.setAttribute("animation__float", {
+    property: "position",
+    dir: "alternate",
+    dur: 1000,
+    loop: true,
+    to: `${worldPos.x} ${worldPos.y + 0.5} ${worldPos.z}`
+  });
+
+  burger.setAttribute("animation__move", {
+    property: "position",
+    dur: 1000,
+    dir: "alternate",
+    loop: true,
+    to: `${worldPos.x + (Math.random()*4-2)} ${worldPos.y} ${worldPos.z}`
+  });
+
+  burger.setAttribute("animation__rotate", {
+    property: "rotation",
+    to: "0 360 0",
+    loop: true,
+    dur: 1000,
+    easing: "linear"
+  });
+
+  burger.addEventListener("click", () => {
+    popSound.currentTime = 0;
+    popSound.play();
+    triggerHitEffect();
+    score++;
+    scoreEl.textContent = score;
+    burger.remove();
+  });
+
+  setTimeout(() => burger.remove(), 4000);
+
+  scene.appendChild(burger);
+}
+
+setInterval(createBurger, 1800);
+
+/* ⏱ Timer */
+const timerInterval = setInterval(() => {
+  timeLeft--;
+  timerEl.textContent = timeLeft;
+
+  if (timeLeft <= 0) {
+    gameOver = true;
+    clearInterval(timerInterval);
+    submitScore(score, hashId);
+  }
+}, 1000);
+
+/* 🚀 Send Score to Django */
+function submitScore(finalScore, hashId, csrfToken) {
+  console.log("Submitting score:", finalScore, "Hash ID:", hashId);
+
+  fetch("/update-ar-game-score", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken
+    },
+    body: JSON.stringify({
+      score: finalScore,
+      hashid: hashId
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+      window.location.href = "/ar-game-leaderboard/"+ hashId;
+  })
+  .catch(error => {
+      console.error("Error:", error);
+      window.location.href = "/ar-game-leaderboard/"+ hashId;
+  });
+}
+
+/* 🔐 CSRF */
+function getCSRFToken() {
+  const cookies = document.cookie.split(";");
+  for (let i = 0; i < cookies.length; i++) {
+    const c = cookies[i].trim();
+    if (c.startsWith("csrftoken=")) {
+      return c.substring("csrftoken=".length, c.length);
+    }
+  }
+  return "";
+}
+</script>
+
+</body>
+</html>
