@@ -312,19 +312,23 @@ setInterval(() => {
 }, 1200);
 
 
-window.addEventListener("click", () => {
+scene.addEventListener("click", () => {
 
-  if (!hitTarget && !gameOver) {
+  setTimeout(() => {
 
-    score--;
+    if (!hitTarget && !gameOver) {
 
-    if (score < 0) score = 0;
+      score--;
 
-    scoreEl.textContent = score;
+      if (score < 0) score = 0;
 
-  }
+      scoreEl.textContent = score;
 
-  hitTarget = false;
+    }
+
+    hitTarget = false;
+
+  }, 40);
 
 });
 
