@@ -97,6 +97,7 @@ class BurgerScore(models.Model):
         return self.player_name + "-" + str(self.id)
 
 class ArGame(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=255)
     max_size = models.DecimalField(max_digits=50, decimal_places=20)
     min_size = models.DecimalField(max_digits=50, decimal_places=20)
@@ -125,6 +126,7 @@ class ArGameScore(models.Model):
     contact = models.CharField(max_length=15)
     score = models.IntegerField(default=0)
     timestamp = models.DateTimeField(default=datetime.now, blank=True)
+    used = models.BooleanField(default=False)
 
     def __str__(self):
         return self.player_name + "-" + str(self.id)

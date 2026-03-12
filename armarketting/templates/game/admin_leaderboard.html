@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+{% load static %}
+<meta charset="utf-8">
+<title>AliveFrame Dashboard</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<link rel="shortcut icon" type="image/png" href="{% static 'aflogo.png' %}">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container-fluid position-relative d-flex p-0">
+
+<!-- Sidebar -->
+
+<div class="sidebar pe-4 pb-3">
+
+<nav class="navbar bg-secondary navbar-dark">
+
+<a onclick="window.location.href='/admin-leaderboard'" class="navbar-brand mx-4 mb-3">
+
+<h3 class="text-info">
+<i class="fa fa-user-edit me-2"></i>AliveFrame
+</h3>
+
+</a>
+
+<div class="d-flex align-items-center ms-4 mb-4">
+
+<div class="ms-3">
+<h6 class="mb-0">{{client.name}}</h6>
+<span>{{client.business_name}}</span>
+</div>
+
+</div>
+
+<div class="navbar-nav w-100">
+
+<a onclick="window.location.href='/admin-leaderboard'" class="nav-item nav-link active">
+<i class="fa fa-tachometer-alt me-2"></i>Dashboard
+</a>
+
+
+
+</div>
+
+</nav>
+
+</div>
+
+<!-- Content -->
+
+<div class="content">
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+
+<a class="sidebar-toggler flex-shrink-0 text-info">
+<i class="fa fa-bars"></i>
+</a>
+
+<div class="navbar-nav align-items-center ms-auto">
+
+<div class="nav-item dropdown">
+
+<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+
+<img class="rounded-circle me-lg-2"
+src="{% static 'aflogo.png' %}"
+style="width:40px;height:40px;">
+
+<span class="d-none d-lg-inline-flex">
+{{client.name}}
+</span>
+
+</a>
+
+<div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+
+<a onclick="window.location.href='/game-admin-logout'" class="dropdown-item">
+Logout
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</nav>
+
+<!-- Table Section -->
+
+<div class="container-fluid pt-4 px-4">
+
+<div class="bg-secondary rounded p-4">
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+
+<h6 class="mb-0 text-white">AR Game Scores</h6>
+
+<form method="GET" class="d-flex">
+
+<input
+type="text"
+name="search"
+value="{{search_query}}"
+class="form-control bg-dark border-0 me-2 text-white"
+placeholder="Search Mobile Number">
+
+<button class="btn btn-info">
+Search
+</button>
+
+</form>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="table text-start align-middle table-bordered table-hover mb-0">
+
+<thead>
+
+<tr class="text-white">
+
+<th>ID</th>
+<th>Player Name</th>
+<th>Mobile</th>
+<th>Score</th>
+<th>Played Time</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for score in page_obj %}
+
+<tr>
+
+<td>{{forloop.counter}}</td>
+<td>{{score.player_name}}</td>
+<td>{{score.contact}}</td>
+<td>{{score.score}}</td>
+<td>{{score.timestamp}}</td>
+
+<td>
+
+{% if score.used %}
+
+<span class="badge bg-success">
+Used
+</span>
+
+{% else %}
+
+<form method="POST" action="/use-score/{{score.id}}">
+{% csrf_token %}
+
+<button type="submit" class="btn btn-sm btn-warning">
+Use
+</button>
+
+</form>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+<td colspan="6" class="text-center text-white">
+No records found
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- Pagination -->
+
+<div class="mt-4">
+
+<nav>
+
+<ul class="pagination justify-content-center">
+
+{% if page_obj.has_previous %}
+
+<li class="page-item">
+
+<a class="page-link"
+href="?page=1{% if search_query %}&search={{search_query}}{% endif %}">
+First </a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link"
+href="?page={{page_obj.previous_page_number}}{% if search_query %}&search={{search_query}}{% endif %}">
+Previous </a>
+
+</li>
+
+{% endif %}
+
+<li class="page-item disabled">
+
+<a class="page-link">
+Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+</a>
+
+</li>
+
+{% if page_obj.has_next %}
+
+<li class="page-item">
+
+<a class="page-link"
+href="?page={{page_obj.next_page_number}}{% if search_query %}&search={{search_query}}{% endif %}">
+Next </a>
+
+</li>
+
+<li class="page-item">
+
+<a class="page-link"
+href="?page={{page_obj.paginator.num_pages}}{% if search_query %}&search={{search_query}}{% endif %}">
+Last </a>
+
+</li>
+
+{% endif %}
+
+</ul>
+
+</nav>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Footer -->
+
+<div class="container-fluid pt-4 px-4">
+
+<div class="bg-secondary rounded-top p-4">
+
+<div class="row">
+
+<div class="col-12 col-sm-6 text-center text-sm-start">
+© AliveFrame.com
+</div>
+
+<div class="col-12 col-sm-6 text-center text-sm-end">
+AR Marketing Platform
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- JS -->
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>

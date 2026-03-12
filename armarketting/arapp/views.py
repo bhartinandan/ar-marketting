@@ -1179,6 +1179,7 @@ def update_ar_game_score(request):
                     player_name=name,
                     contact=mobile,
                     score=score,
+                    used=False,
                     game_id=userid
                 )
 
@@ -1216,7 +1217,101 @@ def ar_game_leaderboard(request, hashid):
             "error_message": "An unexpected error occurred. Please try again later."
         })
     
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from django.db.models import Q
 
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+
+@login_required(login_url='/game-admin-signin')
+def admin_leaderboard(request):
+
+    search_query = request.GET.get("search", "")
+
+    # Get games created by logged-in user
+    games = ArGame.objects.filter(user=request.user)
+
+    # Get scores only for those games
+    scores = ArGameScore.objects.filter(game__in=games).order_by("-score")
+
+    if search_query:
+        scores = scores.filter(contact__icontains=search_query)
+
+    paginator = Paginator(scores, 10)
+    page_number = request.GET.get("page")
+
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "search_query": search_query
+    }
+
+    return render(request, "game/admin_leaderboard.html", context)
+
+@login_required(login_url='/game-admin-signin')
+def use_score(request, id):
+
+    score = ArGameScore.objects.get(id=id, game__user=request.user)
+
+    if not score.used:
+        score.used = True
+        score.save()
+
+    return redirect("/admin-leaderboard")
+
+def game_admin_signin(request):
+    """
+    Handles client sign-in.
+    """
+    message = ''
+    
+    if request.method == "POST":
+        try:
+            # Extract user input
+            mobile = request.POST.get("mobile", "").strip()
+            password = request.POST.get("password", "").strip()
+
+            # Validate mobile number (Assuming 10-digit format for India)
+            if not mobile or not password:
+                return render(request, "game/game_admin_signin.html", {
+                    "message": "Mobile number and password are required."
+                })
+            
+            if not mobile.isdigit() or len(mobile) != 10:
+                return render(request, "game/game_admin_signin.html", {
+                    "message": "Invalid mobile number. It should be a 10-digit number."
+                })
+
+            # Authenticate user
+            user = authenticate(username=mobile, password=password)
+            
+            if user is not None:
+                login(request, user)
+                print("staff user logged in",request.user.username)
+                logger.info("User %s logged in successfully.", user.username)
+                return redirect("/admin-leaderboard")
+                
+            else:
+                print("user not authenticated")
+                logger.warning("Failed login attempt for mobile: %s", mobile)
+                return render(request, "game/game_admin_signin.html", {
+                    "message": "Invalid mobile number or password. Please try again or create an account."
+                })
+        
+        except Exception as e:
+            logger.exception("Error during client login: %s", str(e))
+            return render(request, "client_error.html", {
+                "message": "An unexpected error occurred. Please try again later."
+            })
+
+    return render(request, "game/game_admin_signin.html")
+
+@login_required(login_url='game-admin-signin')
+def game_admin_logout(request):
+    logout(request)
+    return redirect('game-admin-signin')
     
 def contact(request):
     """

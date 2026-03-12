@@ -52,6 +52,10 @@ urlpatterns = [
     path('play-ar-game/<slug:hashid>', views.play_ar_game, name='play-ar-game'),
     path('update-ar-game-score', views.update_ar_game_score, name='update-ar-game-score'),
     path('ar-game-leaderboard/<slug:hashid>', views.ar_game_leaderboard, name='ar-game-leaderboard'),
+    path('admin-leaderboard', views.admin_leaderboard, name='admin-leaderboard'),
+    path("use-score/<int:id>", views.use_score, name="use-score"),
+    path('game-admin-signin', views.game_admin_signin, name='game-admin-signin'),
+    path('game-admin-logout', views.game_admin_logout, name='game-admin-logout'),
 
 
     #client signin urls 
