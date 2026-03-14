@@ -28,6 +28,7 @@ from django.db.models import F
 from django.db.models import Count, Sum
 from django.db.models.functions import TruncDate
 from collections import OrderedDict
+from django.utils import timezone
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -1171,6 +1172,9 @@ def update_ar_game_score(request):
             if existing_score :
                 existing_score.score = score  # Update only if the new score is higher
                 existing_score.player_name = name  # Update player name as well
+                existing_score.used = False  # Reset used status on score update
+                existing_score.timestamp = timezone.now()   # update timestamp
+
                 existing_score.save()
                 return JsonResponse({"message": "Score updated successfully"}, status=200)
             
