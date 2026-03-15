@@ -5,6 +5,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime 
 from django.utils import timezone
+
+
 #web user experience
 
 class StaffProfile(models.Model):
@@ -125,7 +127,7 @@ class ArGameScore(models.Model):
     player_name = models.CharField(max_length=10)
     contact = models.CharField(max_length=15)
     score = models.IntegerField(default=0)
-    timestamp = models.DateTimeField(default=datetime.now, blank=True)
+    timestamp = models.DateTimeField(default=timezone.now, blank=True)
     used = models.BooleanField(default=False)
 
     def __str__(self):
