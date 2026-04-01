@@ -610,7 +610,7 @@ def add_frame(request, id):
         # Get the client or return 404 if not found
         cli_id = get_object_or_404(ClientInfo, id=id)
         framecount = FrameCount.objects.filter(client_id=cli_id).first()
-        if not framecount:
+        if not framecount == None and framecount.frame_count <= 0:
             return redirect("/frame/payment")
 
         if request.method == "POST":
