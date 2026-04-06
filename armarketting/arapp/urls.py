@@ -56,6 +56,7 @@ urlpatterns = [
     path("use-score/<int:id>", views.use_score, name="use-score"),
     path('game-admin-signin', views.game_admin_signin, name='game-admin-signin'),
     path('game-admin-logout', views.game_admin_logout, name='game-admin-logout'),
+    path('reset-game-scores/<int:game_id>', views.reset_game_scores, name='reset-game-scores'),
 
 
     #client signin urls 
@@ -72,6 +73,9 @@ urlpatterns = [
     path('assets/<int:id>', views.assets, name='assets'),
     path('userex/<str:hasheduserid>', views.user_ex, name='userex'),
     path('qr/<int:frameuserid>', views.generate_qr, name='qr'),
+
+    # 3D model viewer
+    path('view-3d-model/<str:hasheduserid>', views.ar_card_view, name='view-3d-model'),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

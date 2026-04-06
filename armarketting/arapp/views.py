@@ -1092,6 +1092,16 @@ def update_burger_score(request):
         logger.exception("Error while updating burger game score")
         return JsonResponse({"error": "An unexpected error occurred."}, status=500)
 
+def reset_game_scores(request, game_id):
+    # Get the game
+    game = get_object_or_404(ArGame, id=game_id)
+
+    # Reset all scores to 0 for this game
+    ArGameScore.objects.filter(game=game).update(score=0)
+
+    messages.success(request, f"All scores reset for {game.company_name}")
+
+    return redirect('/')  # change this
 
 def ar_game_landing(request,hashid):
     """
@@ -1418,3 +1428,31 @@ def blog_page(request):
         return render(request, "client_error.html", {
             "error_message": "An unexpected error occurred. Please try again later."
         })
+
+
+def ar_card_view(request, hasheduserid):
+    id = decode_primary_key(hasheduserid)
+
+    experience = ARExperience.objects.get(id=id)
+
+    context = {
+        "target_file": experience.target_file.url,
+        "model_3d": experience.model_3d.url,
+
+        "scale_x": experience.scale_x,
+        "scale_y": experience.scale_y,
+        "scale_z": experience.scale_z,
+
+        "rot_x": experience.rot_x,
+        "rot_y": experience.rot_y,
+        "rot_z": experience.rot_z,
+
+        "website": experience.website,
+        "phone": experience.phone,
+        "email": experience.email,
+        "instagram": experience.instagram,
+        "whatsapp": experience.whatsapp,
+        "location": experience.location
+    }
+
+    return render(request,"three_d/ar_card.html",context)

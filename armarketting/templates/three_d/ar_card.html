@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}  
+<meta charset="UTF-8">
+<title>Aliveframe AR</title>
+
+<!-- A-Frame -->
+<script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+
+<!-- MindAR -->
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.4/dist/mindar-image-aframe.prod.js"></script>
+
+<!-- Animation -->
+<script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+overflow:hidden;
+font-family: Arial, sans-serif;
+}
+
+/* Buttons Container */
+
+.ar-buttons{
+position:fixed;
+bottom:20px;
+width:100%;
+display:flex;
+justify-content:center;
+gap:10px;
+flex-wrap:wrap;
+z-index:999;
+}
+
+/* Button Style */
+
+.ar-btn{
+padding:10px 16px;
+background:rgba(0,0,0,0.85);
+color:white;
+border:none;
+border-radius:25px;
+font-size:13px;
+cursor:pointer;
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
+backdrop-filter:blur(10px);
+transition:0.3s;
+}
+
+.ar-btn:hover{
+background:#333;
+transform:translateY(-2px);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a-scene
+mindar-image="imageTargetSrc: {{ target_file }}; filterMinCF: 0.001; filterBeta: 0.01;"
+color-space="sRGB"
+renderer="colorManagement: true, physicallyCorrectLights"
+vr-mode-ui="enabled: false"
+device-orientation-permission-ui="enabled: true"
+>
+
+<!-- Camera -->
+<a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+
+<!-- Lights -->
+<a-light type="ambient" intensity="1"></a-light>
+<a-light type="directional" position="0 1 1" intensity="0.8"></a-light>
+
+
+<!-- Target -->
+<a-entity
+id="target"
+mindar-image-target="targetIndex: 0"
+smooth="true"
+smoothCount="5"
+smoothTolerance="0.02"
+smoothThreshold="2"
+>
+
+<!-- 3D Model -->
+<a-gltf-model
+id="model"
+src="{{ model_3d }}"
+position="0 0 0"
+scale="{{ scale_x }} {{ scale_y }} {{ scale_z }}"
+rotation="{{ rot_x }} {{ rot_y }} {{ rot_z }}"
+animation-mixer="loop: repeat"
+>
+</a-gltf-model>
+
+</a-entity>
+
+</a-scene>
+
+
+
+<!-- Buttons -->
+
+<div class="ar-buttons">
+
+{% if website %}
+<button class="ar-btn" data-url="{{ website }}">
+🌐 Website
+</button>
+{% endif %}
+
+
+{% if phone %}
+<button class="ar-btn" data-url="tel:{{ phone }}">
+📞 Call
+</button>
+{% endif %}
+
+
+{% if email %}
+<button class="ar-btn" data-url="mailto:{{ email }}">
+✉️ Email
+</button>
+{% endif %}
+
+
+{% if instagram %}
+<button class="ar-btn" data-url="{{ instagram }}">
+📸 Instagram
+</button>
+{% endif %}
+
+
+{% if whatsapp %}
+<button class="ar-btn" data-url="https://wa.me/{{ whatsapp }}">
+💬 WhatsApp
+</button>
+{% endif %}
+
+
+{% if location %}
+<button class="ar-btn" data-url="{{ location }}">
+📍 Location
+</button>
+{% endif %}
+
+</div>
+
+
+
+<script>
+
+// Target Animation Control
+
+const target = document.querySelector("#target");
+const model = document.querySelector("#model");
+
+target.addEventListener("targetFound", () => {
+if(model.components["animation-mixer"]){
+model.components["animation-mixer"].play();
+}
+});
+
+
+target.addEventListener("targetLost", () => {
+if(model.components["animation-mixer"]){
+model.components["animation-mixer"].stop();
+}
+});
+
+
+
+// Button Click Handler
+
+document.querySelectorAll(".ar-btn").forEach(btn => {
+
+btn.addEventListener("click", () => {
+
+const url = btn.getAttribute("data-url");
+
+if(!url) return;
+
+if(url.startsWith("tel:") || url.startsWith("mailto:")){
+window.location.href = url;
+}
+else{
+window.open(url,"_blank");
+}
+
+});
+
+});
+
+
+</script>
+
+</body>
+</html>

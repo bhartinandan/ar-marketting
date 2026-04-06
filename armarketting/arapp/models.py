@@ -142,3 +142,63 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return self.business_name +"-"+ str(self.id)
+
+
+class ThreeDClientProfile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    joined_date = models.DateTimeField(default=datetime.now, blank=True)
+    name = models.CharField(max_length=255)
+    business_name = models.CharField(max_length=255)
+    business_description = models.TextField()
+    business_size = models.CharField(max_length=255)
+    business_industry = models.CharField(max_length=255)
+    email = models.EmailField(max_length = 254)
+    pin_code = models.CharField(max_length=6)
+    address = models.TextField()
+    contact = models.CharField(max_length=15)
+    city = models.CharField(max_length=20)
+    state = models.CharField(max_length=20)
+    country = models.CharField(max_length=20)
+
+    def __str__(self):
+        return str(self.user.username) +"-"+ self.business_name
+    
+class ARExperience(models.Model):
+
+    client = models.ForeignKey(
+        ThreeDClientProfile,
+        on_delete=models.CASCADE,
+        related_name="ar_experiences"
+    )
+
+    title = models.CharField(max_length=255)
+
+    # AR Files
+    target_file = models.FileField(upload_to="markettingasset/targets/")
+    model_3d = models.FileField(upload_to="markettingasset/models/")
+    reference_image = models.FileField(upload_to="markettingasset/reference_images/")
+
+    # Transform
+    scale_x = models.FloatField(default=0.25)
+    scale_y = models.FloatField(default=0.25)
+    scale_z = models.FloatField(default=0.25)
+
+    rot_x = models.FloatField(default=0)
+    rot_y = models.FloatField(default=90)
+    rot_z = models.FloatField(default=90)
+
+    # Buttons (Optional)
+    website = models.URLField(blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    instagram = models.URLField(blank=True, null=True)
+    whatsapp = models.CharField(max_length=20, blank=True, null=True)
+    location = models.URLField(blank=True, null=True)
+
+    # Status
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.client.name} - {self.title}- {self.id}"
