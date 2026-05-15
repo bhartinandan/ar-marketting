@@ -555,6 +555,8 @@ def service_statitiscs(request, id):
     Renders the client dashboard with their profile information and services.
     """
     try:
+        ServiceStatistics.objects.filter(timestamp__isnull=True).all()
+        print("service statistics", ServiceStatistics.objects.filter(timestamp__isnull=True).all())
         user = request.user
         print(user)
         logger.info(f"Accessing dashboard for user: {user.username} (ID: {user.id})")
@@ -582,8 +584,10 @@ def service_statitiscs(request, id):
         .order_by('day'))
         
         click_stats_map = OrderedDict()
+        print(daily_click_stats)
 
         for item in daily_click_stats:
+            print(item)
             date_str = item['day'].strftime('%Y-%m-%d')  # or any format you prefer
             click_stats_map[date_str] = [
                 item['unique_clicks'],
@@ -974,10 +978,12 @@ def user_ex(request, hasheduserid):
             ser_ip = ServiceStatistics.objects.filter(service_id=service, ip_address=ip).first()
             if ser_ip:
                 print("ip already exists")
+                print(now())
                 ser_ip.impressions = F('impressions') + 1
                 ser_ip.save()
             else:
                 print("ip not exists")
+                print(now())
                 ser_ip = ServiceStatistics.objects.create(
                     service_id=service,
                     ip_address=ip,
@@ -1230,7 +1236,23 @@ def ar_game_leaderboard(request, hashid):
         return render(request, "client_error.html", {
             "error_message": "An unexpected error occurred. Please try again later."
         })
-    
+
+def clove_ar_shooting_game(request):
+    """
+    Renders the Clove Shooting AR game page.
+    """
+    try:
+        # userid = decode_primary_key(hashid)
+        # print("userid", userid)
+        # argame = ArGame.objects.filter(id=userid).first()
+        return render(request, "game/clove_shooting_game.html")
+    except Exception as e:
+        logger.exception("Error while loading Clove Shooting AR game page")
+        return render(request, "client_error.html", {
+            "error_message": "An unexpected error occurred. Please try again later."
+        })
+
+
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.db.models import Q

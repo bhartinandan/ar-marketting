@@ -59,7 +59,7 @@ urlpatterns = [
     path('reset-game-scores/<int:game_id>', views.reset_game_scores, name='reset-game-scores'),
 
     #AR Game Demo
-    path('clove-shooting-game', views.clove_shooting_game, name='clove-shooting-game'),
+    path('clove-shooting-game', views.clove_ar_shooting_game, name='clove-shooting-game'),
 
 
     #client signin urls 
