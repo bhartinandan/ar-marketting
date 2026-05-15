@@ -29,6 +29,7 @@ from django.db.models import Count, Sum
 from django.db.models.functions import TruncDate
 from collections import OrderedDict
 from django.utils import timezone
+from django.utils.timezone import now
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -569,10 +570,13 @@ def service_statitiscs(request, id):
             return JsonResponse({"error": "Client information not found."}, status=404)
 
         # Fetch frame user information
+        print(id)
         service_data = ServiceAvail.objects.filter(client_id=client, id=id).first()
 
         serv_stats = ServiceStatistics.objects.filter(service_id=service_data).all()
         # print("service statistics", ServiceStatistics.objects.filter(service_id=service_data).all())
+        for stat in serv_stats:
+            print("stat", stat.id, stat.ip_address, stat.timestamp, stat.clicks, stat.impressions)
         # print(ServiceStatistics.objects.filter(service_id=service_data).exists())
         
         stats = ServiceStatistics.objects.filter(
@@ -583,9 +587,10 @@ def service_statitiscs(request, id):
         click_stats_map = OrderedDict()
 
         for s in stats:
-            print("stat", s.ip_address, s.timestamp, s.clicks, s.impressions)
+            # print("stat", s.ip_address, s.timestamp, s.clicks, s.impressions)
 
             day = s.timestamp.date().strftime('%Y-%m-%d')
+            # print("day", day)
 
             if day not in click_stats_map:
                 click_stats_map[day] = {

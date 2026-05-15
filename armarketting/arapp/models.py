@@ -66,7 +66,7 @@ class ServiceAvail(models.Model):
 class ServiceStatistics(models.Model):
     service_id = models.ForeignKey(ServiceAvail, on_delete=models.CASCADE, related_name='serviceid')
     ip_address = models.GenericIPAddressField()
-    timestamp = models.DateTimeField(default=datetime.now, blank=True)
+    timestamp = models.DateTimeField(default=timezone.now, blank=True)
     impressions = models.IntegerField(default=0)
     clicks = models.IntegerField(default=0)
 
