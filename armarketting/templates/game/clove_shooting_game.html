@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -99,6 +100,7 @@ canvas{
 
 <canvas id="gameCanvas"></canvas>
 
+
 <script>
 
 // ---------------- CAMERA ----------------
@@ -173,7 +175,7 @@ USE TRANSPARENT PNG
 */
 
 playerImage.src =
-"clove_image.png";
+"{% static 'clove_image.png' %}";
 
 
 // ---------------- PLAYER ----------------
