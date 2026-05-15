@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Clove AR Tooth Defense</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    touch-action:none;
+}
+
+body{
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+    background:black;
+}
+
+/* CAMERA FEED */
+
+video{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-2;
+}
+
+/* OVERLAY */
+
+.overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.15);
+    z-index:-1;
+}
+
+/* CANVAS */
+
+canvas{
+    display:block;
+}
+
+/* SCORE */
+
+.scoreboard{
+    position:absolute;
+    top:15px;
+    left:15px;
+    color:white;
+    font-size:clamp(18px,3vw,30px);
+    font-weight:bold;
+    z-index:5;
+    text-shadow:0 0 10px black;
+}
+
+/* TITLE */
+
+.title{
+    position:absolute;
+    top:15px;
+    right:15px;
+    color:#00ffcc;
+    font-size:clamp(16px,2.5vw,24px);
+    font-weight:bold;
+    z-index:5;
+    text-shadow:0 0 10px black;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- CAMERA -->
+
+<video id="camera" autoplay playsinline muted></video>
+
+<div class="overlay"></div>
+
+<div class="scoreboard">
+    Score:
+    <span id="score">0</span>
+</div>
+
+<div class="title">
+    🦷 Clove AR Defense
+</div>
+
+<canvas id="gameCanvas"></canvas>
+
+<script>
+
+// ---------------- CAMERA ----------------
+
+const video =
+document.getElementById("camera");
+
+async function startCamera(){
+
+    try{
+
+        const stream =
+        await navigator.mediaDevices.getUserMedia({
+
+            video:{
+                facingMode:"environment"
+            },
+
+            audio:false
+
+        });
+
+        video.srcObject = stream;
+
+    }catch(err){
+
+        alert("Camera permission denied");
+
+    }
+
+}
+
+startCamera();
+
+
+// ---------------- CANVAS ----------------
+
+const canvas =
+document.getElementById("gameCanvas");
+
+const ctx =
+canvas.getContext("2d");
+
+function resizeCanvas(){
+
+    canvas.width =
+    window.innerWidth;
+
+    canvas.height =
+    window.innerHeight;
+
+}
+
+resizeCanvas();
+
+
+// ---------------- SCORE ----------------
+
+let score = 0;
+
+const scoreElement =
+document.getElementById("score");
+
+
+// ---------------- PLAYER IMAGE ----------------
+
+const playerImage =
+new Image();
+
+/*
+USE TRANSPARENT PNG
+*/
+
+playerImage.src =
+"clove_image.png";
+
+
+// ---------------- PLAYER ----------------
+
+const player = {
+
+    width:0,
+    height:0,
+
+    x:canvas.width/2,
+
+    y:0
+
+};
+
+
+// RESPONSIVE SIZE
+
+function setPlayerSize(){
+
+    if(window.innerWidth < 768){
+
+        player.width = 120;
+        player.height = 170;
+
+    }else{
+
+        player.width = 180;
+        player.height = 250;
+
+    }
+
+    player.y =
+    canvas.height -
+    player.height -
+    20;
+
+}
+
+setPlayerSize();
+
+
+// ---------------- BULLETS ----------------
+
+let bullets = [];
+
+
+// ---------------- OBJECTS ----------------
+
+let objects = [];
+
+const virusItems =
+
+[
+    "🦠",
+    "☣️",
+    "👾",
+    "🧫"
+];
+
+const foodItems =
+
+[
+    "🍎",
+    "🥕",
+    "🥛",
+    "🧀",
+    "🍓"
+];
+
+
+// ---------------- CREATE OBJECTS ----------------
+
+function createObject(){
+
+    const isVirus =
+    Math.random() > 0.4;
+
+    const emoji = isVirus
+
+    ?
+
+    virusItems[
+        Math.floor(
+            Math.random() *
+            virusItems.length
+        )
+    ]
+
+    :
+
+    foodItems[
+        Math.floor(
+            Math.random() *
+            foodItems.length
+        )
+    ];
+
+    objects.push({
+
+        x:
+        Math.random() *
+        (canvas.width - 50),
+
+        y:-50,
+
+        speed:
+        2 + Math.random()*4,
+
+        emoji:emoji,
+
+        type:
+        isVirus
+        ? "virus"
+        : "food"
+
+    });
+
+}
+
+
+// ---------------- DRAW PLAYER ----------------
+
+function drawPlayer(){
+
+    ctx.drawImage(
+
+        playerImage,
+
+        player.x -
+        player.width/2,
+
+        player.y,
+
+        player.width,
+
+        player.height
+
+    );
+
+}
+
+
+// ---------------- DRAW BULLETS ----------------
+
+function drawBullets(){
+
+    bullets.forEach((bullet,index)=>{
+
+        ctx.beginPath();
+
+        ctx.fillStyle =
+        "#00ffff";
+
+        ctx.shadowBlur = 20;
+
+        ctx.shadowColor =
+        "#00ffff";
+
+        ctx.arc(
+
+            bullet.x,
+            bullet.y,
+
+            8,
+
+            0,
+            Math.PI*2
+
+        );
+
+        ctx.fill();
+
+        bullet.y -= bullet.speed;
+
+        // REMOVE OFFSCREEN
+
+        if(bullet.y < -20){
+
+            bullets.splice(index,1);
+
+        }
+
+    });
+
+}
+
+
+// ---------------- DRAW OBJECTS ----------------
+
+function drawObjects(){
+
+    objects.forEach((obj,index)=>{
+
+        ctx.font =
+
+        window.innerWidth < 768
+
+        ?
+
+        "36px Arial"
+
+        :
+
+        "48px Arial";
+
+        ctx.fillText(
+
+            obj.emoji,
+
+            obj.x,
+
+            obj.y
+
+        );
+
+        obj.y += obj.speed;
+
+        // REMOVE IF OUT
+
+        if(obj.y > canvas.height){
+
+            objects.splice(index,1);
+
+        }
+
+    });
+
+}
+
+
+// ---------------- COLLISION ----------------
+
+function checkCollision(){
+
+    bullets.forEach((bullet,bIndex)=>{
+
+        objects.forEach((obj,oIndex)=>{
+
+            const dx =
+            bullet.x - obj.x;
+
+            const dy =
+            bullet.y - obj.y;
+
+            const distance =
+            Math.sqrt(dx*dx + dy*dy);
+
+            if(distance < 35){
+
+                // HIT VIRUS
+
+                if(obj.type === "virus"){
+
+                    score += 10;
+
+                }
+
+                // HIT FOOD
+
+                else{
+
+                    score -= 5;
+
+                }
+
+                scoreElement.innerText =
+                score;
+
+                bullets.splice(bIndex,1);
+
+                objects.splice(oIndex,1);
+
+            }
+
+        });
+
+    });
+
+}
+
+
+// ---------------- SHOOT ----------------
+
+function shoot(){
+
+    bullets.push({
+
+        /*
+        BULLET COMES FROM
+        EXACT CENTER TOP
+        OF TOOTHPASTE
+        */
+
+        x:player.x,
+
+        y:player.y + 15,
+
+        speed:14
+
+    });
+
+}
+
+
+// ---------------- CONTINUOUS SHOOT ----------------
+
+let shootingInterval = null;
+
+function startShooting(){
+
+    if(!shootingInterval){
+
+        shoot();
+
+        shootingInterval =
+
+        setInterval(()=>{
+
+            shoot();
+
+        },120);
+
+    }
+
+}
+
+function stopShooting(){
+
+    clearInterval(shootingInterval);
+
+    shootingInterval = null;
+
+}
+
+
+// ---------------- CONTROLS ----------------
+
+// DESKTOP MOVE
+
+window.addEventListener(
+
+    "mousemove",
+
+    (e)=>{
+
+        player.x = e.clientX;
+
+    }
+
+);
+
+
+// MOBILE MOVE
+
+window.addEventListener(
+
+    "touchmove",
+
+    (e)=>{
+
+        player.x =
+        e.touches[0].clientX;
+
+    }
+
+);
+
+
+// START SHOOTING
+
+window.addEventListener(
+
+    "mousedown",
+
+    startShooting
+
+);
+
+window.addEventListener(
+
+    "touchstart",
+
+    startShooting
+
+);
+
+
+// STOP SHOOTING
+
+window.addEventListener(
+
+    "mouseup",
+
+    stopShooting
+
+);
+
+window.addEventListener(
+
+    "touchend",
+
+    stopShooting
+
+);
+
+
+// ---------------- GAME LOOP ----------------
+
+function animate(){
+
+    ctx.clearRect(
+
+        0,
+        0,
+
+        canvas.width,
+        canvas.height
+
+    );
+
+    drawPlayer();
+
+    drawBullets();
+
+    drawObjects();
+
+    checkCollision();
+
+    requestAnimationFrame(
+        animate
+    );
+
+}
+
+animate();
+
+
+// ---------------- SPAWN ITEMS ----------------
+
+setInterval(
+
+    createObject,
+
+    800
+
+);
+
+
+// ---------------- RESIZE ----------------
+
+window.addEventListener(
+
+    "resize",
+
+    ()=>{
+
+        resizeCanvas();
+
+        setPlayerSize();
+
+    }
+
+);
+
+</script>
+
+</body>
+</html>

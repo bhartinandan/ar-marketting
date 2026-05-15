@@ -58,6 +58,9 @@ urlpatterns = [
     path('game-admin-logout', views.game_admin_logout, name='game-admin-logout'),
     path('reset-game-scores/<int:game_id>', views.reset_game_scores, name='reset-game-scores'),
 
+    #AR Game Demo
+    path('clove-shooting-game', views.clove_shooting_game, name='clove-shooting-game'),
+
 
     #client signin urls 
     path('signin', views.client_signin, name='signin'),
