@@ -283,10 +283,6 @@
       }
     }
 
-    /* =========================================================
-       MOBILE
-    ========================================================= */
-
     @media(max-width:600px){
 
       #messageBox{
@@ -446,6 +442,7 @@
       const tapNotification = document.getElementById("tapNotification");
       const targetAnchor = document.getElementById("targetAnchor");
       const visitBtn = document.getElementById("visitButton");
+      const instructionCard = document.querySelector(".instruction-card");
 
       let videoPlaying = false;
       let targetFound = false;
@@ -459,6 +456,10 @@
       ===================================================== */
 
       const startVideo = () => {
+
+        // Hide instruction UI
+        overlayImg.style.display = "none";
+        instructionCard.style.display = "none";
 
         videoEl.play().then(() => {
 
@@ -487,6 +488,8 @@
 
           console.error("Video error:", err);
 
+          instructionCard.style.display = "flex";
+
           messageBox.innerHTML = `
             Tap again to<br>
             <span>allow video playback</span>
@@ -503,10 +506,6 @@
       targetAnchor.addEventListener("targetFound", () => {
 
         targetFound = true;
-
-        messageBox.style.display = "none";
-
-        overlayImg.style.display = "none";
 
         if (!tapHandledOnce){
 
@@ -537,9 +536,9 @@
 
         }
 
+        // Show instruction UI again
         overlayImg.style.display = "block";
-
-        messageBox.style.display = "block";
+        instructionCard.style.display = "flex";
 
         messageBox.innerHTML = `
           Point your camera at the<br>
@@ -561,9 +560,9 @@
 
         if (targetFound && !tapHandledOnce){
 
-          startVideo();
-
           tapHandledOnce = true;
+
+          startVideo();
 
         }
 
