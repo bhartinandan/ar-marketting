@@ -991,7 +991,7 @@ def user_ex(request, hasheduserid):
                 return render(request, "basic_page.html", {"media": service})
             
             elif service.overlap_video and service.service_type.service_type == "PREMIUM":
-                return render(request, "premium_page.html", {"media": service})
+                return render(request, "premium_user_ex.html", {"media": service})
             
             elif service.overlap_video and service.service_type.service_type == "PREMIUM_PLUS":
                 return render(request, "premium_plus_page.html", {"media": service})
