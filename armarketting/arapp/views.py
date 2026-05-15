@@ -549,6 +549,7 @@ def dashboard(request):
         logger.exception("Error occurred while loading client service page")
         return JsonResponse({"error": "An internal server error occurred."}, status=500)
 
+
 @login_required(login_url='/signin')
 def service_statitiscs(request, id):
     """
@@ -571,35 +572,48 @@ def service_statitiscs(request, id):
         service_data = ServiceAvail.objects.filter(client_id=client, id=id).first()
 
         serv_stats = ServiceStatistics.objects.filter(service_id=service_data).all()
-        print(ServiceStatistics.objects.filter(service_id=service_data).exists())
-
-        daily_click_stats = (ServiceStatistics.objects
-        .filter(service_id=service_data)
-        .annotate(day=TruncDate('timestamp'))
-        .values('day')
-        .annotate(
-        unique_clicks=Count('ip_address', distinct=True),
-        total_clicks=Sum('impressions')
-        )
-        .order_by('day'))
+        # print("service statistics", ServiceStatistics.objects.filter(service_id=service_data).all())
+        # print(ServiceStatistics.objects.filter(service_id=service_data).exists())
         
-        click_stats_map = OrderedDict()
-        print(daily_click_stats)
+        stats = ServiceStatistics.objects.filter(
+            service_id=service_data,
+            timestamp__isnull=False
+        ).order_by('timestamp')
 
-        for item in daily_click_stats:
-            print(item)
-            date_str = item['day'].strftime('%Y-%m-%d')  # or any format you prefer
-            click_stats_map[date_str] = [
-                item['unique_clicks'],
-                item['total_clicks']
-                ]
-            
+        click_stats_map = OrderedDict()
+
+        for s in stats:
+            print("stat", s.ip_address, s.timestamp, s.clicks, s.impressions)
+
+            day = s.timestamp.date().strftime('%Y-%m-%d')
+
+            if day not in click_stats_map:
+                click_stats_map[day] = {
+                    "unique_ips": set(),
+                    "total_clicks": 0,
+                    "total_impressions": 0
+                }
+
+            click_stats_map[day]["unique_ips"].add(s.ip_address)
+            click_stats_map[day]["total_clicks"] += s.clicks
+            click_stats_map[day]["total_impressions"] += s.impressions
+
+
+        # convert set count
+        for day in click_stats_map:
+            click_stats_map[day]["unique_clicks"] = len(
+                click_stats_map[day]["unique_ips"]
+            )
+
+            del click_stats_map[day]["unique_ips"]
+
+        print(click_stats_map)
+                    
         context = {
             "client": client,
             "service": service_data,
             "serv_stats": serv_stats,
             "click_stats_map": click_stats_map,
-
             
         }
 
@@ -1061,7 +1075,7 @@ def ar_burger_game_landing(request,hashid):
 
 def burger_game(request, name, hashid):
     """
-    Renders the AR games page.
+    Renders the AR games page
     """
     try:
         userid = decode_primary_key(hashid)

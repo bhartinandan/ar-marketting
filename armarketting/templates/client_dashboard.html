@@ -78,13 +78,12 @@
         </thead>
         <tbody class="divide-y divide-gray-700">
             {% for key, value in click_stats_map.items %}
-          <tr class="hover:bg-gray-700 transition">
-            <td class="p-4">{{ key }}</td>
-            <td class="p-4">{{ value.1 }}</td>
-            <td class="p-4">{{ value.0 }}</td>
-           
-          </tr>
-          {% endfor %}
+              <tr class="hover:bg-gray-700 transition">
+                  <td class="p-4">{{ key }}</td>
+                  <td class="p-4">{{ value.total_impressions }}</td>
+                  <td class="p-4">{{ value.unique_clicks }}</td>
+              </tr>
+            {% endfor %}
           
         </tbody>
       </table>
