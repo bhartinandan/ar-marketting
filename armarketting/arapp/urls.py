@@ -26,7 +26,7 @@ from django.urls import include
 
 urlpatterns = [
     #basic urls
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('', TemplateView.as_view(template_name='landing.html'), name='home'),
     path('contact/', views.contact, name='contact'),
     path('aboutus/', views.aboutus, name='aboutus'),
     path('privacypolicy/', views.privacypolicy, name='privacypolicy'),
