@@ -2,6 +2,9 @@ import requests
 import base64
 import json
 from datetime import datetime
+import qrcode
+import qrcode
+from PIL import Image
 
 def token():
     key="Mydearstreeya"
@@ -82,14 +85,121 @@ def decode_primary_key(hashid: str) -> int:
 
 # Example usage
 
+import qrcode
+from PIL import Image
+#designer qr
+def designer_qr():
+
+    import qrcode
+    from PIL import Image, ImageDraw
+    
+    # Data for QR
+    # data = "https://aliveframe.com/view-3d-model/p2lwYO08"
+    data = "https://4d28-2401-9640-1003-8afd-18b4-efed-ec1d-5f15.ngrok-free.app/loyalty/customer-dashboard/p2lwYO08"
+
+    # Create QR
+    qr = qrcode.QRCode(
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=12,
+        border=2
+    )
+
+    qr.add_data(data)
+    qr.make(fit=True)
+
+    # White background QR
+    qr_img = qr.make_image(
+        fill_color="black",
+        back_color="white"
+    ).convert("RGBA")
+
+    # Load Logo
+    logo = Image.open("aliveframe_logo.png").convert("RGBA")
+
+    # Resize logo
+    logo_size = int(qr_img.size[0] / 4)
+    logo = logo.resize((logo_size, logo_size))
+
+    # Create white background for logo
+    padding = 20
+    white_bg_size = logo_size + padding
+
+    white_bg = Image.new(
+        "RGBA",
+        (white_bg_size, white_bg_size),
+        (255, 255, 255, 255)
+    )
+
+    # Optional: Rounded corners
+    mask = Image.new("L", (white_bg_size, white_bg_size), 0)
+    draw = ImageDraw.Draw(mask)
+    draw.rounded_rectangle(
+        (0, 0, white_bg_size, white_bg_size),
+        radius=20,
+        fill=255
+    )
+    white_bg.putalpha(mask)
+
+    # Paste logo on white bg
+    logo_pos = (
+        (white_bg_size - logo_size) // 2,
+        (white_bg_size - logo_size) // 2
+    )
+
+    white_bg.paste(logo, logo_pos, logo)
+
+    # Center position
+    pos = (
+        (qr_img.size[0] - white_bg_size) // 2,
+        (qr_img.size[1] - white_bg_size) // 2
+    )
+
+    # Paste white bg on QR
+    qr_img.paste(white_bg, pos, white_bg)
+
+    # Save
+    qr_img.save("designer_qr.png")
+
+    print("Professional Designer QR Created")
 
 
 def main():
     print("Hello, this is the main function!")
 
 if __name__ == "__main__":
-    hashed_id = encode_primary_key(1)
+
+    hashed_id = encode_primary_key(8)
     print(hashed_id)  # Example: 'x9J3yK8d'
+
+    
+
+    # Data you want inside QR
+    # data = "https://aliveframe.com/ar-game-landing/pBlENkjY"
+    data = "https://aliveframe.com/view-3d-model/45kmGngd"
+
+    # Create QR
+    qr = qrcode.QRCode(
+        version=1,  # controls size (1 = small, 40 = large)
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=10,
+        border=4,
+    )
+
+    qr.add_data(data)
+    qr.make(fit=True)
+
+    # Create image
+    img = qr.make_image(fill_color="black", back_color="white")
+    print(img)
+
+    # Save image
+    img.save("qrcode.png")
+
+    # designer_qr()
+
+    print("QR Code generated successfully!")
+
+    
 
     original_id = decode_primary_key("p2lwYO08")
     print(original_id)  # Output: 123

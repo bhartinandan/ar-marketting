@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070b3d" />
+  <title>AliveFrame — Create Offers</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ["Inter", "sans-serif"] },
+          colors: {
+            alive: {
+              navy: "#070b3d", navy2: "#0b1154", blue: "#237dff",
+              cyan: "#19d5e8", purple: "#823cff", pink: "#d936ff",
+            },
+          },
+          boxShadow: { alive: "0 30px 90px rgba(7, 13, 65, .15)" },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="min-h-screen overflow-x-hidden bg-[#f6f8ff] font-inter text-[#0b1234]">
+
+  <div class="pointer-events-none fixed -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#237dff]/20 blur-3xl"></div>
+
+  <div class="relative mx-auto w-full max-w-[480px] pb-28">
+
+    <!-- TRIAL BANNER -->
+    <div class="flex items-center gap-3 bg-gradient-to-r from-alive-purple to-alive-blue px-4 py-3 text-white">
+      <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+      <p class="flex-1 text-sm font-semibold leading-snug">Your trial period expires in <b id="trialDays">2</b> days</p>
+      <button id="upgradeBtn" type="button" class="rounded-full bg-white px-5 py-2.5 text-center text-sm font-extrabold leading-tight text-alive-purple transition hover:-translate-y-0.5">Upgrade<br />Now</button>
+    </div>
+
+    <!-- HEADER -->
+    <header class="-mt-px rounded-b-[34px] bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-4 pb-8 pt-6 text-white shadow-alive">
+      <div class="flex items-center gap-3">
+        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-extrabold text-alive-purple">A</div>
+        <div class="min-w-0 flex-1">
+          <h1 id="bizName" class="truncate text-xl font-extrabold tracking-[-0.03em]">Aryan Resturant</h1>
+          <span class="mt-1 inline-block rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan px-3 py-0.5 text-[11px] font-bold">Basic Subscription</span>
+        </div>
+        <button id="profileBtn" type="button" aria-label="Profile" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20" onclick="window.location.href='/loyalty/business-profile'">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="px-4 pt-7">
+
+      <h2 class="text-[32px] font-extrabold leading-tight tracking-[-0.045em] text-alive-navy">Create Offers</h2>
+      <p class="mt-2 text-[15px] leading-6 text-[#636981]">Choose an app to create rewards for your customers</p>
+
+      <!-- OFFER TYPES -->
+      <section class="mt-7 grid grid-cols-3 gap-2">
+
+        <!-- STAMP CARD (live) -->
+        <button id="stampBtn" type="button" class="group flex flex-col items-center text-center" onclick="window.location.href ='/loyalty/create-stamp-card'">
+          <span class="flex h-[104px] w-[104px] items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-[#5131dc] to-[#0f9eea] text-white shadow-lg shadow-[#4e39d6]/30 transition group-hover:-translate-y-1 group-active:translate-y-0">
+            <svg class="h-11 w-11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 3h6v6l2.500 3H6.500L9 9V3zM5 16h14v3H5zM4 21h16"/></svg>
+          </span>
+          <span class="mt-4 text-[17px] font-extrabold leading-tight tracking-[-0.03em] text-alive-navy">Stamp<br />Card</span>
+          <span class="mt-2 text-[11px] font-bold tracking-[.12em] text-[#8a97b0]">LOYALTY<br />PROGRAM</span>
+        </button>
+
+        <!-- SCRATCH CARD (coming soon) -->
+        <button type="button" data-soon="Scratch Card" aria-disabled="true" class="flex flex-col items-center text-center">
+          <span class="relative flex h-[104px] w-[104px] items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-alive-purple to-alive-pink text-white opacity-60 shadow-lg shadow-alive-purple/20">
+            <svg class="h-11 w-11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 3l9 4.500-9 4.500-9-4.500L12 3zM3 12l9 4.500 9-4.500M3 16.500L12 21l9-4.500"/></svg>
+          </span>
+          <span class="-mt-3 rounded-full bg-alive-navy px-3 py-1 text-[10px] font-extrabold tracking-wide text-white shadow-md">COMING SOON</span>
+          <span class="mt-3 text-[17px] font-extrabold leading-tight tracking-[-0.03em] text-alive-navy/70">Scratch<br />Card</span>
+          <span class="mt-2 text-[11px] font-bold tracking-[.12em] text-[#8a97b0]/80">INSTANT<br />GIFTS</span>
+        </button>
+
+        <!-- DIGITAL MENU (coming soon) -->
+        <button type="button" data-soon="Digital Menu" aria-disabled="true" class="flex flex-col items-center text-center">
+          <span class="relative flex h-[104px] w-[104px] items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-alive-cyan to-alive-blue text-white opacity-60 shadow-lg shadow-alive-blue/20">
+            <svg class="h-11 w-11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 9l1.500-5h15L21 9M3 9a3 3 0 006 0 3 3 0 006 0 3 3 0 006 0M5 12v9h14v-9M10 21v-5h4v5"/></svg>
+          </span>
+          <span class="-mt-3 rounded-full bg-alive-navy px-3 py-1 text-[10px] font-extrabold tracking-wide text-white shadow-md">COMING SOON</span>
+          <span class="mt-3 text-[17px] font-extrabold leading-tight tracking-[-0.03em] text-alive-navy/70">Digital<br />Menu</span>
+          <span class="mt-2 text-[11px] font-bold tracking-[.12em] text-[#8a97b0]/80">QR MENU<br />CARD</span>
+        </button>
+      </section>
+
+      <!-- PRO TIP -->
+      <section class="mt-9 flex gap-4 rounded-[26px] border border-black/[.07] bg-white/[.92] p-5 shadow-alive">
+        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-black/[.08] text-[#8a97b0]">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+        </span>
+        <div>
+          <h3 class="text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Pro Tip</h3>
+          <p class="mt-1.5 text-[15px] leading-7 text-[#636981]">You can have both Stamp Cards and Scratch Cards active at the same time to maximize customer engagement and retention.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============ BOTTOM NAV ============ -->
+  <nav class="fixed inset-x-0 bottom-0 z-40 border-t border-black/[.07] bg-white/95 backdrop-blur">
+    <div class="mx-auto grid max-w-[480px] grid-cols-4">
+      <button data-tab="home" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]" onclick="window.location.href ='/loyalty/business-dashboard'">
+        
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full ">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.500"/><rect x="14" y="3" width="7" height="7" rx="1.500"/><rect x="3" y="14" width="7" height="7" rx="1.500"/><rect x="14" y="14" width="7" height="7" rx="1.500"/></svg>
+        </span>Home
+      </button>
+      <button data-tab="customers" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]" onclick="window.location.href ='/loyalty/customers-list'">
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.500 3-5.500 7-5.500s7 2 7 5.500M17 4.500a3.500 3.500 0 010 7M22 20c0-2.500-1.500-4-4-5"/></svg>
+        </span>Customers
+      </button>
+      <button data-tab="winners" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]" onclick="window.location.href ='/loyalty/winners-list'">
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13"/></svg>
+        </span>Winners
+      </button>
+      <button data-tab="offer" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-bold text-alive-purple" onclick="window.location.href ='/loyalty/create-offer'">
+        <span class="absolute left-3 top-0 h-[3px] w-12 rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan nav-bar"></span>
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full bg-alive-purple/10">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.700 1.700 0 00.3 1.800l.1.1a2 2 0 11-2.800 2.800l-.1-.1a1.700 1.700 0 00-1.800-.3 1.700 1.700 0 00-1 1.500V21a2 2 0 11-4 0v-.1a1.700 1.700 0 00-1.100-1.500 1.700 1.700 0 00-1.800.3l-.1.1a2 2 0 11-2.800-2.800l.1-.1a1.700 1.700 0 00.3-1.800 1.700 1.700 0 00-1.500-1H3a2 2 0 110-4h.1a1.700 1.700 0 001.500-1.100 1.700 1.700 0 00-.3-1.800l-.1-.1a2 2 0 112.800-2.800l.1.1a1.700 1.700 0 001.800.3H9a1.700 1.700 0 001-1.500V3a2 2 0 114 0v.1a1.700 1.700 0 001 1.500 1.700 1.700 0 001.800-.3l.1-.1a2 2 0 112.800 2.800l-.1.1a1.700 1.700 0 00-.3 1.800V9a1.700 1.700 0 001.500 1H21a2 2 0 110 4h-.1a1.700 1.700 0 00-1.500 1z"/></svg>
+        </span>Create Offer
+      </button>
+    </div>
+  </nav>
+
+
+  <div id="toast" class="fixed bottom-24 left-1/2 z-50 max-w-[calc(100%-32px)] -translate-x-1/2 translate-y-32 rounded-xl bg-[#111738] px-[18px] py-[13px] text-[13px] font-semibold text-white opacity-0 shadow-2xl transition-all duration-300"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function showToast(msg) {
+      const t = $("toast");
+      t.textContent = msg;
+      t.classList.remove("translate-y-32", "opacity-0");
+      t.classList.add("translate-y-0", "opacity-100");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        t.classList.remove("translate-y-0", "opacity-100");
+        t.classList.add("translate-y-32", "opacity-0");
+      }, 3000);
+    }
+
+    // Stamp Card is live. Point this at your stamp card creation page.
+    $("stampBtn").addEventListener("click", () => {
+      showToast("Demo: opening Stamp Card setup.");
+      // window.location.href = "business-stamp-card.html";
+    });
+
+    // Scratch Card and Digital Menu are not available yet.
+    document.querySelectorAll("[data-soon]").forEach((b) =>
+      b.addEventListener("click", () => showToast(`${b.dataset.soon} is coming soon.`)));
+
+    $("upgradeBtn").addEventListener("click", () => showToast("Demo: opening upgrade plans."));
+    $("profileBtn").addEventListener("click", () => showToast("Demo: open profile."));
+  </script>
+</body>
+</html>

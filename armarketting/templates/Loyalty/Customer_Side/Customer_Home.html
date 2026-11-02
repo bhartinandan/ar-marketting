@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#070b3d" />
+  <title>AliveFrame — Home</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ["Inter", "sans-serif"] },
+          colors: {
+            alive: { navy: "#070b3d", navy2: "#0b1154", blue: "#237dff", cyan: "#19d5e8", purple: "#823cff", pink: "#d936ff" },
+            ink: "#0b1234", muted: "#636981", faint: "#747887",
+          },
+          boxShadow: { alive: "0 30px 90px rgba(7, 13, 65, .15)" },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root { box-sizing: border-box; }
+    .no-scrollbar { scrollbar-width: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+  </style>
+</head>
+
+<body class="min-h-screen overflow-x-hidden bg-[#f6f8ff] font-inter text-ink">
+  <div aria-hidden="true" class="pointer-events-none fixed -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#237dff]/20 blur-3xl"></div>
+
+  <div class="relative mx-auto w-full max-w-[480px] pb-[calc(8rem+env(safe-area-inset-bottom))]">
+
+    <!-- HEADER -->
+    <header class="rounded-b-[34px] bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-4 pb-14 pt-[calc(1.5rem+env(safe-area-inset-top))] text-white shadow-alive">
+      <div class="flex items-center gap-4">
+        <span aria-hidden="true" class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10">
+          <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8S10 3 7.500 4.500 9 8 12 8zM12 8s2-5 4.500-3.500S15 8 12 8z"/></svg>
+        </span>
+        <div class="min-w-0">
+          <p id="greeting" class="text-xs font-semibold tracking-wide text-white/75"></p>
+          <h1 id="customerName" class="truncate text-2xl font-extrabold tracking-[-0.04em]"></h1>
+        </div>
+      </div>
+
+      <dl class="mt-5 grid grid-cols-3 gap-3 text-center">
+        <div class="rounded-2xl border border-white/15 bg-white/10 px-2 py-3">
+          <svg aria-hidden="true" class="mx-auto h-5 w-5 text-white/85" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13"/></svg>
+          <dd id="statRewards" class="mt-1 text-2xl font-extrabold leading-none"></dd>
+          <dt class="mt-1.5 text-[11px] font-semibold tracking-wider text-white/75">REWARDS</dt>
+        </div>
+        <div class="rounded-2xl border border-white/15 bg-white/10 px-2 py-3">
+          <svg aria-hidden="true" class="mx-auto h-5 w-5 text-white/85" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+          <dd id="statActive" class="mt-1 text-2xl font-extrabold leading-none"></dd>
+          <dt class="mt-1.5 text-[11px] font-semibold tracking-wider text-white/75">ACTIVE</dt>
+        </div>
+        <div class="rounded-2xl border border-white/15 bg-white/10 px-2 py-3">
+          <svg aria-hidden="true" class="mx-auto h-5 w-5 text-white/85" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s7-6.200 7-12a7 7 0 10-14 0c0 5.800 7 12 7 12z"/><circle cx="12" cy="10" r="2.500"/></svg>
+          <dd id="statVisits" class="mt-1 text-2xl font-extrabold leading-none"></dd>
+          <dt class="mt-1.5 text-[11px] font-semibold tracking-wider text-white/75">VISITS</dt>
+        </div>
+      </dl>
+    </header>
+
+    <main class="relative z-10">
+
+      <!-- BANNERS -->
+      <section aria-label="Highlights" class="-mt-6">
+        <div id="banners" tabindex="0" class="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-4 pb-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-alive-purple">
+          <a onclick="window.location.href ='/loyalty/customer-scanner/{{ hash_id }}'" class="relative flex h-[170px] w-[86%] shrink-0 snap-center flex-col justify-between overflow-hidden rounded-3xl bg-gradient-to-br from-alive-purple to-alive-blue p-5 text-white shadow-alive">
+            <span aria-hidden="true" class="absolute -bottom-10 -right-8 h-40 w-40 rounded-full bg-white/15"></span>
+            <span aria-hidden="true" class="absolute -right-2 top-4 h-16 w-16 rounded-full bg-alive-cyan/40"></span>
+            <p class="relative text-[32px] font-extrabold uppercase leading-[1.02] tracking-[-0.03em]">Scan and<br />earn reward</p>
+            <span class="relative inline-flex w-fit items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-extrabold text-alive-purple">Scan now</span>
+          </a>
+          <div class="relative flex h-[170px] w-[86%] shrink-0 snap-center flex-col justify-between overflow-hidden rounded-3xl bg-gradient-to-br from-alive-navy to-[#2a1a8f] p-5 text-white shadow-alive">
+            <span aria-hidden="true" class="absolute -bottom-12 -right-6 h-44 w-44 rounded-full bg-alive-pink/25"></span>
+            <span aria-hidden="true" class="absolute right-10 top-5 h-12 w-12 rounded-full bg-alive-blue/50"></span>
+            <p class="relative text-[32px] font-extrabold uppercase leading-[1.02] tracking-[-0.03em]">Collect stamps<br />&amp; get free<br />rewards</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- REWARDS -->
+      <section class="px-4 pt-6" aria-labelledby="rewardsTitle">
+        <h2 id="rewardsTitle" class="text-xl font-extrabold tracking-[-0.03em] text-alive-navy">Your Rewards</h2>
+        <div id="rewardList" class="mt-3 space-y-3"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav aria-label="Main" class="fixed inset-x-0 bottom-0 z-40 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+    <div class="relative mx-auto grid h-[84px] max-w-[480px] grid-cols-5 items-center rounded-[34px] border border-black/[.05] bg-white/95 shadow-alive backdrop-blur">
+      <a onclick="window.location.href ='/loyalty/customer-dashboard/{{ hash_id }}'" aria-current="page" class="flex flex-col items-center gap-1 text-[11px] font-bold tracking-wide text-[#5131dc]">
+        <svg aria-hidden="true" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-9z"/></svg>HOME
+      </a>
+      <a onclick="window.location.href ='/loyalty/customer-explore/{{ hash_id }}'" class="flex flex-col items-center gap-1 text-[11px] font-semibold tracking-wide text-faint">
+        <svg aria-hidden="true" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.500 8.500l-2 5-5 2 2-5 5-2z"/></svg>EXPLORE
+      </a>
+      <span aria-hidden="true"></span>
+      <a onclick="window.location.href ='/loyalty/customer-rewards/{{ hash_id }}'" class="flex flex-col items-center gap-1 text-[11px] font-semibold tracking-wide text-faint">
+        <svg aria-hidden="true" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8S10 3 7.500 4.500 9 8 12 8zM12 8s2-5 4.500-3.500S15 8 12 8z"/></svg>REWARDS
+      </a>
+      <a onclick="window.location.href ='/loyalty/customer-profile/{{ hash_id }}'" class="flex flex-col items-center gap-1 text-[11px] font-semibold tracking-wide text-faint">
+        <svg aria-hidden="true" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.500-6.500 8-6.500s8 2.500 8 6.500"/></svg>PROFILE
+      </a>
+      <a onclick="window.location.href ='/loyalty/customer-scanner/{{ hash_id }}'" aria-label="Scan QR code" class="absolute left-1/2 top-0 flex h-[76px] w-[76px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-[#5131dc] to-[#0f9eea] text-white shadow-lg shadow-[#4e39d6]/30 transition hover:scale-105 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#5a40e6]/40">
+        <svg aria-hidden="true" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" viewBox="0 0 24 24"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2M8 12h8"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    /* DATA: replace with your API data */
+    const data = {
+      customerName: "{{ customer_profile.name }}",
+      stats: { rewards: "{{ redeemed_count }}", active: "{{ active_visits }}", visits: "{{ total_visits }}" },
+      rewards: JSON.parse('{{ rewards|safe }}'),
+      // [
+      //   { id: "6ac60", business: "Aryan Restaurant", logo: null, offer: "After two Sattu one will be free", stamps: 1, goal: 2 },
+      // ],
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const MAX_DOTS = 6;
+
+    const giftSvg = '<svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8S10 3 7.500 4.500 9 8 12 8zM12 8s2-5 4.500-3.500S15 8 12 8z"/></svg>';
+
+    function greeting() {
+      const h = new Date().getHours();
+      return h < 12 ? "GOOD MORNING," : h < 17 ? "GOOD AFTERNOON," : "GOOD EVENING,";
+    }
+
+    function stampDots(stamps, goal) {
+      const shown = Math.min(goal, MAX_DOTS);
+      let html = "";
+      for (let i = 0; i < shown; i++) {
+        html += i < stamps
+          ? `<span class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-[#5131dc] to-[#0f9eea] text-white">${giftSvg}</span>`
+          : `<span class="flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed border-[#5131dc]/40 bg-[#f1ecff] text-[#5131dc]/60">${giftSvg}</span>`;
+      }
+      if (goal > shown) html += `<span class="flex h-11 items-center rounded-full bg-[#edf0f4] px-3 text-sm font-bold text-muted">+${goal - shown}</span>`;
+      return html;
+    }
+
+    function rewardCard(r) {
+      const stamps = Math.max(0, Math.min(r.stamps, r.goal));
+      const done = stamps >= r.goal;
+      const initial = esc([...String(r.business).trim()][0]?.toUpperCase() || "A");
+      const logo = r.logo
+        ? `<img src="${esc(r.logo)}" alt="" class="h-full w-full object-cover" />`
+        : `<span class="text-2xl font-extrabold text-white">${initial}</span>`;
+      return `<a onclick="window.location.href='/loyalty/stamp-card-details/{{hash_id}}/${encodeURIComponent(r.id)}'"?id=${encodeURIComponent(r.id)}" class="block rounded-[24px] border border-black/[.05] bg-white p-4 shadow-sm transition hover:shadow-alive focus-visible:outline focus-visible:outline-2 focus-visible:outline-alive-purple">
+        <div class="flex items-start gap-3">
+          <span class="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-black/[.06] bg-gradient-to-br from-alive-purple to-alive-blue">${logo}</span>
+          <span class="min-w-0 flex-1">
+            <span class="block break-words text-lg font-extrabold leading-tight tracking-[-0.03em] text-alive-navy">${esc(r.business)}</span>
+            <span class="mt-0.5 block break-words text-[15px] font-medium leading-snug text-[#5131dc]">${esc(r.offer)}</span>
+          </span>
+          <span class="shrink-0 text-right">
+            ${done
+              ? '<span class="block text-sm font-extrabold text-[#16a058]">Ready to claim</span>'
+              : `<span class="block text-xl leading-none"><b class="font-extrabold text-[#5131dc]">${stamps}</b><span class="text-muted">/${r.goal}</span></span><span class="mt-1 block text-[11px] font-semibold tracking-wider text-muted">STAMPS</span>`}
+          </span>
+        </div>
+        <div class="mt-3 flex items-center justify-between gap-3">
+          <span class="flex flex-wrap items-center gap-2" aria-label="${stamps} of ${r.goal} stamps collected">${stampDots(stamps, r.goal)}</span>
+          <svg aria-hidden="true" class="h-5 w-5 shrink-0 text-faint" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+      </a>`;
+    }
+
+    function render() {
+      $("greeting").textContent = greeting();
+      $("customerName").textContent = data.customerName;
+      $("statRewards").textContent = data.stats.rewards;
+      $("statActive").textContent = data.stats.active;
+      $("statVisits").textContent = data.stats.visits;
+
+      $("rewardList").innerHTML = data.rewards.length
+        ? data.rewards.map(rewardCard).join("")
+        : `<div class="rounded-[24px] border border-black/[.05] bg-white p-6 text-center shadow-sm">
+             <p class="text-lg font-extrabold tracking-[-0.03em] text-alive-navy">No rewards yet</p>
+             <p class="mt-1 text-[15px] text-muted">Scan the QR code at a business to collect your first stamp.</p>
+             <a href="customer-scan.html" class="mt-4 inline-flex h-12 items-center rounded-2xl bg-gradient-to-r from-[#5131dc] to-[#0f9eea] px-6 text-[15px] font-extrabold text-white">Scan QR code</a>
+           </div>`;
+    }
+
+    render();
+  </script>
+</body>
+</html>

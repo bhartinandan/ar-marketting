@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#070b3d" />
+  <title>Help &amp; Support</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ["Inter", "sans-serif"] },
+          colors: {
+            alive: { navy: "#070b3d", navy2: "#0b1154", blue: "#237dff", cyan: "#19d5e8", purple: "#823cff", pink: "#d936ff" },
+            ink: "#0b1234", muted: "#636981", faint: "#747887",
+          },
+          boxShadow: { alive: "0 30px 90px rgba(7, 13, 65, .15)" },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    .field:focus-visible { outline: 3px solid rgba(90, 64, 230, .25); outline-offset: 1px; border-color: #5a40e6; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+
+<body class="min-h-screen overflow-x-hidden bg-[#f6f8ff] font-inter text-ink">
+  <div aria-hidden="true" class="pointer-events-none fixed -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#237dff]/20 blur-3xl"></div>
+  <div class="relative mx-auto w-full max-w-[480px] pb-[calc(7rem+env(safe-area-inset-bottom))]">
+
+    <!-- TRIAL BANNER (hidden when trialDaysLeft is 0 or less) -->
+    <div id="trialBanner" class="hidden items-center gap-3 bg-gradient-to-r from-alive-purple to-alive-blue px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] text-white">
+      <svg aria-hidden="true" class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+      <p id="trialText" class="flex-1 text-sm font-semibold leading-snug"></p>
+      <a href="business-plans.html" class="rounded-full bg-white px-5 py-2.5 text-center text-sm font-extrabold leading-tight text-alive-purple">Upgrade<br />Now</a>
+    </div>
+
+    <!-- HEADER -->
+    <header class="-mt-px rounded-b-[34px] bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-4 pb-16 pt-7 text-white shadow-alive">
+      <div class="flex items-center gap-4">
+        <a href="business-profile.html" aria-label="Back to Profile &amp; Settings" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">
+          <svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+        </a>
+        <h1 class="text-2xl font-extrabold tracking-[-0.045em]">Help &amp; Support</h1>
+      </div>
+      <p class="ml-[52px] mt-1 text-sm text-white/80">Get help from our team</p>
+    </header>
+
+    <main class="relative z-10 -mt-12 space-y-4 px-4">
+
+      <!-- INTRO CARD -->
+      <section class="flex items-center gap-4 rounded-[28px] border border-black/[.05] bg-white p-5 shadow-alive">
+        <span class="flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-2xl border border-alive-blue/10 bg-[#eaf3ff] text-alive-blue">
+          <svg aria-hidden="true" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 8l9 6 9-6"/></svg>
+        </span>
+        <div class="min-w-0">
+          <h2 class="flex flex-wrap items-center gap-2 text-xl font-extrabold tracking-[-0.03em] text-alive-navy">Contact Support <span class="rounded-md bg-[#edf0f4] px-2 py-0.5 text-[11px] font-bold tracking-wide text-muted">BETA</span></h2>
+          <p class="mt-0.5 text-[15px] text-muted">We'll get back within 24 hours</p>
+        </div>
+      </section>
+
+      <!-- FORM -->
+      <form id="supportForm" class="rounded-[28px] border border-black/[.05] bg-white p-5 shadow-alive" novalidate>
+        <div>
+          <label for="name" class="block text-[15px] font-bold text-[#23283c]">Your Name <span aria-hidden="true">*</span></label>
+          <input id="name" name="name" type="text" autocomplete="name" maxlength="50" required class="field mt-2 h-14 w-full rounded-2xl border border-black/[.08] bg-[#f8f9fb] px-4 text-base font-medium outline-none transition placeholder:font-normal placeholder:text-[#8c91a0]" />
+          <p data-err="name" id="err-name" class="mt-1.5 hidden text-xs font-semibold text-[#d92d3a]"></p>
+        </div>
+
+        <div class="mt-5">
+          <label for="email" class="block text-[15px] font-bold text-[#23283c]">Email Address <span class="font-normal text-[#8c91a0]">(optional)</span></label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="80" placeholder="you@example.com" class="field mt-2 h-14 w-full rounded-2xl border border-black/[.08] bg-[#f8f9fb] px-4 text-base font-medium outline-none transition placeholder:font-normal placeholder:text-[#8c91a0]" />
+          <p data-err="email" id="err-email" class="mt-1.5 hidden text-xs font-semibold text-[#d92d3a]"></p>
+        </div>
+
+        <div class="mt-5">
+          <label for="subject" class="block text-[15px] font-bold text-[#23283c]">Subject</label>
+          <input id="subject" name="subject" type="text" maxlength="100" placeholder="What's this about?" class="field mt-2 h-14 w-full rounded-2xl border border-black/[.08] bg-[#f8f9fb] px-4 text-base font-medium outline-none transition placeholder:font-normal placeholder:text-[#8c91a0]" />
+        </div>
+
+        <div class="mt-5">
+          <div class="flex items-baseline justify-between">
+            <label for="message" class="block text-[15px] font-bold text-[#23283c]">Message <span aria-hidden="true">*</span></label>
+            <span id="msgCount" class="text-xs text-[#8c91a0]" aria-hidden="true">0/1000</span>
+          </div>
+          <textarea id="message" name="message" rows="5" maxlength="1000" required placeholder="Describe your issue or question..." class="field mt-2 w-full resize-none rounded-2xl border border-black/[.08] bg-[#f8f9fb] px-4 py-3.5 text-base font-medium outline-none transition placeholder:font-normal placeholder:text-[#8c91a0]"></textarea>
+          <p data-err="message" id="err-message" class="mt-1.5 hidden text-xs font-semibold text-[#d92d3a]"></p>
+        </div>
+
+        <div class="mt-5">
+          <p class="text-[15px] font-bold text-[#23283c]">Screenshots <span class="font-normal text-[#8c91a0]">(optional, up to 3)</span></p>
+          <ul id="fileList" class="mt-2 space-y-2"></ul>
+          <label id="addFile" class="mt-3 inline-flex cursor-pointer items-center gap-3 rounded-lg py-1 text-base font-bold text-[#5131dc] focus-within:outline focus-within:outline-2 focus-within:outline-alive-purple">
+            <svg aria-hidden="true" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 3H6a3 3 0 00-3 3v12a3 3 0 003 3h12a3 3 0 003-3v-6M3 16l5-5 4 4 2-2 3 3M19 3v6M16 6h6"/><circle cx="8.500" cy="7.500" r="1.200"/></svg>
+            Add a screenshot or PDF
+            <input id="fileInput" type="file" accept="image/*,application/pdf" multiple class="sr-only" />
+          </label>
+          <p data-err="files" id="err-files" class="mt-1.5 hidden text-xs font-semibold text-[#d92d3a]"></p>
+        </div>
+
+        <button id="sendBtn" type="submit" class="mt-6 flex h-16 w-full items-center justify-center gap-3 rounded-[22px] bg-gradient-to-r from-[#5131dc] to-[#0f9eea] text-lg font-bold text-white shadow-lg shadow-[#4e39d6]/20 transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-alive-purple/40">
+          <svg id="sendIcon" aria-hidden="true" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          <span id="sendLabel">Send to Support</span>
+        </button>
+      </form>
+    </main>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav aria-label="Main" class="fixed inset-x-0 bottom-0 z-40 border-t border-black/[.07] bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">
+    <div class="mx-auto grid max-w-[480px] grid-cols-4">
+      <a href="business-dashboard.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-faint">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.500"/><rect x="14" y="3" width="7" height="7" rx="1.500"/><rect x="3" y="14" width="7" height="7" rx="1.500"/><rect x="14" y="14" width="7" height="7" rx="1.500"/></svg></span>Home
+      </a>
+      <a href="business-customers.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-faint">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.500"/><path d="M2 20c0-3.500 3-5.500 7-5.500s7 2 7 5.500M17 4.500a3.500 3.500 0 010 7M22 20c0-2.500-1.500-4-4-5"/></svg></span>Customers
+      </a>
+      <a href="business-winners.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-faint">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13M12 8S10 3 7.500 4.500 9 8 12 8zM12 8s2-5 4.500-3.500S15 8 12 8z"/></svg></span>Winners
+      </a>
+      <a href="business-offers.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-faint">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.900 4.900l2.100 2.100M17 17l2.100 2.100M4.900 19.100L7 17M17 7l2.100-2.100"/></svg></span>Create Offer
+      </a>
+    </div>
+  </nav>
+
+  <div id="toast" role="status" aria-live="polite" class="fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] left-1/2 z-50 max-w-[calc(100%-32px)] -translate-x-1/2 translate-y-32 rounded-xl bg-[#111738] px-[18px] py-[13px] text-[13px] font-semibold text-white opacity-0 shadow-2xl transition-all duration-300"></div>
+
+  <script>
+    /* DATA: replace with your API data */
+    const data = { trialDaysLeft: 2, ownerName: "Aryan Kumar" };
+
+    const MAX_FILES = 3, MAX_BYTES = 5 * 1024 * 1024;
+    const $ = (id) => document.getElementById(id);
+    let files = [], sending = false, toastTimer;
+
+    /* Trial banner */
+    const n = data.trialDaysLeft;
+    if (n > 0) {
+      $("trialBanner").classList.replace("hidden", "flex");
+      $("trialText").textContent = `Your trial period expires in ${n} ${n === 1 ? "day" : "days"}`;
+    }
+    $("name").value = data.ownerName;
+
+    /* Validation */
+    const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    function setErr(key, msg) {
+      const p = $("err-" + key), input = $(key);
+      p.textContent = msg; p.classList.toggle("hidden", !msg);
+      if (input) { input.setAttribute("aria-invalid", !!msg); msg ? input.setAttribute("aria-describedby", p.id) : input.removeAttribute("aria-describedby"); }
+    }
+    function validate() {
+      const name = $("name").value.trim(), email = $("email").value.trim(), msg = $("message").value.trim();
+      const e = {
+        name: name ? "" : "Enter your name.",
+        email: email && !emailOk(email) ? "Enter a valid email address." : "",
+        message: msg ? (msg.length < 10 ? "Add a few more details (at least 10 characters)." : "") : "Describe your issue or question.",
+      };
+      Object.entries(e).forEach(([k, v]) => setErr(k, v));
+      const firstBad = ["name", "email", "message"].find((k) => e[k]);
+      return { ok: !firstBad, firstBad };
+    }
+    const looksReady = () => $("name").value.trim() && $("message").value.trim().length >= 10 && (!$("email").value.trim() || emailOk($("email").value.trim()));
+    function updateBtn() { $("sendBtn").classList.toggle("opacity-75", !looksReady() && !sending); }
+
+    ["name", "email", "subject", "message"].forEach((id) => $(id).addEventListener("input", () => {
+      if (id !== "subject" && !$("err-" + id).classList.contains("hidden")) validate();
+      if (id === "message") $("msgCount").textContent = `${$("message").value.length}/1000`;
+      updateBtn();
+    }));
+
+    /* Attachments */
+    const fmtSize = (b) => (b < 1048576 ? `${Math.max(1, Math.round(b / 1024))} KB` : `${(b / 1048576).toFixed(1)} MB`);
+    function renderFiles() {
+      const ul = $("fileList");
+      ul.textContent = "";
+      files.forEach((f, i) => {
+        const li = document.createElement("li");
+        li.className = "flex items-center gap-3 rounded-2xl border border-black/[.08] bg-[#f8f9fb] p-3";
+        const thumb = document.createElement("span");
+        thumb.className = "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#eaf3ff] text-[11px] font-extrabold text-alive-blue";
+        if (f.type.startsWith("image/")) {
+          const img = document.createElement("img");
+          img.src = URL.createObjectURL(f); img.alt = ""; img.className = "h-full w-full object-cover";
+          img.onload = () => URL.revokeObjectURL(img.src);
+          thumb.appendChild(img);
+        } else thumb.textContent = "PDF";
+        const meta = document.createElement("span");
+        meta.className = "min-w-0 flex-1";
+        const nm = document.createElement("span"); nm.className = "block truncate text-sm font-semibold"; nm.textContent = f.name;
+        const sz = document.createElement("span"); sz.className = "block text-xs text-muted"; sz.textContent = fmtSize(f.size);
+        meta.append(nm, sz);
+        const rm = document.createElement("button");
+        rm.type = "button"; rm.setAttribute("aria-label", `Remove ${f.name}`);
+        rm.className = "flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-alive-purple";
+        rm.innerHTML = '<svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+        rm.addEventListener("click", () => { files.splice(i, 1); setErr("files", ""); renderFiles(); $("addFile").querySelector("input").focus(); });
+        li.append(thumb, meta, rm);
+        ul.appendChild(li);
+      });
+      $("addFile").classList.toggle("hidden", files.length >= MAX_FILES);
+    }
+    $("fileInput").addEventListener("change", (e) => {
+      let err = "";
+      for (const f of e.target.files) {
+        if (files.length >= MAX_FILES) { err = `You can attach up to ${MAX_FILES} files.`; break; }
+        if (!(f.type.startsWith("image/") || f.type === "application/pdf")) { err = `${f.name} isn't an image or PDF.`; continue; }
+        if (f.size > MAX_BYTES) { err = `${f.name} is over 5 MB.`; continue; }
+        files.push(f);
+      }
+      setErr("files", err);
+      e.target.value = ""; // allows re-selecting the same file
+      renderFiles();
+    });
+
+    /* Submit */
+    $("supportForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (sending) return;
+      const { ok, firstBad } = validate();
+      if (!ok) { $(firstBad).focus(); return showToast("Fix the highlighted fields to continue."); }
+
+      const body = new FormData();
+      ["name", "email", "subject", "message"].forEach((k) => body.append(k, $(k).value.trim()));
+      files.forEach((f) => body.append("attachments", f));
+
+      sending = true;
+      $("sendBtn").disabled = true; $("sendBtn").classList.add("opacity-75");
+      $("sendLabel").textContent = "Sending...";
+      try {
+        // DEMO: replace with your API, e.g.
+        // const res = await fetch("/api/support", { method: "POST", body });
+        // if (!res.ok) throw new Error();
+        await new Promise((r) => setTimeout(r, 900));
+        ["email", "subject", "message"].forEach((k) => ($(k).value = ""));
+        $("msgCount").textContent = "0/1000";
+        files = []; renderFiles();
+        showToast("Sent. We'll reply within 24 hours.");
+      } catch {
+        showToast("Couldn't send your message. Check your connection and try again.");
+      } finally {
+        sending = false;
+        $("sendBtn").disabled = false;
+        $("sendLabel").textContent = "Send to Support";
+        updateBtn();
+      }
+    });
+
+    function showToast(msg) {
+      const t = $("toast");
+      t.textContent = msg;
+      t.classList.remove("translate-y-32", "opacity-0");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.add("translate-y-32", "opacity-0"), 3500);
+    }
+
+    updateBtn();
+  </script>
+</body>
+</html>

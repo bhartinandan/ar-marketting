@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b3d">
+<title>Explore</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  --navy:#070b3d; --navy2:#0b1154; --navy3:#2a1a8f; --blue:#237dff; --cyan:#19d5e8; --purple:#823cff; --pink:#d936ff;
+  --ink:#0b1234; --muted:#636981; --faint:#747887; --bg:#f6f8ff; --accent:#5131dc; --accent2:#0f9eea; --green:#16a058; --soft:#f1ecff;
+  --shadow:0 30px 90px rgba(7,13,65,.15); color-scheme:light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;overflow-x:hidden;background:var(--bg);color:var(--ink);font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+.glow{position:fixed;right:-160px;top:-160px;width:420px;height:420px;border-radius:50%;background:rgba(35,125,255,.2);filter:blur(64px);pointer-events:none}
+.app{position:relative;max-width:480px;margin:0 auto;padding-bottom:calc(8rem + env(safe-area-inset-bottom,0px))}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2),var(--navy3));color:#fff;border-radius:0 0 34px 34px;padding:24px 16px 56px;box-shadow:var(--shadow)}
+.who{display:flex;align-items:center;gap:16px}
+.tile{flex:none;width:56px;height:56px;border-radius:16px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);display:grid;place-items:center}
+.tile svg{width:28px;height:28px}
+.who p{margin:0;font-size:12px;font-weight:600;letter-spacing:.025em;color:rgba(255,255,255,.75);text-transform:uppercase}
+.who h1{margin:0;font-size:24px;font-weight:800;letter-spacing:-.04em}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0 0;text-align:center}
+.stat{border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.1);border-radius:16px;padding:12px 8px}
+.stat svg{width:20px;height:20px;color:rgba(255,255,255,.85)}
+.stat b{display:block;margin-top:4px;font-size:24px;font-weight:800;line-height:1}
+.stat span{display:block;margin-top:6px;font-size:11px;font-weight:600;letter-spacing:.05em;color:rgba(255,255,255,.75);text-transform:uppercase}
+main{position:relative;z-index:1}
+.banner{position:relative;overflow:hidden;margin:-24px 16px 0;height:170px;border-radius:24px;padding:20px;color:#fff;background:linear-gradient(135deg,var(--purple),var(--blue));box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between}
+.banner:before{content:"";position:absolute;right:-32px;bottom:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.15)}
+.banner:after{content:"";position:absolute;right:-8px;top:16px;width:64px;height:64px;border-radius:50%;background:rgba(25,213,232,.4)}
+.banner p{position:relative;z-index:1;margin:0;font-size:32px;font-weight:800;line-height:1.02;letter-spacing:-.03em;text-transform:uppercase}
+.banner button{position:relative;z-index:1;align-self:flex-start;border:0;background:#fff;color:var(--purple);font:800 14px Inter,sans-serif;padding:8px 16px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.search{display:flex;align-items:center;gap:12px;margin:16px 16px 0;background:#fff;border:1px solid rgba(0,0,0,.05);border-radius:24px;padding:14px 18px;color:var(--faint);box-shadow:0 1px 3px rgba(7,13,65,.08)}
+.search input{flex:1;border:0;outline:0;background:transparent;font:500 15px Inter,sans-serif;color:var(--ink)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:16px 16px 0;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid rgba(0,0,0,.06);background:#fff;color:var(--ink);padding:10px 18px;border-radius:999px;font:600 14px Inter,sans-serif;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:transparent;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.sec{display:flex;justify-content:space-between;align-items:baseline;padding:24px 16px 0}
+.sec h2{margin:0;font-size:20px;font-weight:800;letter-spacing:-.03em;color:var(--navy)}
+.sec a{color:var(--accent);font-weight:700;font-size:14px;text-decoration:none}
+.list{display:grid;gap:12px;padding:12px 16px 0}
+.biz{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid rgba(0,0,0,.05);border-radius:24px;padding:16px;box-shadow:0 1px 3px rgba(7,13,65,.08)}
+.av{flex:none;width:56px;height:56px;border-radius:16px;border:1px solid rgba(0,0,0,.06);display:grid;place-items:center;color:#fff;font-size:24px;font-weight:800;background:linear-gradient(135deg,var(--purple),var(--blue))}
+.info{min-width:0;flex:1}
+.info b{display:block;font-size:18px;font-weight:800;line-height:1.15;letter-spacing:-.03em;color:var(--navy);word-break:break-word}
+.info span{display:block;margin-top:2px;font-size:15px;font-weight:500;line-height:1.3;color:var(--accent)}
+.right{flex:none;text-align:right}
+.right em{display:block;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.05em;color:var(--green)}
+.right svg{width:20px;height:20px;margin-top:8px;color:var(--faint)}
+.more{display:block;margin:20px auto 0;border:1px solid rgba(0,0,0,.06);background:#fff;color:var(--ink);font:700 15px Inter,sans-serif;padding:12px 32px;border-radius:999px;cursor:pointer}
+.empty{text-align:center;color:var(--muted);padding:28px 0;font-size:15px}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:0 16px calc(1rem + env(safe-area-inset-bottom,0px))}
+.bar{position:relative;max-width:480px;margin:0 auto;height:84px;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;border:1px solid rgba(0,0,0,.05);border-radius:34px;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);box-shadow:var(--shadow)}
+.bar a{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:600;letter-spacing:.025em;color:var(--faint);text-decoration:none;text-transform:uppercase}
+.bar a.on{font-weight:700;color:var(--accent)}
+.bar svg{width:28px;height:28px}
+.scan{position:absolute;left:50%;top:0;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;border:4px solid #fff;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 15px -3px rgba(78,57,214,.3)}
+.scan svg{width:32px;height:32px}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<div class="app">
+<header>
+  <div class="who">
+    <span class="tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/></svg></span>
+    <div><p>Find new favorites near you</p><h1>Explore</h1></div>
+  </div>
+  <dl class="stats" style="margin-bottom:0">
+    <div class="stat"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><dd id="sN" style="margin:4px 0 0"><b>0</b></dd><dt><span>Nearby</span></dt></div>
+    <div class="stat"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg><dd id="sO" style="margin:4px 0 0"><b>0</b></dd><dt><span>Open</span></dt></div>
+    <div class="stat"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13"/></svg><dd id="sR" style="margin:4px 0 0"><b>0</b></dd><dt><span>Rewards</span></dt></div>
+  </dl>
+</header>
+<main>
+  <section class="banner" aria-label="Location">
+    <p>Find places<br>near you</p>
+    <button id="loc"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg><span id="locText">Use my location</span></button>
+  </section>
+  <label class="search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="Find businesses near you" aria-label="Find businesses near you"></label>
+  <div class="chips" id="chips"></div>
+  <div class="sec"><h2>Trending near you</h2><a href="#" id="all">View all</a></div>
+  <div class="list" id="list"></div>
+  <button class="more" id="more">Load more</button>
+</main>
+</div>
+<nav aria-label="Main"><div class="bar">
+  <a onclick="window.location.href ='/loyalty/customer-dashboard/{{ hash_id }}'"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-9z"/></svg>Home</a>
+  <a onclick="window.location.href ='/loyalty/customer-explore/{{ hash_id }}'" class="on" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/></svg>Explore</a>
+  <span aria-hidden="true"></span>
+  <a onclick="window.location.href ='/loyalty/customer-rewards/{{ hash_id }}'"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8S10 3 7.5 4.5 9 8 12 8zM12 8s2-5 4.5-3.5S15 8 12 8z"/></svg>Rewards</a>
+  <a onclick="window.location.href ='/loyalty/customer-profile/{{ hash_id }}'"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6.5 8-6.5s8 2.5 8 6.5"/></svg>Profile</a>
+  <button onclick="window.location.href ='/loyalty/customer-scanner/{{ hash_id }}'" class="scan" aria-label="Scan QR code"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2M8 12h8"/></svg></button>
+</div></nav>
+<script>
+// const cats="{{categories|safe}}";     //["All","Bakery","Bar","Bookstore","Restaurant","Cafe"];
+// const data="{{business_list}}";  //[["Crisp N Co","Cafe"],["The Hungry Hub","Restaurant"],["Sugar rush","Bakery"],["Mahmud's bakes","Bakery"],["Twelve Tables","Restaurant"],["Pk chicken","Restaurant"],["Savji's Ruchi family restaurant","Restaurant"],["Bhima mart","Bookstore"],["खम्मा घणी सा","Restaurant"],["Hello momo","Restaurant"],["Page Turners","Bookstore"],["Blue Hour Bar","Bar"],["Brew & Co","Cafe"]];
+const cats = JSON.parse('{{ categories|escapejs }}');
+const data = JSON.parse('{{ businesses|escapejs }}');
+
+console.log(cats);
+console.log(data);
+let cat="All",shown=6,term="";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+["sN","sO","sR"].forEach(i=>$(i).firstChild.textContent=data.length);
+function render(){
+  $("chips").innerHTML=cats.map(c=>`<button class="chip" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join("");
+  const f=data.filter(d=>(cat==="All"||d[1]===cat)&&d[0].toLowerCase().includes(term));
+  $("list").innerHTML=f.slice(0,shown).map(d=>`<a class="biz" href="#" style="text-decoration:none;color:inherit"><span class="av">${esc([...d[0]][0].toUpperCase())}</span><span class="info"><b>${esc(d[0])}</b><span>Win: Loyalty reward</span></span><span class="right"><em>OPEN</em><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></span></a>`).join("")||'<p class="empty">No businesses found. Try another search or category.</p>';
+  $("more").style.display=f.length>shown?"block":"none";
+}
+$("chips").onclick=e=>{const c=e.target.closest(".chip");if(c){cat=c.dataset.c;shown=6;render()}};
+$("q").oninput=e=>{term=e.target.value.toLowerCase();shown=6;render()};
+$("more").onclick=()=>{shown+=6;render()};
+$("all").onclick=e=>{e.preventDefault();shown=99;render()};
+$("loc").onclick=()=>{$("locText").textContent="Showing places near you"};
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#070b3d" />
+  <title>Privacy &amp; Security</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ["Inter", "sans-serif"] },
+          colors: {
+            alive: { navy: "#070b3d", navy2: "#0b1154", blue: "#237dff", cyan: "#19d5e8", purple: "#823cff", pink: "#d936ff" },
+            ink: "#0b1234", muted: "#636981", faint: "#747887",
+          },
+          boxShadow: { alive: "0 30px 90px rgba(7, 13, 65, .15)" },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root { box-sizing: border-box; }
+    .knob { transition: transform .2s ease; }
+    [aria-checked="true"] .knob { transform: translateX(24px); }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+
+<body class="min-h-screen overflow-x-hidden bg-[#f6f8ff] font-inter text-ink">
+  <div aria-hidden="true" class="pointer-events-none fixed -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#237dff]/20 blur-3xl"></div>
+
+  <div class="relative mx-auto w-full max-w-[480px] pb-[calc(7rem+env(safe-area-inset-bottom))]">
+
+    <!-- TRIAL BANNER (hidden when trialDaysLeft is 0 or less) -->
+    <div id="trialBanner" class="hidden items-center gap-3 bg-gradient-to-r from-alive-purple to-alive-blue px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] text-white">
+      <svg aria-hidden="true" class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+      <p id="trialText" class="flex-1 text-sm font-semibold leading-snug"></p>
+      <a href="business-plans.html" class="rounded-full bg-white px-5 py-2.5 text-center text-sm font-extrabold leading-tight text-alive-purple">Upgrade<br />Now</a>
+    </div>
+
+    <!-- HEADER -->
+    <header class="-mt-px rounded-b-[34px] bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-4 pb-16 pt-7 text-white shadow-alive">
+      <div class="flex items-center gap-4">
+        <a id="backLink" href="business-profile.html" aria-label="Back to Profile &amp; Settings" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">
+          <svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+        </a>
+        <h1 class="text-2xl font-extrabold tracking-[-0.045em]">Privacy &amp; Security</h1>
+      </div>
+      <p class="ml-[52px] mt-1 text-sm text-white/75">Your data &amp; security</p>
+    </header>
+
+    <main class="relative z-10 -mt-12 space-y-4 px-4">
+
+      <!-- SETTINGS -->
+      <section class="divide-y divide-black/[.05] overflow-hidden rounded-[28px] border border-black/[.05] bg-white shadow-alive">
+        <div class="flex items-center gap-4 p-5">
+          <div class="min-w-0 flex-1">
+            <div id="locLabel" class="flex flex-wrap items-center gap-2 text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Share Location <span class="rounded-md bg-[#edf0f4] px-2 py-0.5 text-[11px] font-bold tracking-wide text-muted">BETA</span></div>
+            <p id="locDesc" class="mt-0.5 text-[15px] leading-snug text-muted">For business location services</p>
+          </div>
+          <button id="locToggle" type="button" role="switch" aria-checked="false" aria-labelledby="locLabel" aria-describedby="locDesc" data-key="shareLocation"
+            class="relative h-9 w-[60px] shrink-0 rounded-full bg-[#cfd3de] transition focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#5a40e6]/40 aria-checked:bg-gradient-to-r aria-checked:from-[#5131dc] aria-checked:to-[#0f9eea]">
+            <span class="knob absolute left-1 top-1 h-7 w-7 rounded-full bg-white shadow"></span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-4 p-5">
+          <div class="min-w-0 flex-1">
+            <div id="anaLabel" class="flex flex-wrap items-center gap-2 text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Analytics <span class="rounded-md bg-[#edf0f4] px-2 py-0.5 text-[11px] font-bold tracking-wide text-muted">BETA</span></div>
+            <p id="anaDesc" class="mt-0.5 text-[15px] leading-snug text-muted">Help improve the app</p>
+          </div>
+          <button id="anaToggle" type="button" role="switch" aria-checked="false" aria-labelledby="anaLabel" aria-describedby="anaDesc" data-key="analytics"
+            class="relative h-9 w-[60px] shrink-0 rounded-full bg-[#cfd3de] transition focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#5a40e6]/40 aria-checked:bg-gradient-to-r aria-checked:from-[#5131dc] aria-checked:to-[#0f9eea]">
+            <span class="knob absolute left-1 top-1 h-7 w-7 rounded-full bg-white shadow"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- DATA PROTECTION -->
+      <section class="rounded-[28px] border border-black/[.05] bg-white p-5 shadow-alive">
+        <h2 class="flex items-center gap-3 text-xl font-bold tracking-[-0.03em] text-alive-navy">
+          <svg aria-hidden="true" class="h-6 w-6 shrink-0 text-[#5131dc]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2.500"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+          Data Protection
+        </h2>
+        <p class="mt-3 text-base leading-relaxed text-muted">Your business data is encrypted and securely stored. We never share your information with third parties without your consent.</p>
+      </section>
+
+      <!-- SAVE -->
+      <button id="saveBtn" type="button" disabled class="h-[60px] w-full rounded-[22px] bg-[#d0d5de] text-lg font-bold text-[#6b7280] transition enabled:bg-gradient-to-r enabled:from-[#5131dc] enabled:to-[#0f9eea] enabled:text-white enabled:shadow-lg enabled:shadow-[#4e39d6]/20 enabled:hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#5a40e6]/40">Save Settings</button>
+    </main>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav aria-label="Main" class="fixed inset-x-0 bottom-0 z-40 border-t border-black/[.07] bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">
+    <div class="mx-auto grid max-w-[480px] grid-cols-4">
+      <a href="business-dashboard.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-faint">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.500"/><rect x="14" y="3" width="7" height="7" rx="1.500"/><rect x="3" y="14" width="7" height="7" rx="1.500"/><rect x="14" y="14" width="7" height="7" rx="1.500"/></svg></span>Home
+      </a>
+      <a href="business-customers.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-faint">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.500"/><path d="M2 20c0-3.500 3-5.500 7-5.500s7 2 7 5.500M17 4.500a3.500 3.500 0 010 7M22 20c0-2.500-1.500-4-4-5"/></svg></span>Customers
+      </a>
+      <a href="business-winners.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-faint">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13M12 8S10 3 7.500 4.500 9 8 12 8zM12 8s2-5 4.500-3.500S15 8 12 8z"/></svg></span>Winners
+      </a>
+      <a href="business-offers.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-faint">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.900 4.900l2.100 2.100M17 17l2.100 2.100M4.900 19.100L7 17M17 7l2.100-2.100"/></svg></span>Create Offer
+      </a>
+    </div>
+  </nav>
+
+  <div id="toast" role="status" aria-live="polite" class="fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] left-1/2 z-50 max-w-[calc(100%-32px)] -translate-x-1/2 translate-y-32 rounded-xl bg-[#111738] px-[18px] py-[13px] text-[13px] font-semibold text-white opacity-0 shadow-2xl transition-all duration-300"></div>
+
+  <script>
+    /* DATA: replace with your API data */
+    const data = { trialDaysLeft: 2 };
+    let saved = { shareLocation: false, analytics: false }; // last saved values from your API
+    let draft = { ...saved };
+    let saving = false, toastTimer;
+
+    const $ = (id) => document.getElementById(id);
+    const toggles = [$("locToggle"), $("anaToggle")];
+    const isDirty = () => Object.keys(saved).some((k) => saved[k] !== draft[k]);
+
+    /* Trial banner */
+    const n = data.trialDaysLeft;
+    if (n > 0) {
+      $("trialBanner").classList.replace("hidden", "flex");
+      $("trialText").textContent = `Your trial period expires in ${n} ${n === 1 ? "day" : "days"}`;
+    }
+
+    /* Render */
+    function render() {
+      toggles.forEach((b) => { b.setAttribute("aria-checked", String(draft[b.dataset.key])); b.disabled = saving; });
+      $("saveBtn").disabled = !isDirty() || saving;
+      $("saveBtn").textContent = saving ? "Saving..." : "Save Settings";
+    }
+
+    /* Ask the browser for location access before turning Share Location on */
+    function requestLocation() {
+      return new Promise((resolve) => {
+        if (!("geolocation" in navigator)) return resolve("unsupported");
+        navigator.geolocation.getCurrentPosition(() => resolve("ok"), (err) => resolve(err.code === 1 ? "denied" : "ok"), { timeout: 8000 });
+      });
+    }
+
+    toggles.forEach((b) => b.addEventListener("click", async () => {
+      const key = b.dataset.key, next = !draft[key];
+      if (key === "shareLocation" && next) {
+        const r = await requestLocation();
+        if (r === "denied") return showToast("Location access is blocked. Allow it in your browser settings to turn this on.");
+        if (r === "unsupported") return showToast("This device doesn't support location sharing.");
+      }
+      draft[key] = next;
+      render();
+    }));
+
+    /* Save */
+    $("saveBtn").addEventListener("click", async () => {
+      if (!isDirty() || saving) return;
+      saving = true; render();
+      try {
+        // DEMO: replace with your API, e.g.
+        // const res = await fetch("/api/privacy", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(draft) });
+        // if (!res.ok) throw new Error();
+        await new Promise((r) => setTimeout(r, 700));
+        saved = { ...draft };
+        showToast("Settings saved.");
+      } catch {
+        showToast("Couldn't save your settings. Check your connection and try again.");
+      } finally {
+        saving = false; render();
+      }
+    });
+
+    /* Warn before leaving with unsaved changes */
+    window.addEventListener("beforeunload", (e) => { if (isDirty()) { e.preventDefault(); e.returnValue = ""; } });
+
+    function showToast(msg) {
+      const t = $("toast");
+      t.textContent = msg;
+      t.classList.remove("translate-y-32", "opacity-0");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.add("translate-y-32", "opacity-0"), 3500);
+    }
+
+    render();
+  </script>
+</body>
+</html>

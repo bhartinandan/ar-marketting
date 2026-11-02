@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070b3d" />
+  <title>AliveFrame — Profile &amp; Settings</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ["Inter", "sans-serif"] },
+          colors: {
+            alive: {
+              navy: "#070b3d", navy2: "#0b1154", blue: "#237dff",
+              cyan: "#19d5e8", purple: "#823cff", pink: "#d936ff",
+            },
+          },
+          boxShadow: { alive: "0 30px 90px rgba(7, 13, 65, .15)" },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="min-h-screen overflow-x-hidden bg-[#f6f8ff] font-inter text-[#0b1234]">
+
+  <div class="pointer-events-none fixed -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#237dff]/20 blur-3xl"></div>
+
+  <div class="relative mx-auto w-full max-w-[480px] pb-28">
+
+    <!-- TRIAL BANNER -->
+    <div id="trialBanner" class="flex items-center gap-3 bg-gradient-to-r from-alive-purple to-alive-blue px-4 py-3 text-white">
+      <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+      <p id="trialText" class="flex-1 text-sm font-semibold leading-snug"></p>
+      <button id="upgradeBtn" type="button" class="rounded-full bg-white px-5 py-2.5 text-center text-sm font-extrabold leading-tight text-alive-purple transition hover:-translate-y-0.5">Upgrade<br />Now</button>
+    </div>
+
+    <!-- HEADER -->
+    <header class="-mt-px rounded-b-[34px] bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-4 pb-16 pt-7 text-white shadow-alive">
+      <div class="flex items-center gap-4">
+        <a onclick="window.location.href ='/loyalty/business-dashboard'" aria-label="Back to home" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+        </a>
+        <h1 class="text-2xl font-extrabold tracking-[-0.045em]">Profile &amp; Settings</h1>
+      </div>
+      <p class="ml-[52px] mt-1 text-sm text-white/75">Manage your business and account</p>
+    </header>
+
+    <main class="relative z-10 -mt-12 space-y-4 px-4">
+
+      <!-- BUSINESS CARD -->
+      <section class="flex items-center gap-4 rounded-[28px] border border-black/[.05] bg-white p-5 shadow-alive">
+        <div class="relative shrink-0">
+          <div id="logoBox" class="flex h-[88px] w-[88px] items-center justify-center overflow-hidden rounded-3xl border border-black/[.06] bg-gradient-to-br from-alive-purple to-alive-blue text-3xl font-extrabold text-white"></div>
+          <label class="absolute -bottom-1 -right-1 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-[#5131dc] to-[#0f9eea] text-white shadow-md" title="Change logo">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8a2 2 0 012-2h2l1.500-2h7L17 6h2a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/><circle cx="12" cy="13" r="3.500"/></svg>
+            <span class="sr-only">Change logo</span>
+            <input id="logoInput" type="file" accept="image/*" class="sr-only" />
+          </label>
+        </div>
+        <div class="min-w-0 flex-1">
+          <h2 id="bizName" class="text-[22px] font-extrabold leading-tight tracking-[-0.04em] text-alive-navy"></h2>
+          <p id="bizCategory" class="mt-1 text-[15px] text-[#636981]"></p>
+        </div>
+        <button type="button" data-edit="business" class="flex h-12 shrink-0 items-center gap-2 rounded-2xl border border-black/[.08] bg-[#f3f5fa] px-4 text-sm font-bold text-alive-navy transition hover:bg-[#e9ecf5]">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9M16.500 3.500a2.100 2.100 0 013 3L7 19l-4 1 1-4L16.500 3.500z"/></svg>Edit
+        </button>
+      </section>
+
+      <!-- EDITABLE ROWS -->
+      <button type="button" data-edit="location" class="flex w-full items-center gap-4 rounded-[24px] border border-black/[.05] bg-white p-5 text-left shadow-sm transition hover:shadow-alive">
+        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#e9fbf0] text-[#16a058]"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s7-6.200 7-12a7 7 0 10-14 0c0 5.800 7 12 7 12z"/><circle cx="12" cy="10" r="2.500"/></svg></span>
+        <span class="min-w-0 flex-1"><span class="block text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Location &amp; Hours</span><span id="locSub" class="mt-0.5 block truncate text-[15px] text-[#636981]"></span></span>
+        <svg class="h-5 w-5 shrink-0 text-alive-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9M16.500 3.500a2.100 2.100 0 013 3L7 19l-4 1 1-4L16.500 3.500z"/></svg>
+      </button>
+
+      <button type="button" data-edit="contact" class="flex w-full items-center gap-4 rounded-[24px] border border-black/[.05] bg-white p-5 text-left shadow-sm transition hover:shadow-alive">
+        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#eaf3ff] text-alive-blue"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+        <span class="min-w-0 flex-1"><span class="block text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Phone &amp; Email</span><span id="contactSub" class="mt-0.5 block truncate text-[15px] text-[#636981]"></span></span>
+        <svg class="h-5 w-5 shrink-0 text-alive-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9M16.500 3.500a2.100 2.100 0 013 3L7 19l-4 1 1-4L16.500 3.500z"/></svg>
+      </button>
+
+      <button type="button" data-edit="social" class="flex w-full items-center gap-4 rounded-[24px] border border-black/[.05] bg-white p-5 text-left shadow-sm transition hover:shadow-alive">
+        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#fdeaff] text-alive-pink"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.500" cy="6.500" r=".6" fill="currentColor"/></svg></span>
+        <span class="min-w-0 flex-1"><span class="block text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Social Links &amp; Reviews</span><span id="socialSub" class="mt-0.5 block truncate text-[15px] text-[#636981]"></span></span>
+        <svg class="h-5 w-5 shrink-0 text-alive-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9M16.500 3.500a2.100 2.100 0 013 3L7 19l-4 1 1-4L16.500 3.500z"/></svg>
+      </button>
+
+      <!-- TOGGLES -->
+      <div class="flex items-center gap-4 rounded-[24px] border border-alive-purple/15 bg-[#f1ecff] p-5 shadow-sm">
+        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#e9fbf0] text-[#16a058]"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.500-3.300 8-8 9-4.700-1-8-4.500-8-9V6l8-3z"/></svg></span>
+        <div class="min-w-0 flex-1">
+          <div id="autoLabel" class="text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Auto Approve Scans</div>
+          <p class="mt-0.5 text-[15px] leading-snug text-[#636981]">Scans are auto-approved without your review</p>
+        </div>
+        <button id="autoToggle" type="button" role="switch" aria-labelledby="autoLabel" class="relative h-9 w-[60px] shrink-0 rounded-full transition"><span class="knob absolute top-1 h-7 w-7 rounded-full bg-white shadow transition-all"></span></button>
+      </div>
+
+      <div class="flex items-center gap-4 rounded-[24px] border border-black/[.05] bg-white p-5 shadow-sm">
+        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#fff1e3] text-[#f26a0f]"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 11a8 8 0 00-14.500-4.500L4 8M4 4v4h4M4 13a8 8 0 0014.500 4.500L20 16M20 20v-4h-4"/></svg></span>
+        <div class="min-w-0 flex-1">
+          <div id="multiLabel" class="text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Allow Multiple Scans</div>
+          <p class="mt-0.5 text-[15px] leading-snug text-[#636981]">Customers can scan multiple times a day</p>
+        </div>
+        <button id="multiToggle" type="button" role="switch" aria-labelledby="multiLabel" class="relative h-9 w-[60px] shrink-0 rounded-full transition"><span class="knob absolute top-1 h-7 w-7 rounded-full bg-white shadow transition-all"></span></button>
+      </div>
+
+      <!-- OWNER -->
+      <button type="button" data-edit="owner" class="flex w-full items-center gap-4 rounded-[24px] border border-black/[.05] bg-white p-5 text-left shadow-sm transition hover:shadow-alive">
+        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-alive-purple/10 text-alive-purple"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l1.500-5h15L21 9M3 9a3 3 0 006 0 3 3 0 006 0 3 3 0 006 0M5 12v9h14v-9"/></svg></span>
+        <span class="min-w-0 flex-1"><span id="ownerName" class="block text-lg font-semibold tracking-[-0.02em] text-alive-navy"></span><span class="mt-0.5 block text-[15px] text-[#636981]">Owner Account</span></span>
+        <svg class="h-5 w-5 shrink-0 text-alive-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9M16.500 3.500a2.100 2.100 0 013 3L7 19l-4 1 1-4L16.500 3.500z"/></svg>
+      </button>
+
+      <!-- MENU LIST -->
+      <section class="divide-y divide-black/[.05] overflow-hidden rounded-[26px] border border-black/[.05] bg-white shadow-sm">
+
+        <div>
+          <button id="howBtn" type="button" aria-expanded="false" class="flex w-full items-center gap-4 p-5 text-left">
+            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#eaf3ff] text-alive-blue"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg></span>
+            <span class="min-w-0 flex-1"><span class="block text-lg font-extrabold tracking-[-0.03em] text-alive-navy">How to Use AliveFrame</span><span class="block text-[15px] text-[#636981]">Watch a quick tutorial video</span></span>
+            <svg id="howChevron" class="h-5 w-5 shrink-0 text-[#747887] transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="howPanel" class="hidden px-5 pb-5">
+            <button id="playBtn" type="button" class="flex aspect-video w-full items-center justify-center rounded-2xl bg-gradient-to-br from-alive-navy to-[#2a1a8f] text-white">
+              <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/15 backdrop-blur"><svg class="ml-1 h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></span>
+            </button>
+          </div>
+        </div>
+
+        <button type="button" data-soon="Download App" class="flex w-full items-center gap-4 p-5 text-left">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-alive-purple/10 text-alive-purple"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></span>
+          <span class="min-w-0 flex-1"><span class="block text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Download App</span><span class="block text-[15px] text-[#636981]">Install AliveFrame on your device</span></span>
+          <svg class="h-5 w-5 shrink-0 text-[#747887]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+
+        <button type="button" data-soon="Subscription" class="flex w-full items-center gap-4 p-5 text-left">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#fff6d9] text-[#d19a00]"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span>
+          <span class="min-w-0 flex-1"><span class="block text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Subscription</span><span class="block text-[15px] text-[#636981]">Manage your plan</span></span>
+          <svg class="h-5 w-5 shrink-0 text-[#747887]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+
+        <button type="button" data-soon="Privacy &amp; Security" class="flex w-full items-center gap-4 p-5 text-left">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#e9fbf0] text-[#16a058]"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.500-3.300 8-8 9-4.700-1-8-4.500-8-9V6l8-3z"/></svg></span>
+          <span class="min-w-0 flex-1"><span class="flex items-center gap-2 text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Privacy &amp; Security <span class="rounded-md bg-[#edf0f4] px-2 py-0.5 text-[11px] font-bold tracking-wide text-[#636981]">BETA</span></span><span class="block text-[15px] text-[#636981]">Control your data</span></span>
+          <svg class="h-5 w-5 shrink-0 text-[#747887]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+
+        <button type="button" data-soon="Help &amp; Support" class="flex w-full items-center gap-4 p-5 text-left">
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#eaf3ff] text-alive-blue"><svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.500 9.500a2.500 2.500 0 114 2c-.8.600-1.500 1-1.500 2M12 17h.01"/></svg></span>
+          <span class="min-w-0 flex-1"><span class="flex items-center gap-2 text-lg font-extrabold tracking-[-0.03em] text-alive-navy">Help &amp; Support <span class="rounded-md bg-[#edf0f4] px-2 py-0.5 text-[11px] font-bold tracking-wide text-[#636981]">BETA</span></span><span class="block text-[15px] text-[#636981]">Get help or contact us</span></span>
+          <svg class="h-5 w-5 shrink-0 text-[#747887]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </section>
+
+      <!-- LOGOUT -->
+      <div id="logoutArea">
+        <button id="logoutBtn" type="button" class="flex h-[64px] w-full items-center justify-center gap-2.5 rounded-full bg-[#ef4444] text-lg font-semibold text-white shadow-lg shadow-[#ef4444]/25 transition hover:-translate-y-0.5 active:translate-y-0">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>Logout
+        </button>
+        <div id="logoutConfirm" class="hidden rounded-[24px] bg-[#fde8ea] p-5">
+          <p class="text-base font-bold text-[#c0262d]">Log out of AliveFrame?</p>
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <button id="logoutCancel" type="button" class="h-12 rounded-2xl border border-black/10 bg-white text-sm font-semibold text-[#23283c]">Stay</button>
+            <button id="logoutYes" type="button" class="h-12 rounded-2xl bg-[#d92d3a] text-sm font-extrabold text-white" onclick="window.location.href ='/loyalty/logout'">Logout</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- EDIT SHEET -->
+  <div id="sheet" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div id="sheetBackdrop" class="absolute inset-0 bg-alive-navy/50 backdrop-blur-sm"></div>
+    <form id="sheetForm" class="absolute inset-x-0 bottom-0 mx-auto max-h-[88vh] w-full max-w-[480px] overflow-y-auto rounded-t-[32px] bg-white p-6 shadow-2xl" novalidate>
+      <div class="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[#dfe2eb]"></div>
+      <h3 id="sheetTitle" class="text-2xl font-extrabold tracking-[-0.045em] text-alive-navy"></h3>
+      <div id="sheetFields" class="mt-5 space-y-4"></div>
+      <div class="mt-6 grid grid-cols-2 gap-3">
+        <button id="sheetCancel" type="button" class="h-[54px] rounded-[17px] border border-black/10 bg-white text-[15px] font-semibold text-[#23283c]">Cancel</button>
+        <button type="submit" class="h-[54px] rounded-[17px] bg-gradient-to-r from-[#5131dc] to-[#0f9eea] text-[15px] font-extrabold text-white shadow-lg shadow-[#4e39d6]/20">Save changes</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="fixed inset-x-0 bottom-0 z-40 border-t border-black/[.07] bg-white/95 backdrop-blur">
+    <div class="mx-auto grid max-w-[480px] grid-cols-4">
+      <a href="business-dashboard.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>Home
+      </a>
+      <a href="business-customers.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5M17 4.5a3.5 3.5 0 010 7M22 20c0-2.5-1.5-4-4-5"/></svg></span>Customers
+      </a>
+      <a href="business-winners.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13"/></svg></span>Winners
+      </a>
+      <a href="business-offers.html" class="flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></span>Create Offer
+      </a>
+    </div>
+  </nav>
+
+  <div id="toast" class="fixed bottom-24 left-1/2 z-[60] max-w-[calc(100%-32px)] -translate-x-1/2 translate-y-32 rounded-xl bg-[#111738] px-[18px] py-[13px] text-[13px] font-semibold text-white opacity-0 shadow-2xl transition-all duration-300"></div>
+
+  <script>
+    /* ---------------------------------
+       DATA — replace with your API data
+    --------------------------------- */
+     const csrfToken = "{{ csrf_token }}";
+    const data = {
+      trialDaysLeft: 2,
+      logo: "{{ profile.logo.url|default:'' }}",
+
+    business: {
+        name: "{{ profile.business_name|escapejs }}",
+        category: "{{ profile.business_category|escapejs }}"
+    },
+
+    location: {
+        address: "{{ profile.address|default:''|escapejs }}",
+        openTime: "{{ profile.open_at|time:'H:i' }}",
+        closeTime: "{{ profile.close_at|time:'H:i' }}"
+    },
+
+    contact: {
+        phone: "{{ profile.business_contact|default:'' }}",
+        email: "{{ profile.email|default:'' }}"
+    },
+
+    social: {
+        instagram: "{{ profile.instagram_url|default:'' }}",
+        facebook: "{{ profile.facebook_url|default:'' }}",
+        youtube: "{{ profile.youtube_url|default:'' }}",
+        googleReview: "{{ profile.google_review_url|default:'' }}"
+    },
+
+    owner: {
+        name: "{{ profile.business_partner_name|escapejs }}"
+    },
+    settings: { autoApprove: false, multipleScans: true },
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    /* ---------------------------------
+       EDIT SHEET CONFIG
+    --------------------------------- */
+    const forms = {
+      business: { title: "Edit business", fields: [
+        { key: "name", label: "Business name", required: true, max: 50 },
+        { key: "category", label: "Category", type: "select", options: ["Cafe", "Restaurant", "Salon", "Retail store", "Gym", "Other"] },
+      ]},
+      location: { title: "Location & hours", fields: [
+        { key: "address", label: "Address", type: "textarea", placeholder: "Shop no., street, city", max: 200 },
+        { key: "openTime", label: "Opens at", type: "time" },
+        { key: "closeTime", label: "Closes at", type: "time" },
+      ]},
+      contact: { title: "Phone & email", fields: [
+        { key: "phone", label: "Mobile number", readonly: true, hint: "This is your login number and can't be changed here." },
+        { key: "email", label: "Email address", type: "email", placeholder: "you@business.com", max: 80 },
+      ]},
+      social: { title: "Social links & reviews", fields: [
+        { key: "instagram", label: "Instagram", type: "url", placeholder: "https://instagram.com/yourpage" },
+        { key: "facebook", label: "Facebook", type: "url", placeholder: "https://facebook.com/yourpage" },
+        { key: "youtube", label: "YouTube", type: "url", placeholder: "https://youtube.com/@yourchannel" },
+        { key: "googleReview", label: "Google review link", type: "url", placeholder: "https://g.page/r/..." },
+      ]},
+      owner: { title: "Owner account", fields: [
+        { key: "name", label: "Owner name", required: true, max: 50 },
+      ]},
+    };
+    let editing = null;
+
+    const inputCls = "mt-2 w-full rounded-[15px] border border-black/[.1] bg-white px-4 text-base font-medium text-[#11182e] outline-none transition placeholder:font-normal placeholder:text-[#9da2ad] focus:border-[#5a40e6]/40 focus:ring-4 focus:ring-[#5a40e6]/10";
+
+    function openSheet(name) {
+      editing = name;
+      const f = forms[name];
+      $("sheetTitle").textContent = f.title;
+      $("sheetFields").innerHTML = f.fields.map((fl) => {
+        const v = data[name][fl.key] || "";
+        const id = `f_${fl.key}`;
+        let control;
+        if (fl.type === "select") {
+          control = `<select id="${id}" name="${fl.key}" class="${inputCls} h-[54px]">${fl.options.map((o) => `<option ${o === v ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
+        } else if (fl.type === "textarea") {
+          control = `<textarea id="${id}" name="${fl.key}" rows="3" maxlength="${fl.max || 200}" placeholder="${esc(fl.placeholder || "")}" class="${inputCls} py-3">${esc(v)}</textarea>`;
+        } else {
+          control = `<input id="${id}" name="${fl.key}" type="${fl.type || "text"}" value="${esc(v)}" ${fl.max ? `maxlength="${fl.max}"` : ""} ${fl.readonly ? "readonly" : ""} placeholder="${esc(fl.placeholder || "")}" class="${inputCls} h-[54px] ${fl.readonly ? "bg-[#f3f4f8] text-[#747887]" : ""}" />`;
+        }
+        return `<div><label for="${id}" class="block text-[13px] font-bold text-[#23283c]">${fl.label}${fl.required ? " *" : ""}</label>${control}
+          ${fl.hint ? `<p class="mt-1.5 text-xs text-[#9a9eab]">${fl.hint}</p>` : ""}
+          <p data-err="${fl.key}" class="mt-1.5 hidden text-xs font-semibold text-[#d92d3a]"></p></div>`;
+      }).join("");
+      $("sheet").classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+      const first = $("sheetFields").querySelector("input:not([readonly]),textarea,select");
+      if (first) first.focus({ preventScroll: true });
+    }
+
+    function closeSheet() {
+      $("sheet").classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+      editing = null;
+    }
+
+    // $("sheetForm").addEventListener("submit", (e) => {
+    //   e.preventDefault();
+    //   const f = forms[editing];
+    //   const vals = {};
+    //   let ok = true;
+    //   f.fields.forEach((fl) => {
+    //     if (fl.readonly) return;
+    //     const v = $("f_" + fl.key).value.trim();
+    //     vals[fl.key] = v;
+    //     let err = "";
+    //     if (fl.required && !v) err = "This field is required.";
+    //     else if (fl.type === "email" && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) err = "Enter a valid email address.";
+    //     else if (fl.type === "url" && v && !/^https?:\/\/\S+\.\S+/.test(v)) err = "Enter a full link starting with https://";
+    //     const el = document.querySelector(`[data-err="${fl.key}"]`);
+    //     el.textContent = err; el.classList.toggle("hidden", !err);
+    //     if (err) ok = false;
+    //   });
+    //   if (!ok) return;
+    //   if (editing === "location" && vals.openTime && vals.closeTime && vals.openTime === vals.closeTime) {
+    //     return showToast("Opening and closing time can't be the same.");
+    //   }
+    //   // DEMO: send vals to your save API here
+    //   Object.assign(data[editing], vals);
+    //   closeSheet(); render();
+    //   showToast("Changes saved.");
+    // });
+
+    $("sheetForm").addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const f = forms[editing];
+
+    const vals = {};
+
+    let ok = true;
+
+    f.fields.forEach((fl) => {
+
+        if (fl.readonly)
+            return;
+
+        vals[fl.key] = $("f_" + fl.key).value.trim();
+
+    });
+
+    if (!ok)
+        return;
+
+    // Update local object
+    Object.assign(data[editing], vals);
+
+    //----------------------------------------
+    // Prepare payload
+    //----------------------------------------
+
+    const payload = {
+
+        business_partner_name: data.owner.name,
+
+        business_name: data.business.name,
+
+        business_category: data.business.category,
+
+        address: data.location.address,
+
+        open_at: data.location.openTime,
+
+        close_at: data.location.closeTime,
+
+        business_contact: data.contact.phone,
+
+        email: data.contact.email,
+
+        instagram_url: data.social.instagram,
+
+        facebook_url: data.social.facebook,
+
+        youtube_url: data.social.youtube,
+
+        google_review_url: data.social.googleReview,
+
+        latitude: data.location.latitude || "",
+
+        longitude: data.location.longitude || ""
+
+    };
+
+    const response = await fetch(
+        "/loyalty/update-business-profile",
+        {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        }
+    );
+
+    const result = await response.json();
+
+    if(result.success){
+
+        render();
+
+        closeSheet();
+
+        showToast(result.message);
+
+    }else{
+
+        showToast("Something went wrong.");
+
+    }
+
+});
+
+    $("sheetCancel").addEventListener("click", closeSheet);
+    $("sheetBackdrop").addEventListener("click", closeSheet);
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && editing) closeSheet(); });
+    document.querySelectorAll("[data-edit]").forEach((b) => b.addEventListener("click", () => openSheet(b.dataset.edit)));
+
+    /* ---------------------------------
+       RENDER
+    --------------------------------- */
+    const t12 = (t) => {
+      const [h, m] = t.split(":").map(Number);
+      return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`;
+    };
+
+    function render() {
+      const n = data.trialDaysLeft;
+      $("trialBanner").classList.toggle("hidden", !(n > 0));
+      $("trialText").innerHTML = `Your trial period expires in <b>${n}</b> ${n === 1 ? "day" : "days"}`;
+
+      $("bizName").textContent = data.business.name;
+      $("bizCategory").textContent = data.business.category;
+      $("ownerName").textContent = data.owner.name;
+      $("logoBox").innerHTML = data.logo
+        ? `<img src="${esc(data.logo)}" alt="Business logo" class="h-full w-full object-cover" />`
+        : esc(data.business.name.trim().charAt(0).toUpperCase() || "A");
+
+      const l = data.location;
+      const hours = l.openTime && l.closeTime ? `${t12(l.openTime)} – ${t12(l.closeTime)}` : "";
+      $("locSub").textContent = l.address || hours ? [l.address, hours].filter(Boolean).join(" · ") : "Manage your address and timing";
+      $("contactSub").textContent = data.contact.email || "No email address set";
+      const linked = Object.values(data.social).filter(Boolean).length;
+      $("socialSub").textContent = linked ? `${linked} link${linked === 1 ? "" : "s"} added` : "Manage your online presence";
+
+      setSwitch($("autoToggle"), data.settings.autoApprove);
+      setSwitch($("multiToggle"), data.settings.multipleScans);
+    }
+
+    function setSwitch(btn, on) {
+      btn.setAttribute("aria-checked", on);
+      btn.className = `relative h-9 w-[60px] shrink-0 rounded-full transition ${on ? "bg-gradient-to-r from-[#5131dc] to-[#0f9eea]" : "bg-[#cfd3de]"}`;
+      btn.querySelector(".knob").style.left = on ? "28px" : "4px";
+    }
+
+    /* ---------------------------------
+       TOGGLES
+    --------------------------------- */
+    $("autoToggle").addEventListener("click", () => {
+      data.settings.autoApprove = !data.settings.autoApprove; render();
+      // DEMO: save setting via your API
+      showToast(data.settings.autoApprove ? "Scans will be approved automatically." : "Scans now need your approval.");
+    });
+    $("multiToggle").addEventListener("click", () => {
+      data.settings.multipleScans = !data.settings.multipleScans; render();
+      showToast(data.settings.multipleScans ? "Customers can scan multiple times a day." : "Customers can scan once a day.");
+    });
+
+    /* ---------------------------------
+       LOGO UPLOAD
+    --------------------------------- */
+    $("logoInput").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) { e.target.value = ""; return showToast("Logo must be under 2 MB."); }
+      const r = new FileReader();
+      r.onload = () => { data.logo = r.result; render(); showToast("Logo updated."); }; // DEMO: upload to your server instead
+      r.readAsDataURL(file);
+    });
+
+    /* ---------------------------------
+       MENU LIST
+    --------------------------------- */
+    $("howBtn").addEventListener("click", () => {
+      const open = $("howPanel").classList.toggle("hidden") === false;
+      $("howBtn").setAttribute("aria-expanded", open);
+      $("howChevron").classList.toggle("rotate-180", open);
+    });
+    $("playBtn").addEventListener("click", () => showToast("Demo: playing tutorial video."));
+    document.querySelectorAll("[data-soon]").forEach((b) =>
+      b.addEventListener("click", () => showToast(`Demo: ${b.dataset.soon.replace(/&amp;/g, "&")} page.`)));
+
+    /* ---------------------------------
+       LOGOUT
+    --------------------------------- */
+    $("logoutBtn").addEventListener("click", () => { $("logoutBtn").classList.add("hidden"); $("logoutConfirm").classList.remove("hidden"); });
+    $("logoutCancel").addEventListener("click", () => { $("logoutConfirm").classList.add("hidden"); $("logoutBtn").classList.remove("hidden"); });
+    $("logoutYes").addEventListener("click", () => {
+      // DEMO: clear session, then go to your login page
+      showToast("Logged out.");
+      // window.location.href = "index.html";
+    });
+
+    $("upgradeBtn").addEventListener("click", () => showToast("Demo: opening upgrade plans."));
+
+    function showToast(msg) {
+      const t = $("toast");
+      t.textContent = msg;
+      t.classList.remove("translate-y-32", "opacity-0");
+      t.classList.add("translate-y-0", "opacity-100");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        t.classList.remove("translate-y-0", "opacity-100");
+        t.classList.add("translate-y-32", "opacity-0");
+      }, 3000);
+    }
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070b3d" />
+  <title>AliveFrame — Reward Programs</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ["Inter", "sans-serif"] },
+          colors: {
+            alive: {
+              navy: "#070b3d", navy2: "#0b1154", blue: "#237dff",
+              cyan: "#19d5e8", purple: "#823cff", pink: "#d936ff",
+            },
+          },
+          boxShadow: { alive: "0 30px 90px rgba(7, 13, 65, .15)" },
+        },
+      },
+    };
+  </script>
+  <style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
+  </style>
+</head>
+
+<body class="min-h-screen overflow-x-hidden bg-[#f6f8ff] font-inter text-[#0b1234]">
+
+  <div class="pointer-events-none fixed -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#237dff]/20 blur-3xl"></div>
+
+  <div class="relative mx-auto w-full max-w-[480px] pb-28">
+
+    <!-- TRIAL BANNER -->
+    <div class="flex items-center gap-3 bg-gradient-to-r from-alive-purple to-alive-blue px-4 py-3 text-white">
+      <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+      <p class="flex-1 text-sm font-semibold leading-snug">Your trial period expires in <b>2</b> days</p>
+      <button id="upgradeBtn" type="button" class="rounded-full bg-white px-5 py-2.5 text-center text-sm font-extrabold leading-tight text-alive-purple transition hover:-translate-y-0.5">Upgrade<br />Now</button>
+    </div>
+
+    <!-- HEADER -->
+    <header class="-mt-px rounded-b-[34px] bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-4 pb-8 pt-6 text-white shadow-alive">
+      <div class="flex items-center gap-3">
+        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-extrabold text-alive-purple">A</div>
+        <div class="min-w-0 flex-1">
+          <h1 id="bizName" class="truncate text-xl font-extrabold tracking-[-0.03em]">"{{business_name}}"</h1>
+          <span class="mt-1 inline-block rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan px-3 py-0.5 text-[11px] font-bold">Basic Subscription</span>
+        </div>
+        <button id="profileBtn" type="button" aria-label="Profile" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="px-4 pt-6">
+
+      <a href="business-offers.html" class="inline-flex items-center gap-2 py-2 text-[15px] font-bold text-alive-navy">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+        Back to Menu
+      </a>
+
+      <!-- TITLE ROW -->
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <h2 class="text-[26px] font-extrabold tracking-[-0.045em] text-alive-navy">Reward Programs</h2>
+        <button id="liveToggle" type="button" role="switch" aria-checked="true" class="flex items-center gap-3 rounded-full border border-black/[.05] bg-white px-3 py-2.5 shadow-sm">
+          <span id="liveTrack" class="relative h-8 w-14 rounded-full bg-gradient-to-r from-[#5131dc] to-[#0f9eea] transition">
+            <span id="liveKnob" class="absolute top-1 h-6 w-6 rounded-full bg-white shadow transition-all" style="left:28px"></span>
+          </span>
+          <span id="liveLabel" class="pr-1 text-sm font-extrabold tracking-[.12em] text-alive-navy">LIVE</span>
+        </button>
+        <button id="addBtn" type="button" class="ml-auto flex h-[52px] items-center gap-2 rounded-full border border-black/[.05] bg-white px-5 text-[15px] font-bold text-alive-purple shadow-sm transition hover:-translate-y-0.5">
+          <span class="text-xl leading-none">+</span> Add Reward
+        </button>
+      </div>
+
+      <!-- REWARD CARDS -->
+      <section id="rewards" class="mt-6 space-y-6"></section>
+
+      <!-- SAVE -->
+      <p id="dirtyNote" class="mt-6 hidden text-center text-sm font-semibold text-[#b45f06]">You have unsaved changes.</p>
+      <button id="saveBtn" type="button" class="mt-3 flex h-[72px] w-full items-center justify-center rounded-full bg-gradient-to-r from-[#5131dc] to-[#0f9eea] text-xl font-extrabold text-white shadow-lg shadow-[#4e39d6]/25 transition hover:-translate-y-0.5 active:translate-y-0">
+        Save Reward Programs
+      </button>
+
+      <!-- PREVIEW -->
+      <h3 class="mt-10 text-center text-sm font-bold tracking-[.12em] text-[#8a97b0]">CUSTOMER PREVIEW</h3>
+      <div id="previewTabs" class="mt-3 flex flex-wrap justify-center gap-2"></div>
+
+      <div class="mx-auto mt-5 w-[300px] rounded-[44px] border-[12px] border-alive-navy bg-alive-navy shadow-alive">
+        <div class="relative h-[470px] overflow-hidden rounded-[32px] bg-[#f8f9fc]">
+          <div class="absolute left-1/2 top-0 z-10 h-6 w-28 -translate-x-1/2 rounded-b-2xl bg-alive-navy"></div>
+
+          <div class="bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-5 pb-16 pt-12 text-white">
+            <div class="flex items-center gap-2.5">
+              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-extrabold text-alive-purple">A</span>
+              <span id="pvName" class="truncate text-[15px] font-extrabold">"{{business_name}}"</span>
+            </div>
+            <div id="pvCount" class="mt-5 text-[26px] font-extrabold tracking-[-0.04em]"></div>
+          </div>
+
+          <div class="-mt-10 px-4">
+            <div class="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-alive">
+              <span id="pvImg" class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-alive-purple/10 text-alive-purple"></span>
+              <div class="min-w-0">
+                <span id="pvBadge" class="inline-block rounded-full bg-alive-purple/10 px-2.5 py-0.5 text-[9px] font-extrabold tracking-wide text-alive-purple"></span>
+                <p id="pvDesc" class="mt-1 text-xs font-bold leading-snug text-alive-navy"></p>
+              </div>
+            </div>
+
+            <div class="mt-4 rounded-2xl bg-white p-4">
+              <div class="text-[10px] font-bold tracking-[.12em] text-[#8a97b0]">STAMP CARD</div>
+              <div id="pvStamps" class="mt-3 flex flex-wrap justify-center gap-3"></div>
+              <p id="pvHint" class="mt-3 text-center text-[11px] font-semibold text-[#8a97b0]"></p>
+            </div>
+
+            <div class="mt-4 flex justify-center gap-3 text-[11px] font-bold text-[#8a97b0]">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm">◎</span>
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm">f</span>
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm">▶</span>
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm">in</span>
+            </div>
+          </div>
+
+          <!-- Paused overlay -->
+          <div id="pvPaused" class="absolute inset-0 hidden items-center justify-center bg-white/70 backdrop-blur-[2px]">
+            <span class="rounded-full bg-alive-navy px-4 py-2 text-xs font-extrabold tracking-[.12em] text-white">PROGRAM PAUSED</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============ BOTTOM NAV ============ -->
+  <nav class="fixed inset-x-0 bottom-0 z-40 border-t border-black/[.07] bg-white/95 backdrop-blur">
+    <div class="mx-auto grid max-w-[480px] grid-cols-4">
+      <button data-tab="home" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]" onclick="window.location.href ='/loyalty/business-dashboard'">
+        
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full ">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.500"/><rect x="14" y="3" width="7" height="7" rx="1.500"/><rect x="3" y="14" width="7" height="7" rx="1.500"/><rect x="14" y="14" width="7" height="7" rx="1.500"/></svg>
+        </span>Home
+      </button>
+      <button data-tab="customers" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]" onclick="window.location.href ='/loyalty/customers-list'">
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.500 3-5.500 7-5.500s7 2 7 5.500M17 4.500a3.500 3.500 0 010 7M22 20c0-2.500-1.500-4-4-5"/></svg>
+        </span>Customers
+      </button>
+      <button data-tab="winners" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]" onclick="window.location.href ='/loyalty/winners-list'">
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13"/></svg>
+        </span>Winners
+      </button>
+      <button data-tab="offer" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-bold text-alive-purple" onclick="window.location.href ='/loyalty/create-offer'">
+        <span class="absolute left-3 top-0 h-[3px] w-12 rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan nav-bar"></span>
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full bg-alive-purple/10">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.700 1.700 0 00.3 1.800l.1.1a2 2 0 11-2.800 2.800l-.1-.1a1.700 1.700 0 00-1.800-.3 1.700 1.700 0 00-1 1.500V21a2 2 0 11-4 0v-.1a1.700 1.700 0 00-1.100-1.500 1.700 1.700 0 00-1.800.3l-.1.1a2 2 0 11-2.800-2.800l.1-.1a1.700 1.700 0 00.3-1.800 1.700 1.700 0 00-1.500-1H3a2 2 0 110-4h.1a1.700 1.700 0 001.500-1.100 1.700 1.700 0 00-.3-1.800l-.1-.1a2 2 0 112.800-2.800l.1.1a1.700 1.700 0 001.800.3H9a1.700 1.700 0 001-1.500V3a2 2 0 114 0v.1a1.700 1.700 0 001 1.500 1.700 1.700 0 001.800-.3l.1-.1a2 2 0 112.800 2.800l-.1.1a1.700 1.700 0 00-.3 1.800V9a1.700 1.700 0 001.500 1H21a2 2 0 110 4h-.1a1.700 1.700 0 00-1.500 1z"/></svg>
+        </span>Create Offer
+      </button>
+    </div>
+  </nav>
+
+  <div id="toast" class="fixed bottom-24 left-1/2 z-50 max-w-[calc(100%-32px)] -translate-x-1/2 translate-y-32 rounded-xl bg-[#111738] px-[18px] py-[13px] text-[13px] font-semibold text-white opacity-0 shadow-2xl transition-all duration-300"></div>
+
+  <script>
+    /* ---------------------------------
+       DATA — replace with your API data
+       image: URL / data URL, or null
+    --------------------------------- */
+    const csrfToken = "{{ csrf_token }}";
+    const data = {
+      businessName: "{{business_name}}",
+      live: true,
+      rewards: JSON.parse('{{ offer_list|escapejs }}'),
+      // [
+      //   { id: 1, image: null, visits: 2, expiryDays: 30, description: "After two Sattu one will be free" },
+      //   { id: 2, image: null, visits: 1, expiryDays: 30, description: "After 1 visit" },
+      //   { id: 3, image: null, visits: 5, expiryDays: 30, description: "After 5 visit" },
+      // ],
+    };
+
+    const LIMITS = { minVisits: 1, maxVisits: 20, maxRewards: 5, maxDays: 365 };
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    let nextId = -100, selected = data.rewards[0].id, dirty = false;
+
+    $("bizName").textContent = $("pvName").textContent = data.businessName;
+
+    const giftIcon = `<svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13M12 8S10 3 7.5 4.5 8 8 12 8zm0 0s2-5 4.5-3.5S16 8 12 8z"/></svg>`;
+    const imgHTML = (r, cls = "h-full w-full object-cover") => r.image ? `<img src="${esc(r.image)}" alt="" class="${cls}" />` : giftIcon;
+    const find = (id) => data.rewards.find((r) => r.id === id);
+
+    function markDirty(v = true) {
+      dirty = v;
+      $("dirtyNote").classList.toggle("hidden", !v);
+    }
+
+    /* ---------------------------------
+       REWARD CARDS
+    --------------------------------- */
+    function cardHTML(r) {
+      return `
+      <article data-id="${r.id}" class="relative rounded-[28px] border border-black/[.07] bg-white p-5 shadow-alive">
+        <button type="button" data-act="delete" aria-label="Delete reward" class="absolute -right-2 -top-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#ff5560] text-white shadow-lg shadow-[#ff5560]/30 transition hover:scale-105">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 11v6M14 11v6"/></svg>
+        </button>
+
+        <div data-confirm class="mb-4 hidden rounded-2xl bg-[#fde8ea] p-3.5">
+          <p class="text-sm font-semibold text-[#c0262d]">Delete this reward?</p>
+          <div class="mt-3 grid grid-cols-2 gap-3">
+            <button type="button" data-act="keep" class="h-11 rounded-[14px] border border-black/10 bg-white text-sm font-semibold text-[#23283c]">Keep</button>
+            <button type="button" data-act="delete-yes" class="h-11 rounded-[14px] bg-[#d92d3a] text-sm font-extrabold text-white">Delete</button>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <label class="group relative flex h-[118px] w-[118px] shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-black/[.06] bg-gradient-to-br from-alive-purple/5 to-alive-cyan/10 text-alive-purple">
+            <span data-img class="flex h-full w-full items-center justify-center">${imgHTML(r)}</span>
+            <span class="absolute inset-x-0 bottom-0 bg-alive-navy/70 py-1 text-center text-[11px] font-bold text-white opacity-0 transition group-hover:opacity-100">Change</span>
+            <input type="file" accept="image/*" data-act="image" class="sr-only" />
+          </label>
+
+          <div class="min-w-0 flex-1">
+            <div class="text-[11px] font-bold tracking-[.12em] text-[#8a97b0]">VISITS REQUIRED</div>
+            <div class="mt-1.5 inline-flex items-center gap-3 rounded-2xl bg-alive-purple/[.06] p-1.5">
+              <button type="button" data-act="minus" aria-label="Decrease visits" class="flex h-10 w-10 items-center justify-center rounded-full border border-black/[.08] bg-white text-xl text-[#747887]">−</button>
+              <span data-visits class="w-6 text-center text-lg font-extrabold">${r.visits}</span>
+              <button type="button" data-act="plus" aria-label="Increase visits" class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#5131dc] to-[#0f9eea] text-xl text-white shadow-md shadow-[#4e39d6]/25">+</button>
+            </div>
+
+            <div class="mt-3 text-[11px] font-bold tracking-[.12em] text-[#8a97b0]">REWARD EXPIRY</div>
+            <label class="mt-1.5 flex items-center gap-3 rounded-2xl bg-alive-purple/[.06] px-3.5 py-2.5">
+              <svg class="h-5 w-5 shrink-0 text-[#8a97b0]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+              <input type="number" inputmode="numeric" min="1" max="${LIMITS.maxDays}" value="${r.expiryDays}" data-act="days" aria-label="Expiry in days" class="w-12 min-w-0 bg-transparent text-lg font-extrabold outline-none" />
+              <span class="text-base font-semibold text-[#23283c]">Days</span>
+            </label>
+          </div>
+        </div>
+
+        <label class="mt-5 block text-[11px] font-bold tracking-[.12em] text-[#8a97b0]" for="d${r.id}">REWARD DESCRIPTION</label>
+        <input id="d${r.id}" type="text" maxlength="80" value="${esc(r.description)}" data-act="desc" placeholder="e.g. Free coffee after 5 visits"
+          class="mt-2 h-[58px] w-full rounded-[17px] border border-black/[.1] bg-white px-5 text-base font-semibold text-[#11182e] outline-none transition placeholder:font-normal placeholder:text-[#9da2ad] focus:border-[#5a40e6]/40 focus:ring-4 focus:ring-[#5a40e6]/10" />
+      </article>`;
+    }
+
+    function renderCards() {
+      $("rewards").innerHTML = data.rewards.map(cardHTML).join("");
+      $("addBtn").disabled = data.rewards.length >= LIMITS.maxRewards;
+      $("addBtn").classList.toggle("opacity-50", data.rewards.length >= LIMITS.maxRewards);
+    }
+
+    /* ---------------------------------
+       PREVIEW
+    --------------------------------- */
+    function renderPreview() {
+      if (!find(selected)) selected = data.rewards[0]?.id;
+      $("previewTabs").innerHTML = data.rewards.map((r, i) => {
+        const on = r.id === selected;
+        return `<button type="button" data-pv="${r.id}" class="rounded-full px-4 py-2 text-xs font-bold transition ${
+          on ? "bg-alive-navy text-white" : "bg-[#edf0f4] text-[#636981] hover:bg-[#e3e7ef]"}">Reward ${i + 1} · ${r.visits}</button>`;
+      }).join("");
+
+      const r = find(selected);
+      if (!r) return;
+      $("pvCount").textContent = `0 of ${r.visits} Stamp${r.visits === 1 ? "" : "s"}`;
+      $("pvBadge").textContent = `${r.visits} STAMP${r.visits === 1 ? "" : "S"}`;
+      $("pvDesc").textContent = r.description || "Your reward description";
+      $("pvImg").innerHTML = imgHTML(r);
+      $("pvStamps").innerHTML = Array.from({ length: r.visits }, (_, i) => {
+        const last = i === r.visits - 1;
+        return `<span class="flex h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-[#d6dae6] bg-[#f6f8ff] text-[#b4bbcf]">${
+          last ? `<svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z"/></svg>` : ""}</span>`;
+      }).join("");
+      $("pvHint").textContent = `You're ${r.visits} stamp${r.visits === 1 ? "" : "s"} away from your treat!`;
+      $("pvPaused").classList.toggle("hidden", data.live);
+      $("pvPaused").classList.toggle("flex", !data.live);
+    }
+
+    /* ---------------------------------
+       LIVE TOGGLE
+    --------------------------------- */
+    function renderToggle() {
+      $("liveToggle").setAttribute("aria-checked", data.live);
+      $("liveTrack").className = `relative h-8 w-14 rounded-full transition ${data.live ? "bg-gradient-to-r from-[#5131dc] to-[#0f9eea]" : "bg-[#cfd3de]"}`;
+      $("liveKnob").style.left = data.live ? "28px" : "4px";
+      $("liveLabel").textContent = data.live ? "LIVE" : "PAUSED";
+    }
+    $("liveToggle").addEventListener("click", () => {
+      data.live = !data.live; markDirty(); renderToggle(); renderPreview();
+      showToast(data.live ? "Program is live. Save to apply." : "Program paused. Save to apply.");
+    });
+
+    /* ---------------------------------
+       CARD EVENTS (delegated)
+    --------------------------------- */
+    $("rewards").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-act]");
+      if (!btn) return;
+      const card = btn.closest("article");
+      const r = find(Number(card.dataset.id));
+      const act = btn.dataset.act;
+
+      if (act === "plus" || act === "minus") {
+        const v = r.visits + (act === "plus" ? 1 : -1);
+        if (v < LIMITS.minVisits || v > LIMITS.maxVisits) return showToast(`Visits must be between ${LIMITS.minVisits} and ${LIMITS.maxVisits}.`);
+        r.visits = v; card.querySelector("[data-visits]").textContent = v;
+        selected = r.id; markDirty(); renderPreview();
+      } else if (act === "delete") {
+        if (data.rewards.length === 1) return showToast("Keep at least one reward.");
+        card.querySelector("[data-confirm]").classList.remove("hidden");
+      } else if (act === "keep") {
+        card.querySelector("[data-confirm]").classList.add("hidden");
+      } else if (act === "delete-yes") {
+        data.rewards = data.rewards.filter((x) => x.id !== r.id);
+        markDirty(); renderCards(); renderPreview(); showToast("Reward deleted. Save to apply.");
+      }
+    });
+
+    $("rewards").addEventListener("input", (e) => {
+      const el = e.target.closest("[data-act]");
+      if (!el) return;
+      const r = find(Number(el.closest("article").dataset.id));
+      if (el.dataset.act === "desc") r.description = el.value;
+      if (el.dataset.act === "days") r.expiryDays = Math.max(0, Math.min(LIMITS.maxDays, parseInt(el.value, 10) || 0));
+      selected = r.id; markDirty(); renderPreview();
+    });
+
+    $("rewards").addEventListener("change", (e) => {
+      const el = e.target.closest("[data-act]");
+      if (!el) return;
+      const card = el.closest("article");
+      const r = find(Number(card.dataset.id));
+      if (el.dataset.act === "image" && el.files[0]) {
+        const file = el.files[0];
+        if (file.size > 2 * 1024 * 1024) { el.value = ""; return showToast("Image must be under 2 MB."); }
+        const reader = new FileReader();
+        reader.onload = () => {
+          r.image = reader.result; // DEMO: upload the file to your server and store the URL instead
+          card.querySelector("[data-img]").innerHTML = imgHTML(r);
+          selected = r.id; markDirty(); renderPreview();
+        };
+        reader.readAsDataURL(file);
+      }
+      if (el.dataset.act === "days") el.value = r.expiryDays || 1; // normalise on blur
+      if (el.dataset.act === "days" && !r.expiryDays) { r.expiryDays = 1; renderPreview(); }
+    });
+
+    $("previewTabs").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-pv]");
+      if (b) { selected = Number(b.dataset.pv); renderPreview(); }
+    });
+
+    /* ---------------------------------
+       ADD / SAVE
+    --------------------------------- */
+    $("addBtn").addEventListener("click", () => {
+      if (data.rewards.length >= LIMITS.maxRewards) return showToast(`You can add up to ${LIMITS.maxRewards} rewards.`);
+      const last = data.rewards[data.rewards.length - 1];
+      const r = { id: nextId++, image: null, visits: (last ? last.visits : 0) + 1, expiryDays: 30, description: "" };
+      data.rewards.push(r); selected = r.id;
+      markDirty(); renderCards(); renderPreview();
+      const el = document.getElementById("d" + r.id);
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.focus({ preventScroll: true });
+    });
+
+    $("saveBtn").addEventListener("click", async () => {
+
+    const bad = data.rewards.find(r => !r.description.trim());
+
+    if (bad) {
+        const el = document.getElementById("d" + bad.id);
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.focus({ preventScroll: true });
+        return showToast("Add a description for every reward.");
+    }
+
+    try {
+
+        const response = await fetch("/loyalty/save-rewards", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                rewards: data.rewards,
+                live: data.live
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+
+            markDirty(false);
+            showToast("Reward programs saved.");
+
+        } else {
+
+            showToast(result.message);
+
+        }
+
+    } catch (err) {
+
+        console.error(err);
+        showToast("Unable to save rewards.");
+
+    }
+
+    });
+
+    // $("saveBtn").addEventListener("click", () => {
+    //   const bad = data.rewards.find((r) => !r.description.trim());
+    //   if (bad) {
+    //     const el = document.getElementById("d" + bad.id);
+    //     el.scrollIntoView({ behavior: "smooth", block: "center" });
+    //     el.focus({ preventScroll: true });
+    //     return showToast("Add a description for every reward.");
+    //   }
+    //   // DEMO: send `data` to your save API here
+    //   markDirty(false);
+    //   showToast("Reward programs saved.");
+    // });
+
+    window.addEventListener("beforeunload", (e) => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+    /* ---------------------------------
+       MISC
+    --------------------------------- */
+    $("upgradeBtn").addEventListener("click", () => showToast("Demo: opening upgrade plans."));
+    $("profileBtn").addEventListener("click", () => showToast("Demo: open profile."));
+
+    function showToast(msg) {
+      const t = $("toast");
+      t.textContent = msg;
+      t.classList.remove("translate-y-32", "opacity-0");
+      t.classList.add("translate-y-0", "opacity-100");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        t.classList.remove("translate-y-0", "opacity-100");
+        t.classList.add("translate-y-32", "opacity-0");
+      }, 3000);
+    }
+
+    renderToggle(); renderCards(); renderPreview();
+  </script>
+</body>
+</html>

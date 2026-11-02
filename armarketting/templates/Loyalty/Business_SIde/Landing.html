@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070b3d" />
+  <meta name="description" content="AliveFrame replaces paper stamp cards with a digital loyalty card. Scan, collect stamps and claim rewards." />
+
+  <title>AliveFrame — Digital loyalty stamp cards</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            inter: ["Inter", "sans-serif"],
+          },
+          colors: {
+            alive: {
+              navy: "#070b3d",
+              navy2: "#0b1154",
+              blue: "#237dff",
+              cyan: "#19d5e8",
+              purple: "#823cff",
+              pink: "#d936ff",
+            },
+          },
+          boxShadow: {
+            alive: "0 30px 90px rgba(7, 13, 65, .15)",
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+
+<body class="min-h-screen overflow-x-hidden bg-[#f6f8ff] font-inter text-[#0b1234]">
+
+
+  <!-- BACKGROUND GLOW -->
+  <div
+    class="pointer-events-none fixed -right-40 -top-40 h-[420px] w-[420px]
+    rounded-full bg-[#237dff]/20 blur-3xl"
+  ></div>
+
+
+  <!-- NAVBAR -->
+  <header
+    class="mx-auto flex w-[calc(100%-32px)] max-w-[1180px]
+    items-center justify-between py-5 sm:w-[calc(100%-48px)] sm:py-7"
+  >
+
+    <!-- BRAND -->
+    <a
+      href="#"
+      class="flex items-center gap-2.5 text-lg font-extrabold
+      tracking-[-0.04em] text-alive-navy"
+    >
+      <img style="height: 2rem; width: auto;" src="Asset/logo.png" alt="" />
+      AliveFrame
+    </a>
+
+  </header>
+
+
+  <!-- MAIN -->
+  <main
+    class="mx-auto grid w-full max-w-[1180px]
+    grid-cols-1 items-center gap-10
+    px-4 pb-10 pt-3
+    sm:w-[calc(100%-48px)] sm:px-0 sm:pb-16
+    lg:grid-cols-[1.15fr_.85fr] lg:gap-[70px]
+    lg:pt-8"
+  >
+
+
+    <!-- ================================= -->
+    <!-- LEFT SIDE -->
+    <!-- ================================= -->
+
+    <section class="min-w-0">
+
+      <!-- HERO CONTENT -->
+      <div class="text-center lg:text-left">
+
+        <!-- EYEBROW -->
+        <div
+          class="inline-flex items-center gap-2
+          text-[10px] font-extrabold tracking-[.16em]
+          text-[#4f4caa] sm:text-[11px]"
+        >
+          <span
+            class="h-0.5 w-6 rounded-full
+            bg-gradient-to-r from-alive-purple to-alive-cyan"
+          ></span>
+
+          DIGITAL LOYALTY STAMPS
+        </div>
+
+
+        <!-- HEADING -->
+        <h1
+          class="mt-4 text-[44px] font-extrabold
+          leading-[.98] tracking-[-.065em]
+          text-alive-navy
+          sm:text-[58px]
+          lg:text-[72px]"
+        >
+          Every visit
+
+          <br />
+
+          <span
+            class="bg-gradient-to-r
+            from-[#643cff] to-[#1bbce8]
+            bg-clip-text text-transparent"
+          >
+            earns a reward.
+          </span>
+        </h1>
+
+
+        <!-- DESCRIPTION -->
+        <p
+          class="mx-auto mt-5 max-w-[590px]
+          text-sm leading-7 text-[#636981]
+          sm:text-[17px]
+          lg:mx-0"
+        >
+          Say goodbye to paper stamp cards. Scan a QR code at your favourite
+          cafés, restaurants and shops, collect a stamp on every visit and
+          claim free rewards, all from your phone.
+        </p>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- RIGHT LOGIN CARD -->
+    <!-- ================================= -->
+
+    <section
+      id="login"
+      class="relative flex min-h-[650px]
+      w-full flex-col rounded-[26px]
+      border border-black/[.07]
+      bg-white/[.92]
+      p-[22px]
+      shadow-alive
+      sm:p-[38px]
+      lg:rounded-[30px]"
+    >
+
+      <!-- PROGRESS -->
+      <div class="mb-9 flex gap-2 sm:mb-[52px]">
+        <span class="h-[5px] w-[54px] rounded-full bg-gradient-to-r from-[#722cf5] to-[#1ed3e8]"></span>
+        <span class="h-[5px] w-6 rounded-full bg-[#dfe2eb]"></span>
+        <span class="h-[5px] w-6 rounded-full bg-[#dfe2eb]"></span>
+      </div>
+
+
+      <!-- HEADING -->
+      <div>
+
+        <div class="mb-2 text-[26px] leading-none text-alive-purple">
+          ✦
+        </div>
+
+        <h2
+          id="loginTitle"
+          class="text-[30px] font-extrabold
+          leading-tight tracking-[-.045em]
+          sm:text-[38px]"
+        >
+          Start collecting stamps.
+        </h2>
+
+        <p
+          id="loginSub"
+          class="mt-3.5 text-[13px]
+          leading-6 text-[#73778a]
+          sm:text-sm"
+        >
+          Enter your number to see your stamp cards and rewards.
+        </p>
+
+      </div>
+
+
+      <!-- CUSTOMER / BUSINESS -->
+      <div class="mt-7 grid grid-cols-2 rounded-full bg-[#edf0f4] p-[5px]">
+
+        <!-- CUSTOMER -->
+        <button
+          id="customerBtn"
+          type="button"
+          class="role-btn rounded-full
+          bg-white px-3 py-3
+          text-sm font-semibold
+          text-[#172044]
+          shadow-md shadow-black/[.05]"
+        >
+          <span class="mr-1">✦</span>
+          Customer
+        </button>
+
+        <!-- BUSINESS -->
+        <button
+          id="businessBtn"
+          type="button"
+          class="role-btn rounded-full
+          px-3 py-3 text-sm
+          font-semibold text-[#747887]"
+        >
+          <span class="mr-1">▦</span>
+          Business
+        </button>
+
+      </div>
+
+
+      <!-- FORM -->
+      <form id="loginForm" method="POST" action="" class="mt-7">
+        {% csrf_token %}
+
+        <!-- LABEL -->
+        <label
+          for="mobile"
+          class="mb-2.5 block text-[13px]
+          font-semibold text-[#23283c]"
+        >
+          Mobile Number
+        </label>
+
+        <!-- PHONE INPUT -->
+        <div
+          class="flex h-[58px]
+          items-center rounded-[17px]
+          border border-transparent
+          bg-[#eef1ed]
+          px-[18px]
+          transition
+          focus-within:border-[#5a40e6]/30
+          focus-within:ring-4
+          focus-within:ring-[#5a40e6]/10
+          sm:h-[62px]"
+        >
+          <span
+            class="border-r border-[#d9ddd8]
+            pr-3 text-sm font-semibold
+            text-[#666d7d]"
+          >
+            +91
+          </span>
+
+          <input
+            id="mobile"
+            name="mobile"
+            type="tel"
+            inputmode="numeric"
+            maxlength="10"
+            placeholder="9876543210"
+            autocomplete="tel"
+            class="w-full min-w-0
+            border-0 bg-transparent
+            pl-3 text-base
+            tracking-wide
+            text-[#11182e]
+            outline-none
+            placeholder:text-[#9da2ad]"
+          />
+          <input
+    type="hidden"
+    id="role"
+    name="role"
+    value="customer"
+/>
+        </div>
+
+
+        <!-- OTP BUTTON -->
+        <button
+          type="submit"
+          class="mt-4 flex h-[58px]
+          w-full items-center
+          justify-center gap-2
+          rounded-[17px]
+          bg-gradient-to-r
+          from-[#5131dc]
+          to-[#0f9eea]
+          text-base font-extrabold
+          text-white
+          shadow-lg shadow-[#4e39d6]/20
+          transition
+          hover:-translate-y-0.5
+          hover:shadow-xl
+          hover:shadow-[#4e39d6]/30
+          active:translate-y-0
+          sm:h-[60px]"
+        >
+          Get OTP
+          <span class="text-[23px] font-normal">→</span>
+        </button>
+
+
+        <!-- WHATSAPP -->
+        <div
+          class="mt-4 flex items-center
+          justify-center gap-2
+          text-xs text-[#7c8190]"
+        >
+          <span class="text-base text-[#22b968]">◉</span>
+          We'll send your code on WhatsApp
+        </div>
+
+      </form>
+
+
+      <!-- TRUST -->
+      <div class="mt-6 flex justify-center gap-2 text-[11px] text-[#9a9eab]">
+        <span>Secure &amp; simple</span>
+        <span class="text-[#c7cad3]">•</span>
+        <span>No spam</span>
+      </div>
+
+
+      <!-- TERMS -->
+      <p
+        class="mt-auto pt-7
+        text-center text-[10px]
+        leading-6 text-[#74798a]"
+      >
+        By proceeding, you agree to AliveFrame's
+
+        <a href="#" class="font-bold text-[#5238c7]">T&amp;C</a>
+
+        and
+
+        <a href="#" class="font-bold text-[#5238c7]">Privacy Policy</a>
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <!-- TOAST -->
+  <div
+    id="toast"
+    class="fixed bottom-7 left-1/2
+    z-50 max-w-[calc(100%-32px)]
+    -translate-x-1/2
+    translate-y-32
+    rounded-xl bg-[#111738]
+    px-[18px] py-[13px]
+    text-[13px] font-semibold
+    text-white opacity-0
+    shadow-2xl transition-all duration-300"
+  ></div>
+
+
+  <!-- JAVASCRIPT -->
+  <script>
+
+    const customerBtn = document.querySelector("#customerBtn");
+    const businessBtn = document.querySelector("#businessBtn");
+    const mobileInput = document.querySelector("#mobile");
+    const form = document.querySelector("#loginForm");
+    const toast = document.querySelector("#toast");
+    const loginTitle = document.querySelector("#loginTitle");
+    const loginSub = document.querySelector("#loginSub");
+    const roleInput = document.querySelector("#role");
+
+    let role = "customer";
+
+    const copy = {
+      customer: {
+        title: "Start collecting stamps.",
+        sub: "Enter your number to see your stamp cards and rewards.",
+      },
+      business: {
+        title: "Run your loyalty program.",
+        sub: "Enter your number to create stamp cards, scan customers and approve rewards.",
+      },
+    };
+
+    const on = ["bg-white", "text-[#172044]", "shadow-md", "shadow-black/[.05]"];
+
+    /* CUSTOMER / BUSINESS SWITCH */
+    function setRole(selectedRole) {
+      role = selectedRole;
+      // Update hidden input
+    roleInput.value = selectedRole;
+
+      const active = role === "customer" ? customerBtn : businessBtn;
+      const idle = role === "customer" ? businessBtn : customerBtn;
+
+      active.classList.add(...on);
+      active.classList.remove("text-[#747887]");
+
+      idle.classList.remove(...on);
+      idle.classList.add("text-[#747887]");
+
+      loginTitle.textContent = copy[role].title;
+      loginSub.textContent = copy[role].sub;
+    }
+
+    customerBtn.addEventListener("click", () => setRole("customer"));
+    businessBtn.addEventListener("click", () => setRole("business"));
+
+
+    /* MOBILE NUMBER VALIDATION */
+    mobileInput.addEventListener("input", () => {
+      mobileInput.value = mobileInput.value.replace(/\D/g, "").slice(0, 10);
+    });
+
+
+    /* FORM SUBMISSION */
+    form.addEventListener("submit", function(event) {
+
+    const number = mobileInput.value.trim();
+
+    if (!/^[6-9]\d{9}$/.test(number)) {
+        event.preventDefault();
+        showToast("Please enter a valid 10-digit Indian mobile number.");
+        mobileInput.focus();
+        return;
+    }
+
+    roleInput.value = role;
+
+    // Allow the browser to submit the form normally
+});
+
+
+    /* TOAST */
+    function showToast(message) {
+      toast.textContent = message;
+
+      toast.classList.remove("translate-y-32", "opacity-0");
+      toast.classList.add("translate-y-0", "opacity-100");
+
+      clearTimeout(window.toastTimer);
+
+      window.toastTimer = setTimeout(() => {
+        toast.classList.remove("translate-y-0", "opacity-100");
+        toast.classList.add("translate-y-32", "opacity-0");
+      }, 4200);
+    }
+
+  </script>
+
+</body>
+</html>

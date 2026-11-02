@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070b3d" />
+  <title>AliveFrame — Customers</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ["Inter", "sans-serif"] },
+          colors: {
+            alive: {
+              navy: "#070b3d", navy2: "#0b1154", blue: "#237dff",
+              cyan: "#19d5e8", purple: "#823cff", pink: "#d936ff",
+            },
+          },
+          boxShadow: { alive: "0 30px 90px rgba(7, 13, 65, .15)" },
+        },
+      },
+    };
+  </script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { scrollbar-width: none; }
+  </style>
+</head>
+
+<body class="min-h-screen overflow-x-hidden bg-[#f6f8ff] font-inter text-[#0b1234]">
+
+  <div class="pointer-events-none fixed -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#237dff]/20 blur-3xl"></div>
+
+  <div class="relative mx-auto w-full max-w-[480px] pb-28">
+
+    <!-- ============ TRIAL BANNER ============ -->
+    <div id="trialBanner" class="flex items-center gap-3 bg-gradient-to-r from-alive-purple to-alive-blue px-4 py-3 text-white">
+      <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+      <p class="flex-1 text-sm font-semibold leading-snug">Your trial period expires in <b id="trialDays">2</b> days</p>
+      <button id="upgradeBtn" type="button" class="rounded-full bg-white px-5 py-2.5 text-center text-sm font-extrabold leading-tight text-alive-purple transition hover:-translate-y-0.5">Upgrade<br />Now</button>
+    </div>
+
+    <!-- ============ HEADER ============ -->
+    <header class="-mt-px rounded-b-[34px] bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-4 pb-6 pt-6 text-white shadow-alive">
+      <div class="flex items-center gap-3">
+        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-extrabold text-alive-purple">A</div>
+        <div class="min-w-0 flex-1">
+          <h1 id="bizName" class="truncate text-xl font-extrabold tracking-[-0.03em]">Aryan Resturant</h1>
+          <span class="mt-1 inline-block rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan px-3 py-0.5 text-[11px] font-bold">Basic Subscription</span>
+        </div>
+        <button onclick="window.location.href='/loyalty/business-profile'" id="profileBtn" type="button" aria-label="Profile" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </button>
+      </div>
+
+      <div class="mt-5 grid grid-cols-4 gap-2">
+        <div class="rounded-2xl bg-white/10 px-1 py-3.5 text-center backdrop-blur">
+          <svg class="mx-auto h-4 w-4 text-alive-cyan" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>
+          <div id="statScans" class="mt-1 text-2xl font-extrabold">1</div>
+          <div class="text-[10px] font-medium tracking-wide text-white/70">Scans</div>
+        </div>
+        <div class="rounded-2xl bg-white/10 px-1 py-3.5 text-center backdrop-blur">
+          <svg class="mx-auto h-4 w-4 text-alive-cyan" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5M17 4.5a3.5 3.5 0 010 7M22 20c0-2.5-1.5-4-4-5"/></svg>
+          <div id="statUsers" class="mt-1 text-2xl font-extrabold">1</div>
+          <div class="text-[10px] font-medium tracking-wide text-white/70">Users</div>
+        </div>
+        <div class="rounded-2xl bg-white/10 px-1 py-3.5 text-center backdrop-blur">
+          <svg class="mx-auto h-4 w-4 text-alive-cyan" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13"/></svg>
+          <div id="statRewards" class="mt-1 text-2xl font-extrabold">0</div>
+          <div class="text-[10px] font-medium tracking-wide text-white/70">Rewards</div>
+        </div>
+        <div class="rounded-2xl bg-white/10 px-1 py-3.5 text-center backdrop-blur">
+          <svg class="mx-auto h-4 w-4 text-alive-cyan" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3"/></svg>
+          <div id="statRepeat" class="mt-1 text-2xl font-extrabold">0%</div>
+          <div class="text-[10px] font-medium tracking-wide text-white/70">Repeat</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="px-4 pt-6">
+
+      <!-- SEARCH -->
+      <label class="flex h-[54px] items-center gap-3 rounded-[17px] border border-black/[.07] bg-white px-4 shadow-sm transition focus-within:border-[#5a40e6]/30 focus-within:ring-4 focus-within:ring-[#5a40e6]/10">
+        <svg class="h-5 w-5 shrink-0 text-[#9da2ad]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="search" type="search" placeholder="Search by phone or name..." class="w-full min-w-0 border-0 bg-transparent text-[15px] text-[#11182e] outline-none placeholder:text-[#9da2ad]" />
+      </label>
+
+      <!-- DATE RANGE -->
+      <div class="mt-3 grid grid-cols-2 gap-3">
+        <label class="flex h-[54px] items-center gap-2 rounded-[17px] border border-black/[.07] bg-white px-3.5 shadow-sm focus-within:ring-4 focus-within:ring-[#5a40e6]/10">
+          <span class="sr-only">From date</span>
+          <svg class="h-5 w-5 shrink-0 text-[#9da2ad]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          <input id="fromDate" type="date" class="w-full min-w-0 bg-transparent text-sm text-[#23283c] outline-none" />
+        </label>
+        <label class="flex h-[54px] items-center gap-2 rounded-[17px] border border-black/[.07] bg-white px-3.5 shadow-sm focus-within:ring-4 focus-within:ring-[#5a40e6]/10">
+          <span class="sr-only">To date</span>
+          <svg class="h-5 w-5 shrink-0 text-[#9da2ad]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          <input id="toDate" type="date" class="w-full min-w-0 bg-transparent text-sm text-[#23283c] outline-none" />
+        </label>
+      </div>
+
+      <!-- CSV -->
+      <button id="csvBtn" type="button" class="mt-3 flex h-[54px] w-full items-center justify-center gap-2 rounded-[17px] border border-black/[.07] bg-white text-[15px] font-semibold text-[#23283c] shadow-sm transition hover:bg-[#f3f4fa]">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+        Download CSV
+      </button>
+
+      <!-- FILTER CHIPS -->
+      <div id="chips" class="no-scrollbar -mx-4 mt-5 flex gap-2.5 overflow-x-auto px-4"></div>
+
+      <!-- SORT -->
+      <label class="relative mt-4 flex h-[54px] items-center gap-3 rounded-[17px] border border-black/[.07] bg-white px-4 shadow-sm">
+        <svg class="h-5 w-5 shrink-0 text-[#747887]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 4v16m0 0l-3-3m3 3l3-3M17 20V4m0 0l-3 3m3-3l3 3"/></svg>
+        <span class="sr-only">Sort customers</span>
+        <select id="sort" class="w-full appearance-none bg-transparent pr-8 text-[15px] font-medium text-[#23283c] outline-none">
+          <option value="latest">Latest visit</option>
+          <option value="oldest">Oldest visit</option>
+          <option value="stamps">Most stamps</option>
+          <option value="name">Name A–Z</option>
+        </select>
+        <svg class="pointer-events-none absolute right-4 h-5 w-5 text-[#747887]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </label>
+
+      <!-- LIST -->
+      <section id="list" class="mt-5 space-y-3" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <!-- ============ BOTTOM NAV ============ -->
+  <nav class="fixed inset-x-0 bottom-0 z-40 border-t border-black/[.07] bg-white/95 backdrop-blur">
+    <div class="mx-auto grid max-w-[480px] grid-cols-4">
+      <a onclick="window.location.href ='/loyalty/business-dashboard'" class="relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        </span>Home
+      </a>
+      <a onclick="window.location.href ='/loyalty/customers-list'" aria-current="page" class="relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-bold text-alive-purple">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full bg-alive-purple/10">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5M17 4.5a3.5 3.5 0 010 7M22 20c0-2.5-1.5-4-4-5"/></svg>
+        </span>Customers
+      </a>
+      <button onclick="window.location.href ='/loyalty/winners-list'" data-soon="Winners" type="button" class="relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13"/></svg>
+        </span>Winners
+      </button>
+      <button onclick="window.location.href ='/loyalty/create-offer'" data-soon="Create Offer" type="button" class="relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]">
+        <span class="flex h-8 w-14 items-center justify-center rounded-full">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>
+        </span>Create Offer
+      </button>
+    </div>
+  </nav>
+
+  <div id="toast" class="fixed bottom-24 left-1/2 z-50 max-w-[calc(100%-32px)] -translate-x-1/2 translate-y-32 rounded-xl bg-[#111738] px-[18px] py-[13px] text-[13px] font-semibold text-white opacity-0 shadow-2xl transition-all duration-300"></div>
+
+  <script>
+    /* ---------------------------------
+       DATA — replace with your API data
+       Timestamps are ISO strings (e.g. 2026-10-07T14:43:00+05:30)
+    --------------------------------- */
+    const data = {
+      businessName: "Aryan Resturant",
+      trialDaysLeft: 2,
+      stats: { scans: 1, users: 1, rewards: 0, repeat: 0 },
+      // timestamps are ISO strings (demo values are relative to now)
+      customers: JSON.parse('{{ customers|escapejs }}'),
+      
+      // [
+      //   {
+      //     name: "Aryan kumar", phone: "919608528294",
+      //     stamps: 1, total: 2,
+      //     visits: 1,
+      //     lastVisit: new Date(Date.now() - 23 * 3600e3).toISOString(),
+      //     stampRewardsEarned: 1, stampRewardsRedeemed: 0,
+      //     scratchPlayed: 0, scratchWon: 0,
+      //     // status: "awaiting" | "approved" | "redeemed"
+      //     stampRewards: [
+      //       { name: "Rewards", stamps: 1, earnedAt: new Date(Date.now() - 23 * 3600e3 + 3 * 60e3).toISOString(), status: "awaiting" },
+      //     ],
+      //     scratchCards: [],
+      //     scans: [new Date(Date.now() - 23 * 3600e3).toISOString()],
+      //   },
+      // ],
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    $("bizName").textContent = data.businessName;
+    $("trialDays").textContent = data.trialDaysLeft;
+    $("statScans").textContent = data.stats.scans;
+    $("statUsers").textContent = data.stats.users;
+    $("statRewards").textContent = data.stats.rewards;
+    $("statRepeat").textContent = data.stats.repeat + "%";
+
+    /* ---------------------------------
+       FILTERS
+    --------------------------------- */
+    const isCompleted = (c) => c.stamps >= c.total;
+    const filters = {
+      all: { label: "All", test: () => true },
+      active: { label: "Active", test: (c) => !isCompleted(c) },
+      completed: { label: "Completed", test: isCompleted },
+      pending: { label: "Rewards pending", test: (c) => c.stampRewards.some((r) => r.status === "awaiting") },
+    };
+    let activeFilter = "all";
+    const open = new Set();
+
+    function renderChips() {
+      $("chips").innerHTML = Object.entries(filters).map(([key, f]) => {
+        const on = key === activeFilter;
+        const count = data.customers.filter(f.test).length;
+        return `<button type="button" data-chip="${key}" class="shrink-0 whitespace-nowrap rounded-full px-5 py-3 text-[15px] font-semibold transition ${
+          on ? "bg-gradient-to-r from-[#5131dc] to-[#0f9eea] text-white shadow-lg shadow-[#4e39d6]/20"
+             : "bg-[#edf0f4] text-[#636981] hover:bg-[#e3e7ef]"}">
+          ${f.label} <span class="ml-1 text-sm ${on ? "text-white/80" : "text-[#9da2ad]"}">${count}</span></button>`;
+      }).join("");
+    }
+
+    /* ---------------------------------
+       LIST
+    --------------------------------- */
+    const timeAgo = (iso) => {
+      const m = Math.floor((Date.now() - new Date(iso)) / 60000);
+      if (m < 1) return "Just now";
+      if (m < 60) return m + (m === 1 ? " minute ago" : " minutes ago");
+      const h = Math.floor(m / 60);
+      if (h < 24) return h + (h === 1 ? " hour ago" : " hours ago");
+      const d = Math.floor(h / 24);
+      return d + (d === 1 ? " day ago" : " days ago");
+    };
+    const fmtStamp = (iso) => {
+      const d = new Date(iso), now = new Date();
+      const dayDiff = Math.round((new Date(now.toDateString()) - new Date(d.toDateString())) / 864e5);
+      const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+      const day = dayDiff === 0 ? "Today" : dayDiff === 1 ? "Yesterday"
+        : d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+      return day + ", " + time;
+    };
+    const rewardBadge = {
+      awaiting: ["Awaiting approval", "bg-[#fff8dc] text-[#b45f06]"],
+      approved: ["Approved", "bg-[#ecfdf3] text-[#16a058]"],
+      redeemed: ["Redeemed", "bg-[#f5f0ff] text-alive-purple"],
+    };
+    const confirming = new Set();
+
+    function getVisible() {
+      const q = $("search").value.trim().toLowerCase();
+      const from = $("fromDate").value, to = $("toDate").value;
+      const list = data.customers.filter((c) =>
+        filters[activeFilter].test(c) &&
+        (!q || c.name.toLowerCase().includes(q) || c.phone.includes(q)) &&
+        (!from || c.lastVisit.slice(0, 10) >= from) && (!to || c.lastVisit.slice(0, 10) <= to));
+      const sorters = {
+        latest: (a, b) => b.lastVisit.localeCompare(a.lastVisit),
+        oldest: (a, b) => a.lastVisit.localeCompare(b.lastVisit),
+        stamps: (a, b) => b.stamps - a.stamps,
+        name: (a, b) => a.name.localeCompare(b.name),
+      };
+      return list.sort(sorters[$("sort").value]);
+    }
+
+    function renderList() {
+      const rows = getVisible();
+      if (!rows.length) {
+        $("list").innerHTML = `<div class="rounded-[26px] border border-dashed border-black/10 bg-white/70 p-8 text-center">
+          <div class="text-base font-extrabold tracking-[-0.03em]">No customers found</div>
+          <p class="mt-1 text-sm text-[#73778a]">Try a different search, filter or date range.</p></div>`;
+        return;
+      }
+      $("list").innerHTML = rows.map((c) => {
+        const isOpen = open.has(c.phone);
+        const pct = Math.min(100, Math.round((c.stamps / c.total) * 100));
+        return `
+        <article class="rounded-[26px] border border-black/[.07] bg-white/[.92] p-4 shadow-alive">
+          <button type="button" data-toggle="${esc(c.phone)}" aria-expanded="${isOpen}" class="flex w-full items-center gap-3 text-left">
+            <span class="flex h-[60px] w-[60px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#eef0f4]">
+              <svg class="h-10 w-10 translate-y-1.5 text-[#b4b8c2]" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4.5"/><path d="M3 22c0-5 4-7.5 9-7.5s9 2.5 9 7.5z"/></svg>
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-2">
+                <span class="truncate text-lg font-extrabold tracking-[-0.03em]">${esc(c.name)}</span>
+                <svg class="h-5 w-5 shrink-0 text-[#22b968]" viewBox="0 0 24 24" fill="currentColor" aria-label="WhatsApp"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.200-1.400A10 10 0 1012 2zm5.200 14c-.2.600-1.200 1.200-1.700 1.200-.4.100-1 .100-1.600-.100-.4-.100-.900-.300-1.500-.600-2.600-1.100-4.200-3.700-4.400-3.900-.1-.2-1-1.300-1-2.500s.6-1.800.9-2c.2-.2.500-.3.700-.3h.5c.2 0 .4 0 .6.500l.8 1.900c.1.200.1.300 0 .500l-.3.400-.4.400c-.1.100-.3.300-.1.600.2.300.7 1.200 1.500 1.900 1 .9 1.900 1.200 2.200 1.300.3.100.4.100.6-.1l.8-1c.2-.2.400-.2.600-.1l1.800.9c.2.100.4.200.4.300.1.100.1.600-.1 1.200z"/></svg>
+              </span>
+              <span class="mt-1 flex items-center gap-1.5 text-sm text-[#636981]">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.900v3a2 2 0 01-2.200 2 19.800 19.800 0 01-8.600-3.100 19.500 19.500 0 01-6-6A19.800 19.800 0 012.100 4.200 2 2 0 014.100 2h3a2 2 0 012 1.700c.1 1 .4 1.900.7 2.800a2 2 0 01-.5 2.100L8.100 9.900a16 16 0 006 6l1.300-1.300a2 2 0 012.100-.4c.9.300 1.800.6 2.800.7a2 2 0 011.700 2z"/></svg>
+                ${esc(c.phone)}
+              </span>
+            </span>
+            <span class="text-center">
+              <span class="block text-[22px] font-extrabold leading-none text-alive-purple">${c.stamps}/${c.total}</span>
+              <span class="mt-1.5 block text-[11px] font-semibold tracking-[.1em] text-[#9a9eab]">STAMPS</span>
+            </span>
+            <svg class="h-5 w-5 shrink-0 text-[#747887] transition-transform ${isOpen ? "rotate-180" : ""}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+
+          ${isOpen ? `
+          <div class="mt-4 border-t border-black/[.06]">
+            <div class="flex items-center justify-between py-4 text-[15px]"><span class="text-[#636981]">Total Visits</span><span class="font-bold">${c.visits}</span></div>
+            <div class="flex items-center justify-between pb-4 text-[15px]"><span class="text-[#636981]">Last Visit</span><span class="font-bold">${timeAgo(c.lastVisit)}</span></div>
+            <div class="flex items-center justify-between pb-4 text-[15px]"><span class="text-[#636981]">Status</span>
+              <span class="rounded-full bg-[#edf0f4] px-4 py-2 text-sm font-bold text-[#23283c]">${isCompleted(c) ? "Completed" : "Active"}</span></div>
+
+            <div class="grid grid-cols-2 gap-3 pb-5">
+              <div class="rounded-2xl bg-[#f5f0ff] p-3.5"><div class="text-2xl font-extrabold text-alive-purple">${c.stampRewardsEarned}</div><div class="mt-1 text-[13px] text-[#636981]">Stamp rewards earned</div></div>
+              <div class="rounded-2xl bg-[#f5f0ff] p-3.5"><div class="text-2xl font-extrabold text-alive-purple">${c.stampRewardsRedeemed}</div><div class="mt-1 text-[13px] text-[#636981]">Stamp rewards redeemed</div></div>
+              <div class="rounded-2xl bg-[#ecf8ff] p-3.5"><div class="text-2xl font-extrabold text-alive-blue">${c.scratchPlayed}</div><div class="mt-1 text-[13px] text-[#636981]">Scratch cards played</div></div>
+              <div class="rounded-2xl bg-[#ecf8ff] p-3.5"><div class="text-2xl font-extrabold text-alive-blue">${c.scratchWon}</div><div class="mt-1 text-[13px] text-[#636981]">Scratch cards won</div></div>
+            </div>
+
+            <div class="border-t border-black/[.06] py-5">
+              <h4 class="flex items-center gap-2 text-[13px] font-bold tracking-[.08em] text-[#636981]">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 21h14M7 17h10v4H7zM12 17v-4a4 4 0 10-4-4"/></svg>STAMP CARD REWARDS</h4>
+              ${c.stampRewards.length ? c.stampRewards.map((r) => `
+              <div class="mt-3 flex items-center justify-between gap-3">
+                <div class="min-w-0"><div class="font-bold">${esc(r.name)} <span class="font-normal text-[#9a9eab]">· ${r.stamps} ${r.stamps === 1 ? "stamp" : "stamps"}</span></div>
+                  <div class="mt-0.5 text-sm text-[#636981]">Earned ${fmtStamp(r.earnedAt)}</div></div>
+                <span class="shrink-0 rounded-full px-3 py-2 text-[13px] font-bold ${rewardBadge[r.status][1]}">${rewardBadge[r.status][0]}</span>
+              </div>`).join("") : `<p class="mt-3 text-[15px] text-[#9a9eab]">No stamp rewards earned yet.</p>`}
+            </div>
+
+            <div class="border-t border-black/[.06] py-5">
+              <h4 class="flex items-center gap-2 text-[13px] font-bold tracking-[.08em] text-[#636981]">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8a2 2 0 012-2h14a2 2 0 012 2v2a2 2 0 000 4v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 000-4V8zM14 6v12"/></svg>SCRATCH CARDS</h4>
+              ${c.scratchCards.length ? c.scratchCards.map((s) => `
+              <div class="mt-3 flex items-center justify-between"><span class="font-bold">${esc(s.prize || "No prize")}</span><span class="text-sm text-[#636981]">${fmtStamp(s.playedAt)}</span></div>`).join("")
+                : `<p class="mt-3 text-[15px] text-[#9a9eab]">No scratch cards played.</p>`}
+            </div>
+
+            <div class="border-t border-black/[.06] py-5">
+              <h4 class="flex items-center gap-2 text-[13px] font-bold tracking-[.08em] text-[#636981]">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>SCAN HISTORY</h4>
+              ${c.scans.map((t, i) => `<div class="mt-3 flex gap-3 text-[15px]"><span class="text-[#9a9eab]">#${c.scans.length - i}</span><span class="font-semibold">${fmtStamp(t)}</span></div>`).join("")}
+            </div>
+
+            <div class="border-t border-black/[.06] pt-5">
+              ${confirming.has(c.phone) ? `
+              <p class="text-sm font-semibold text-[#c0262d]">Remove ${esc(c.name)}? This can't be undone.</p>
+              <div class="mt-3 grid grid-cols-2 gap-3">
+                <button type="button" data-cancel="${esc(c.phone)}" class="h-[46px] rounded-[14px] border border-black/10 bg-white text-sm font-semibold text-[#23283c]">Cancel</button>
+                <button type="button" data-confirm="${esc(c.phone)}" class="h-[46px] rounded-[14px] bg-[#d92d3a] text-sm font-extrabold text-white">Remove</button>
+              </div>` : `
+              <button type="button" data-remove="${esc(c.phone)}" class="flex items-center gap-2 text-[15px] font-bold text-[#d92d3a]">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 11v6M14 11v6"/></svg>Remove customer</button>
+              <p class="mt-2 text-sm text-[#9a9eab]">Clears their stamps and visit history at this business.</p>`}
+            </div>
+          </div>` : ""}
+        </article>`;
+      }).join("");
+    }
+
+    function render() { renderChips(); renderList(); }
+
+    /* ---------------------------------
+       EVENTS
+    --------------------------------- */
+    $("chips").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-chip]");
+      if (b) { activeFilter = b.dataset.chip; render(); }
+    });
+    $("list").addEventListener("click", (e) => {
+      const t = e.target.closest("[data-toggle],[data-remove],[data-cancel],[data-confirm]");
+      if (!t) return;
+      const d = t.dataset;
+      if (d.toggle) { open.has(d.toggle) ? open.delete(d.toggle) : open.add(d.toggle); }
+      else if (d.remove) confirming.add(d.remove);
+      else if (d.cancel) confirming.delete(d.cancel);
+      else if (d.confirm) {
+        // DEMO: call your delete API here, then update the list
+        data.customers = data.customers.filter((c) => c.phone !== d.confirm);
+        confirming.delete(d.confirm); open.delete(d.confirm);
+        showToast("Customer removed.");
+        renderChips();
+      }
+      renderList();
+    });
+    ["search", "fromDate", "toDate", "sort"].forEach((id) => $(id).addEventListener("input", renderList));
+
+    $("csvBtn").addEventListener("click", () => {
+      const rows = getVisible();
+      if (!rows.length) return showToast("No customers to download.");
+      const head = ["Name", "Phone", "Stamps", "Total stamps", "Visits", "Last visit", "Status"];
+      const csv = [head, ...rows.map((c) => [c.name, c.phone, c.stamps, c.total, c.visits, c.lastVisit, isCompleted(c) ? "Completed" : "Active"])]
+        .map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+      const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+      Object.assign(document.createElement("a"), { href: url, download: "customers.csv" }).click();
+      URL.revokeObjectURL(url);
+      showToast("Customers downloaded.");
+    });
+
+    $("upgradeBtn").addEventListener("click", () => showToast("Demo: opening upgrade plans."));
+    $("profileBtn").addEventListener("click", () => showToast("Demo: open profile."));
+    document.querySelectorAll("[data-soon]").forEach((b) =>
+      b.addEventListener("click", () => showToast(`Demo: ${b.dataset.soon} page.`)));
+
+    /* ---------------------------------
+       TOAST
+    --------------------------------- */
+    function showToast(msg) {
+      const t = $("toast");
+      t.textContent = msg;
+      t.classList.remove("translate-y-32", "opacity-0");
+      t.classList.add("translate-y-0", "opacity-100");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        t.classList.remove("translate-y-0", "opacity-100");
+        t.classList.add("translate-y-32", "opacity-0");
+      }, 3000);
+    }
+
+    render();
+  </script>
+</body>
+</html>

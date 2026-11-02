@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f8ff" />
+  <title>AliveFrame — Scan QR</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fallback QR decoder for browsers without the BarcodeDetector API (e.g. iOS Safari) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ["Inter", "sans-serif"] },
+          colors: {
+            alive: { navy: "#070b3d", navy2: "#0b1154", blue: "#237dff", cyan: "#19d5e8", purple: "#823cff", pink: "#d936ff" },
+            ink: "#0b1234", muted: "#636981", faint: "#747887",
+          },
+          boxShadow: { alive: "0 30px 90px rgba(7, 13, 65, .15)" },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root { box-sizing: border-box; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { animation: spin .8s linear infinite; }
+    @media (prefers-reduced-motion: reduce) { .spin { animation: none; } * { transition: none !important; } }
+  </style>
+</head>
+
+<body class="min-h-screen overflow-x-hidden bg-[#f6f8ff] font-inter text-ink">
+  <div aria-hidden="true" class="pointer-events-none fixed -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#237dff]/20 blur-3xl"></div>
+
+  <main class="relative mx-auto w-full max-w-[480px] px-4 pb-[calc(9rem+env(safe-area-inset-bottom))] pt-[calc(2rem+env(safe-area-inset-top))]">
+    <h1 class="text-center text-[32px] font-extrabold tracking-[-0.045em] text-alive-navy">Scan QR</h1>
+    <p class="mt-2 text-center text-lg text-muted">Point your camera at the QR code</p>
+
+    <!-- CAMERA BOX -->
+    <section aria-label="Camera" id="camBox" class="relative mt-8 aspect-square w-full overflow-hidden rounded-[32px] border-2 border-dashed border-[#cfd3de] bg-[#eceef5]">
+      <video id="video" class="absolute inset-0 h-full w-full object-cover" playsinline muted autoplay></video>
+
+      <!-- Live viewfinder: corner brackets only -->
+      <div id="finder" aria-hidden="true" class="pointer-events-none absolute inset-0 hidden">
+        <div class="absolute inset-4 [filter:drop-shadow(0_0_2px_rgba(255,255,255,.85))]">
+          <span class="absolute left-0 top-0 h-9 w-9 border-l-[3px] border-t-[3px] border-alive-purple"></span>
+          <span class="absolute right-0 top-0 h-9 w-9 border-r-[3px] border-t-[3px] border-alive-purple"></span>
+          <span class="absolute bottom-0 left-0 h-9 w-9 border-b-[3px] border-l-[3px] border-alive-purple"></span>
+          <span class="absolute bottom-0 right-0 h-9 w-9 border-b-[3px] border-r-[3px] border-alive-purple"></span>
+        </div>
+      </div>
+
+      <!-- Placeholder: starting / failed -->
+      <div id="placeholder" class="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[#eceef5] px-8 text-center">
+        <svg aria-hidden="true" class="h-[72px] w-[72px] text-[#9aa1b5]" fill="none" stroke="currentColor" stroke-width="1.800" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 8a2 2 0 012-2h2l1.500-2h7L17 6h2a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/><circle cx="12" cy="13" r="3.500"/></svg>
+        <p id="placeholderText" class="text-lg leading-snug text-muted">Starting camera...</p>
+        <button id="retryBtn" type="button" class="hidden h-12 rounded-2xl bg-white px-6 text-[15px] font-extrabold text-[#5131dc] shadow-sm ring-1 ring-black/[.08] transition hover:shadow-md focus-visible:outline focus-visible:outline-4 focus-visible:outline-[#5a40e6]/40">Try camera again</button>
+      </div>
+
+      <!-- Busy overlay (checking in) -->
+      <div id="busy" class="absolute inset-0 hidden flex-col items-center justify-center gap-3 bg-alive-navy/75 text-white backdrop-blur-sm">
+        <span aria-hidden="true" class="spin h-9 w-9 rounded-full border-4 border-white/30 border-t-white"></span>
+        <p class="text-lg font-bold">Checking in...</p>
+      </div>
+    </section>
+
+    <!-- Messages (camera problems, invalid codes, check-in errors) -->
+    <p id="msg" role="alert" class="mt-6 hidden text-center text-base font-bold leading-snug text-[#d92d3a]"></p>
+    <p id="detail" class="mx-auto mt-2 hidden max-w-[340px] text-center text-sm leading-snug text-muted"></p>
+
+    <!-- MANUAL ENTRY -->
+    <form id="manualForm" class="mt-5 hidden items-start gap-3 px-1" novalidate>
+      <div class="min-w-0 flex-1">
+        <label for="restId" class="sr-only">Restaurant ID</label>
+        <input id="restId" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="Enter Restaurant ID" class="h-14 w-full rounded-2xl border border-black/[.1] bg-white px-4 text-base font-medium outline-none transition placeholder:font-normal placeholder:text-[#9da2ad] focus:border-[#5a40e6]/40 focus:ring-4 focus:ring-[#5a40e6]/10" />
+      </div>
+      <button id="submitBtn" type="submit" class="h-14 shrink-0 rounded-2xl bg-gradient-to-r from-[#5131dc] to-[#0f9eea] px-6 text-base font-extrabold text-white shadow-lg shadow-[#4e39d6]/20 transition hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#5a40e6]/40">Submit</button>
+    </form>
+
+    <p class="mx-auto mt-8 max-w-[320px] text-center text-[15px] leading-relaxed text-muted">Ensure the QR code is well-lit and clearly visible within the frame.</p>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav aria-label="Main" class="fixed inset-x-0 bottom-0 z-40 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+    <div class="relative mx-auto grid h-[84px] max-w-[480px] grid-cols-5 items-center rounded-[34px] border border-black/[.05] bg-white/95 shadow-alive backdrop-blur">
+      <a href="customer-home.html" class="flex flex-col items-center gap-1 text-[11px] font-semibold tracking-wide text-faint">
+        <svg aria-hidden="true" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-9z"/></svg>HOME
+      </a>
+      <a href="customer-explore.html" class="flex flex-col items-center gap-1 text-[11px] font-semibold tracking-wide text-faint">
+        <svg aria-hidden="true" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.500 8.500l-2 5-5 2 2-5 5-2z"/></svg>EXPLORE
+      </a>
+      <span aria-hidden="true"></span>
+      <a href="customer-rewards.html" class="flex flex-col items-center gap-1 text-[11px] font-semibold tracking-wide text-faint">
+        <svg aria-hidden="true" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8S10 3 7.500 4.500 9 8 12 8zM12 8s2-5 4.500-3.500S15 8 12 8z"/></svg>REWARDS
+      </a>
+      <a href="customer-profile.html" class="flex flex-col items-center gap-1 text-[11px] font-semibold tracking-wide text-faint">
+        <svg aria-hidden="true" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.500-6.500 8-6.500s8 2.500 8 6.500"/></svg>PROFILE
+      </a>
+      <a href="customer-scan.html" aria-label="Scan QR code" aria-current="page" class="absolute left-1/2 top-0 flex h-[76px] w-[76px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-[#5131dc] to-[#0f9eea] text-white shadow-lg shadow-[#4e39d6]/30 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#5a40e6]/40">
+        <svg aria-hidden="true" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" viewBox="0 0 24 24"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2M8 12h8"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    window.__scanReady = true; // lets the watchdog below know this script parsed and started
+
+    const $ = (id) => document.getElementById(id);
+    const video = $("video"), canvas = document.createElement("canvas"), ctx = canvas.getContext("2d", { willReadFrequently: true });
+    video.muted = true; video.playsInline = true;
+
+    let stream = null, detector = null, loopTimer = null, hintTimer = null;
+    let attemptId = 0;            // invalidates in-flight camera starts when a newer one begins
+    let cameraState = "idle";     // idle | starting | live | failed
+    let busy = false;             // true while a check-in request is running
+    let lastInvalidAt = 0, loopErrors = 0;
+
+    const withTimeout = (p, ms) => new Promise((resolve, reject) => {
+      const t = setTimeout(() => reject(Object.assign(new Error("timeout"), { name: "TimeoutError" })), ms);
+      p.then((v) => { clearTimeout(t); resolve(v); }, (e) => { clearTimeout(t); reject(e); });
+    });
+
+    /* ---------- UI helpers ---------- */
+    const CAMERA_MSG = "Unable to access camera. Please enter the ID manually.";
+    function showMsg(text) {
+      const m = $("msg"); m.textContent = text || ""; m.classList.toggle("hidden", !text);
+      if (text !== CAMERA_MSG) showDetail("");
+    }
+    function showDetail(text) { const d = $("detail"); d.textContent = text || ""; d.classList.toggle("hidden", !text); }
+
+    function setBox(state) {
+      cameraState = state;
+      const live = state === "live";
+      $("finder").classList.toggle("hidden", !live);
+      $("placeholder").classList.toggle("hidden", live);
+      $("camBox").classList.toggle("border-dashed", !live);
+      $("camBox").classList.toggle("border-[#cfd3de]", !live);
+      $("camBox").classList.toggle("border-transparent", live);
+      $("camBox").classList.toggle("bg-black", live);
+      $("camBox").classList.toggle("bg-[#eceef5]", !live);
+      $("retryBtn").classList.toggle("hidden", state !== "failed");
+      $("manualForm").classList.toggle("hidden", state !== "failed");
+      $("manualForm").classList.toggle("flex", state === "failed");
+      $("placeholderText").textContent = state === "failed" ? "Camera stream failed.\nPlease enter the code manually." : "Starting camera...";
+      $("placeholderText").style.whiteSpace = "pre-line";
+    }
+
+    function setBusy(on) {
+      busy = on;
+      $("busy").classList.toggle("flex", on);
+      $("busy").classList.toggle("hidden", !on);
+      $("submitBtn").disabled = on;
+      $("submitBtn").textContent = on ? "Checking..." : "Submit";
+    }
+
+    // Small explanation shown under the red message (the red message itself is always the same)
+    const FAIL_DETAILS = {
+      NotAllowedError: "Camera permission was denied. Allow camera access in your browser settings, then tap Try camera again.",
+      SecurityError: "Camera permission was denied. Allow camera access in your browser settings, then tap Try camera again.",
+      NotFoundError: "No camera was found on this device.",
+      OverconstrainedError: "No usable camera was found on this device.",
+      NotReadableError: "Your camera is being used by another app. Close it, then tap Try camera again.",
+      TimeoutError: "The camera didn't respond. Allow camera access when asked, then tap Try camera again.",
+      Insecure: "Camera needs a secure (https) page. Open this page from your website link.",
+      Unsupported: "Camera scanning isn't available in this browser.",
+    };
+
+    /* ---------- Camera ---------- */
+    function stopCamera() {
+      attemptId++;
+      clearTimeout(loopTimer); loopTimer = null;
+      clearTimeout(hintTimer); hintTimer = null;
+      if (stream) { stream.getTracks().forEach((t) => t.stop()); stream = null; }
+      video.srcObject = null;
+    }
+
+    /* Any problem ends up here: show the failed box + a red message (default text for unknown errors) */
+    function failCamera(reason) {
+      stopCamera();
+      setBox("failed");
+      showMsg(CAMERA_MSG);
+      showDetail(FAIL_DETAILS[reason] || "");
+    }
+
+    async function startCamera() {
+      console.log("Starting camera...");
+      stopCamera();
+      const attempt = attemptId;
+      showMsg("");
+      setBox("starting");
+      hintTimer = setTimeout(() => {
+        if (cameraState === "starting") $("placeholderText").textContent = "Waiting for camera permission...\nTap Allow when your browser asks.";
+      }, 3000);
+
+      if (!window.isSecureContext) return failCamera("Insecure");
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return failCamera("Unsupported");
+
+      // Prefer the native detector; fall back to jsQR (loaded from cdnjs)
+      if (!detector && "BarcodeDetector" in window) {
+        try { detector = new BarcodeDetector({ formats: ["qr_code"] }); } catch { detector = null; }
+      }
+      if (!detector && typeof jsQR === "undefined") return failCamera("Unsupported");
+
+      let pending = null;
+      const ask = (constraints) => { pending = navigator.mediaDevices.getUserMedia(constraints); return withTimeout(pending, 20000); };
+      try {
+        let s;
+        try { s = await ask({ video: { facingMode: { ideal: "environment" } }, audio: false }); }
+        catch (err) {
+          // Some devices reject the preferred constraints; retry with any camera
+          if (err && (err.name === "OverconstrainedError" || err.name === "NotFoundError")) s = await ask({ video: true, audio: false });
+          else throw err;
+        }
+        if (attempt !== attemptId) { s.getTracks().forEach((t) => t.stop()); return; }
+        stream = s;
+        stream.getVideoTracks()[0].addEventListener("ended", () => { if (cameraState === "live") failCamera("NotReadableError"); });
+        video.srcObject = stream;
+        await withTimeout(video.play(), 8000);
+        if (attempt !== attemptId) return;
+        clearTimeout(hintTimer);
+        loopErrors = 0;
+        setBox("live");
+        scanLoop();
+      } catch (err) {
+         console.log(err);
+    console.log(err.name);
+    console.log(err.message);
+    failCamera(err && err.name);
+        if (attempt !== attemptId) return;
+        // A permission prompt answered after the timeout would otherwise leave the camera running
+        if (err && err.name === "TimeoutError" && pending) pending.then((st) => { if (st !== stream) st.getTracks().forEach((t) => t.stop()); }).catch(() => {});
+        failCamera(err && err.name);
+
+      }
+    }
+
+    /* ---------- Scanning ---------- */
+    async function readFrame() {
+      if (video.readyState < 2 || !video.videoWidth) return null;
+      if (detector) {
+        const codes = await detector.detect(video);
+        return (codes[0] && codes[0].rawValue) || null;
+      }
+      const scale = Math.min(1, 480 / video.videoWidth);
+      canvas.width = Math.round(video.videoWidth * scale);
+      canvas.height = Math.round(video.videoHeight * scale);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const hit = jsQR(img.data, img.width, img.height, { inversionAttempts: "dontInvert" });
+      return hit ? hit.data : null;
+    }
+
+    function scanLoop() {
+      clearTimeout(loopTimer);
+      loopTimer = setTimeout(async () => {
+        if (cameraState !== "live") return;
+        if (!busy) {
+          try {
+            const raw = await readFrame();
+            loopErrors = 0;
+            if (raw) await onCode(raw);
+          } catch {
+            // One bad frame is fine; repeated failures mean the scanner itself is broken
+            if (++loopErrors >= 8) {
+              if (detector && typeof jsQR !== "undefined") { detector = null; loopErrors = 0; }
+              else return failCamera("Unsupported");
+            }
+          }
+        }
+        if (cameraState === "live") scanLoop();
+      }, 220);
+    }
+
+    /* Accepts a plain ID, or a link like https://druto.in/business/6ac60... or ...?id=6ac60 */
+    const idOk = (s) => /^[A-Za-z0-9_-]{3,64}$/.test(s);
+    function parseCode(raw) {
+      const s = String(raw).trim();
+      if (!s || s.length > 300) return "";
+      try {
+        const u = new URL(s);
+        const m = u.pathname.match(/\/business\/([A-Za-z0-9_-]{3,64})/);
+        const cand = (m && m[1]) || u.searchParams.get("id") || "";
+        return idOk(cand) ? cand : "";
+      } catch { return idOk(s) ? s : ""; }
+    }
+
+    async function onCode(raw) {
+      const id = parseCode(raw);
+      if (!id) {
+        if (Date.now() - lastInvalidAt > 2500) { lastInvalidAt = Date.now(); showMsg("That QR code isn't an AliveFrame code. Try another one."); }
+        return;
+      }
+      await handleId(id);
+    }
+
+    /* ---------- Check-in ---------- */
+    async function checkIn(id) {
+      // DEMO: replace with your API, e.g.
+      // const res = await fetch("/api/scan", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ businessId: id }) });
+      // if (!res.ok) throw new Error((await res.json()).message || "Couldn't check in. Try again.");
+      await new Promise((r) => setTimeout(r, 700));
+    }
+
+    async function handleId(id) {
+      if (busy) return;
+      showMsg("");
+      setBusy(true);
+      try {
+        await checkIn(id);
+        stopCamera();
+        location.href = `customer-business.html?id=${encodeURIComponent(id)}`;
+      } catch (err) {
+        setBusy(false);
+        showMsg((err && err.message) || "Couldn't check in. Check your connection and try again.");
+      }
+    }
+
+    /* ---------- Manual entry ---------- */
+    $("manualForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const v = $("restId").value.trim();
+      if (!v) { showMsg("Enter the restaurant ID."); return $("restId").focus(); }
+      const id = parseCode(v);
+      if (!id) { showMsg("That doesn't look like a valid restaurant ID."); return $("restId").focus(); }
+      handleId(id);
+    });
+    $("restId").addEventListener("input", () => { if (!busy && cameraState !== "failed") showMsg(""); });
+    $("retryBtn").addEventListener("click", startCamera);
+
+    /* ---------- Safety net: any unexpected error while starting shows the failed state ---------- */
+    const onFatal = () => { if (cameraState === "idle" || cameraState === "starting") failCamera(); };
+    window.addEventListener("error", (e) => { if (!e.filename || e.filename === location.href) onFatal(); });
+    window.addEventListener("unhandledrejection", onFatal);
+
+    /* ---------- Lifecycle: release the camera when the page is hidden ---------- */
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) { if (cameraState === "live") { stopCamera(); setBox("idle"); } }
+      else if (cameraState === "idle") startCamera();
+    });
+    window.addEventListener("pagehide", stopCamera);
+    window.addEventListener("pageshow", (e) => { if (e.persisted) startCamera(); });
+
+    document.addEventListener("DOMContentLoaded", startCamera);
+  </script>
+
+  <!-- Watchdog: if the script above crashed before it could run, still show the failed state -->
+  <script>
+    setTimeout(function () {
+      if (window.__scanReady) return;
+      var t = document.getElementById("placeholderText"), m = document.getElementById("msg");
+      if (t) { t.textContent = "Camera stream failed.\nPlease enter the code manually."; t.style.whiteSpace = "pre-line"; }
+      if (m) { m.textContent = "Unable to access camera. Please enter the ID manually."; m.classList.remove("hidden"); }
+      var f = document.getElementById("manualForm"); if (f) { f.classList.remove("hidden"); f.classList.add("flex"); }
+    }, 2500);
+  </script>
+</body>
+</html>

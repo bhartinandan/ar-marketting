@@ -156,6 +156,57 @@
 </div>
 
 <script>
+document.getElementById('uploadForm').addEventListener('submit', function (e) {
+
+    // SINGLE FILES
+    const singleImage = document.getElementById('refimageUpload').files[0];
+    const singleVideo = document.getElementById('videoUpload').files[0];
+
+    if (singleImage && singleImage.size > MAX_IMAGE_SIZE) {
+        alert('Image must be less than 5 MB');
+        e.preventDefault();
+        return false;
+    }
+
+    if (singleVideo && singleVideo.size > MAX_VIDEO_SIZE) {
+        alert('Video must be less than 10 MB');
+        e.preventDefault();
+        return false;
+    }
+
+    // ALBUM FILES (1–10)
+    for (let i = 1; i <= 10; i++) {
+
+        const img = document.getElementById(`albumImage${i}`).files[0];
+        const vid = document.getElementById(`albumVideo${i}`).files[0];
+
+        if (img && img.size > MAX_IMAGE_SIZE) {
+            alert(`Album Image ${i} must be less than 5 MB`);
+            e.preventDefault();
+            return false;
+        }
+
+        if (vid && vid.size > MAX_VIDEO_SIZE) {
+            alert(`Album Video ${i} must be less than 10 MB`);
+            e.preventDefault();
+            return false;
+        }
+    }
+});
+</script>
+
+
+<script>
+    const MAX_IMAGE_SIZE = 3 * 1024 * 1024;   // 5 MB
+    const MAX_VIDEO_SIZE = 10 * 1024 * 1024; // 10 MB
+
+    function validateFileSize(file, maxSize, typeLabel) {
+    if (file.size > maxSize) {
+        alert(`${typeLabel} size must be less than ${maxSize / (1024 * 1024)} MB`);
+        return false;
+    }
+    return true;}
+
     // create 10 album boxes dynamically
     const albumGrid = document.getElementById('albumGrid');
     let html = '';
@@ -202,7 +253,9 @@
             imgInput.addEventListener('change', () => {
                 imgPreview.innerHTML = '';
                 const f = imgInput.files && imgInput.files[0];
-                if (!f) {
+                if (!f) return;
+                if (!validateFileSize(f, MAX_IMAGE_SIZE, 'Image')) {
+                    imgInput.value = '';
                     imgPreview.innerHTML = '<span style="color:#6b7280;font-size:13px">No Image</span>';
                     return;
                 }
@@ -217,7 +270,10 @@
             vidInput.addEventListener('change', () => {
                 vidPreview.innerHTML = '';
                 const f = vidInput.files && vidInput.files[0];
-                if (!f) {
+                if (!f) return;
+
+                if (!validateFileSize(f, MAX_VIDEO_SIZE, 'Video')) {
+                    vidInput.value = '';
                     vidPreview.innerHTML = '<span style="color:#6b7280;font-size:13px">No Video</span>';
                     return;
                 }
@@ -236,6 +292,10 @@
     document.getElementById('singleImage').addEventListener('change', function () {
         const p = this.files && this.files[0];
         if (!p) return;
+        if (!validateFileSize(p, MAX_IMAGE_SIZE, 'Image')) {
+        this.value = '';
+        return;
+        }
         const w = window.open();
         const img = document.createElement('img');
         img.src = URL.createObjectURL(p);
@@ -248,6 +308,10 @@
     document.getElementById('singleVideo').addEventListener('change', function () {
         const p = this.files && this.files[0];
         if (!p) return;
+        if (!validateFileSize(p, MAX_VIDEO_SIZE, 'Video')) {
+            this.value = '';
+            return;
+    }
         const w = window.open();
         const video = document.createElement('video');
         video.src = URL.createObjectURL(p);

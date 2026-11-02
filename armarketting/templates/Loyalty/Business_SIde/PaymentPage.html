@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070b3d" />
+  <title>AliveFrame — Pricing</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ["Inter", "sans-serif"] },
+          colors: {
+            alive: {
+              navy: "#070b3d", navy2: "#0b1154", blue: "#237dff",
+              cyan: "#19d5e8", purple: "#823cff", pink: "#d936ff",
+            },
+          },
+          boxShadow: { alive: "0 30px 90px rgba(7, 13, 65, .15)" },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="min-h-screen overflow-x-hidden bg-[#f6f8ff] font-inter text-[#0b1234]">
+
+  <div class="pointer-events-none fixed -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#237dff]/20 blur-3xl"></div>
+
+  <!-- ===================================== -->
+  <!-- PRICING PAGE -->
+  <!-- ===================================== -->
+  <div id="pricingPage" class="relative mx-auto w-full max-w-[480px] px-4 pb-16 pt-5">
+
+    <div class="relative flex items-center justify-center">
+      <a onclick="window.location.href ='/loyalty/business-dashboard'" aria-label="Back" class="absolute left-0 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+      <span class="text-sm font-bold tracking-[.16em] text-[#636981]">PRICING</span>
+    </div>
+
+    <section class="mt-10 text-center">
+      <h1 class="text-[46px] font-extrabold leading-[1] tracking-[-0.06em] text-alive-navy">
+        Simple,<br />
+        <span class="bg-gradient-to-r from-[#643cff] to-[#1bbce8] bg-clip-text text-transparent">transparent pricing.</span>
+      </h1>
+      <p class="mx-auto mt-5 max-w-[320px] text-base leading-7 text-[#636981]">No hidden fees. Zero setup cost. Cancel anytime.</p>
+
+      <p class="mt-8 text-[11px] font-bold tracking-[.2em] text-[#8a97b0]">TRUSTED BY 1000+ BRANDS</p>
+      <div class="mt-4 flex justify-center gap-4 text-[#636981]">
+        <span class="flex h-[70px] w-[70px] items-center justify-center rounded-full bg-white shadow-sm"><svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 9h11v6a4 4 0 01-4 4H9a4 4 0 01-4-4V9zM16 10h2a2 2 0 010 5h-2M8 3v2M11 3v2M14 3v2"/></svg></span>
+        <span class="flex h-[70px] w-[70px] items-center justify-center rounded-full bg-white shadow-sm"><svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8zM9 8a3 3 0 016 0"/></svg></span>
+        <span class="flex h-[70px] w-[70px] items-center justify-center rounded-full bg-white shadow-sm"><svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M7 3v8M5 3v5a2 2 0 004 0V3M7 11v10M17 21V3c-2 1-3 4-3 8h3"/></svg></span>
+      </div>
+    </section>
+
+    <!-- PLAN CARD -->
+    <section class="mt-9 overflow-hidden rounded-[30px] border border-black/[.05] bg-white shadow-alive">
+      <div class="h-3 bg-gradient-to-r from-alive-purple via-alive-blue to-alive-cyan"></div>
+      <div class="p-6">
+        <h2 class="text-[28px] font-extrabold tracking-[-0.045em] text-alive-navy">Starter Plan</h2>
+        <div class="mt-2 flex items-baseline gap-2">
+          <span id="planPrice" class="text-[54px] font-extrabold leading-none tracking-[-0.05em]"></span>
+          <span class="text-base text-[#8a97b0]">/year</span>
+          <span id="planMrp" class="ml-1 text-base text-[#8a97b0] line-through"></span>
+        </div>
+        <p id="planSave" class="mt-2 inline-block rounded-full bg-[#e3f9ec] px-3 py-1 text-xs font-bold text-[#16a058]"></p>
+
+        <label for="storeSelect" class="mt-6 block text-[13px] font-bold tracking-[.12em] text-[#636981]">NUMBER OF STORES</label>
+        <div class="relative mt-2">
+          <select id="storeSelect" class="h-[58px] w-full appearance-none rounded-[17px] border border-black/[.08] bg-[#f3f5fa] px-5 pr-12 text-base font-semibold text-[#11182e] outline-none focus:border-[#5a40e6]/40 focus:ring-4 focus:ring-[#5a40e6]/10"></select>
+          <svg class="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#747887]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+
+        <ul id="features" class="mt-6 space-y-4"></ul>
+
+        <button id="buyBtn" type="button" class="mt-8 flex h-[62px] w-full items-center justify-center gap-2 rounded-[18px] bg-gradient-to-r from-[#5131dc] to-[#0f9eea] text-lg font-extrabold text-white shadow-lg shadow-[#4e39d6]/25 transition hover:-translate-y-0.5 active:translate-y-0">
+          Buy Now <span class="text-2xl font-normal">→</span>
+        </button>
+        <p class="mt-3 text-center text-xs text-[#8a97b0]">Secure payment via Razorpay</p>
+      </div>
+    </section>
+
+    <!-- VERSATILE -->
+    <section class="mt-14 text-center">
+      <span class="inline-block rounded-full border border-black/[.08] bg-white px-5 py-2 text-[11px] font-bold tracking-[.16em] text-[#636981]">VERSATILE SOLUTION</span>
+      <h2 class="mt-6 text-[34px] font-extrabold leading-[1.05] tracking-[-0.055em] text-alive-navy">Built for every kind of business</h2>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <span class="rounded-full border border-black/[.06] bg-white px-6 py-3 text-base font-semibold shadow-sm">Cafe</span>
+        <span class="rounded-full border border-black/[.06] bg-white px-6 py-3 text-base font-semibold shadow-sm">Restaurant</span>
+        <span class="rounded-full border border-black/[.06] bg-white px-6 py-3 text-base font-semibold shadow-sm">Clothing</span>
+        <span class="rounded-full border border-black/[.06] bg-white px-6 py-3 text-base font-semibold shadow-sm">Hotel</span>
+        <span class="rounded-full border border-black/[.06] bg-white px-6 py-3 text-base font-semibold shadow-sm">Salon</span>
+        <span class="rounded-full border border-black/[.06] bg-white px-6 py-3 text-base font-semibold shadow-sm">Bakery</span>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-14">
+      <h2 class="text-center text-[34px] font-extrabold leading-[1.05] tracking-[-0.055em] text-alive-navy">Frequently Asked Questions</h2>
+      <div id="faq" class="mt-6 space-y-3"></div>
+    </section>
+  </div>
+
+  <!-- ===================================== -->
+  <!-- CHECKOUT (Razorpay-style) -->
+  <!-- ===================================== -->
+  <div id="checkout" class="fixed inset-0 z-50 hidden bg-[#f6f8ff]" role="dialog" aria-modal="true" aria-label="Checkout">
+    <div class="relative mx-auto flex h-full w-full max-w-[480px] flex-col bg-white shadow-2xl">
+
+      <!-- Checkout header -->
+      <div class="shrink-0 bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-4 pb-4 pt-4 text-white">
+        <div class="flex items-center gap-3">
+          <button id="coBack" type="button" aria-label="Back" class="flex h-9 w-9 items-center justify-center rounded-full hover:bg-white/10">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+          </button>
+          <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-lg font-extrabold text-alive-purple">A</span>
+          <span class="flex-1 text-xl font-bold tracking-[-0.02em]">AliveFrame Business</span>
+          <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15"><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6z"/></svg></span>
+        </div>
+
+        <div class="mt-4 rounded-xl bg-white/95 px-4 py-4 text-alive-navy">
+          <div class="text-base text-[#636981]">Price Summary</div>
+          <div id="coTop" class="mt-3 text-[26px] font-extrabold tracking-[-0.03em]"></div>
+        </div>
+
+        <button id="coPhone" type="button" class="mt-3 flex w-full items-center gap-3 rounded-lg bg-white/95 px-4 py-3 text-left text-[15px] text-alive-navy">
+          <svg class="h-5 w-5 text-alive-purple" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+          <span class="flex-1">Using as <span id="coPhoneNum"></span></span>
+          <svg class="h-4 w-4 text-alive-purple" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+
+      <!-- Scrollable body -->
+      <div id="coBody" class="-mt-3 min-h-0 flex-1 overflow-y-auto rounded-t-[22px] bg-white px-4 pb-6 pt-6">
+        <h3 class="text-[26px] font-extrabold tracking-[-0.04em] text-alive-navy">Payment Options</h3>
+
+        <p class="mt-6 text-base text-[#636981]">Recommended</p>
+        <div id="coRecommended" class="mt-3 divide-y divide-black/[.07] overflow-hidden rounded-xl border border-black/[.1]"></div>
+
+        <p class="mt-8 text-base text-[#636981]">All Payment Options</p>
+        <div id="coAll" class="mt-3 space-y-3"></div>
+
+        <p class="mt-6 text-center text-xs leading-5 text-[#8a97b0]">By proceeding, I agree to Razorpay's <b class="text-[#4b5068]">Privacy Notice</b> • Edit Preferences</p>
+      </div>
+
+      <!-- Details panel -->
+      <div id="coDetails" class="hidden shrink-0 border-t border-black/[.08] bg-[#f8f9fc] px-5 py-4 text-sm">
+        <div class="flex justify-between"><span class="text-[#636981]">Starter Plan</span><span id="dPlan" class="font-semibold"></span></div>
+        <div class="mt-2 flex justify-between"><span class="text-[#636981]">Billing</span><span class="font-semibold">1 year</span></div>
+        <div class="mt-2 flex justify-between"><span class="text-[#636981]">Discount</span><span id="dDisc" class="font-semibold text-[#16a058]"></span></div>
+        <div class="mt-2 flex justify-between border-t border-black/[.08] pt-2"><span class="font-bold">Total (incl. taxes)</span><span id="dTotal" class="font-extrabold"></span></div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="flex shrink-0 items-center gap-4 border-t border-black/[.08] bg-white px-5 py-4">
+        <button id="coDetailsBtn" type="button" aria-expanded="false" class="text-left">
+          <span id="coBottom" class="block text-[22px] font-extrabold leading-none"></span>
+          <span class="mt-1.5 flex items-center gap-1 text-[13px] text-[#636981]">View Details <svg id="dChev" class="h-3.5 w-3.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></span>
+        </button>
+        <button id="coContinue" type="button" class="h-14 flex-1 rounded-xl bg-alive-navy text-lg font-bold text-white transition hover:bg-alive-navy2 disabled:opacity-60">Continue</button>
+      </div>
+
+      <!-- Success -->
+      <div id="coSuccess" class="absolute inset-0 hidden flex-col items-center justify-center bg-white px-8 text-center">
+        <span class="flex h-24 w-24 items-center justify-center rounded-full bg-[#e3f9ec] text-[#16a058]"><svg class="h-12 w-12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span>
+        <h3 class="mt-6 text-[28px] font-extrabold tracking-[-0.045em] text-alive-navy">Payment successful</h3>
+        <p id="sOk" class="mt-2 text-base text-[#636981]"></p>
+        <p id="sId" class="mt-4 rounded-full bg-[#f3f5fa] px-4 py-2 text-xs font-semibold text-[#636981]"></p>
+        <a onclick="window.location.href ='/loyalty/business-dashboard'" class="mt-8 flex h-14 w-full items-center justify-center rounded-[18px] bg-gradient-to-r from-[#5131dc] to-[#0f9eea] text-base font-extrabold text-white shadow-lg shadow-[#4e39d6]/25">Go to dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-8 left-1/2 z-[70] max-w-[calc(100%-32px)] -translate-x-1/2 translate-y-32 rounded-xl bg-[#111738] px-[18px] py-[13px] text-[13px] font-semibold text-white opacity-0 shadow-2xl transition-all duration-300"></div>
+
+  <script>
+    /* ---------------------------------
+       DATA — replace with your values
+       (store tiers below are placeholders)
+    --------------------------------- */
+    const csrfToken = "{{ csrf_token }}";
+    const data = {
+      phone: "+91 "+"{{business_user}}",
+      storePlans: [
+        { id: "Starter", stores: 1, price: 1, mrp: 1299 },
+        { id: "Pro" ,stores: 2, price: 2, mrp: 2598 },
+        { id:"Advance" ,stores: 3, price: 3, mrp: 3897 },
+        { id: "Enterprise" ,stores: 4, price: 4, mrp: 6495 },
+      ],
+      features: ["Digital stamp card", "Digital scratch card", "QR menu/catalog", "Unlimited Customers", "Basic Analytics", "Email Support", "24/7 Support", "Get free QR code stand"],
+      faq: [
+        ["What is a digital stamp card?", "A digital stamp card replaces the paper punch card. Customers scan your QR code to collect stamps on their phone, and earn a reward when the card is full."],
+        ["How do customers get stamps?", "They scan the QR code at your counter with their phone camera. You approve the scan, or turn on auto-approve, and the stamp is added instantly."],
+        ["Does it work on iPhone and Android?", "Yes. Customers use their regular phone camera and browser, so no app download is needed on either iPhone or Android."],
+        ["Can I cancel anytime?", "Yes. There are no lock-in contracts, and you can cancel your plan whenever you like."],
+        ["Is there a free trial?", "Yes. Every new business starts with a free trial so you can set up rewards and try the QR code before you pay."],
+      ],
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const inr = (n) => "₹" + n.toLocaleString("en-IN");
+    let plan = data.storePlans[0];
+
+    function showToast(msg) {
+      const t = $("toast");
+      t.textContent = msg;
+      t.classList.remove("translate-y-32", "opacity-0");
+      t.classList.add("translate-y-0", "opacity-100");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        t.classList.remove("translate-y-0", "opacity-100");
+        t.classList.add("translate-y-32", "opacity-0");
+      }, 3000);
+    }
+
+    /* ---------------------------------
+       PRICING PAGE
+    --------------------------------- */
+    $("storeSelect").innerHTML = data.storePlans.map((p, i) =>
+      `<option value="${i}">${p.stores} ${p.stores === 1 ? "Store" : "Stores"} — ${inr(p.price)}/yr</option>`).join("");
+
+    function renderPlan() {
+      $("planPrice").textContent = inr(plan.price);
+      $("planMrp").textContent = inr(plan.mrp);
+      $("planSave").textContent = `You save ${inr(plan.mrp - plan.price)} this year`;
+    }
+    $("storeSelect").addEventListener("change", (e) => { plan = data.storePlans[+e.target.value]; renderPlan(); });
+
+    $("features").innerHTML = data.features.map((f) => `
+      <li class="flex items-center gap-4 text-base text-[#3d4357]">
+        <svg class="h-7 w-7 shrink-0 text-[#12b886]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12.500l3 3 5-6"/></svg>${f}</li>`).join("");
+
+    $("faq").innerHTML = data.faq.map(([q, a], i) => `
+      <div class="overflow-hidden rounded-[22px] border border-black/[.04] bg-white shadow-sm">
+        <button type="button" data-faq="${i}" aria-expanded="false" class="flex w-full items-center justify-between gap-3 px-5 py-5 text-left text-base font-semibold text-alive-navy">
+          ${q}<svg class="h-5 w-5 shrink-0 text-[#8a97b0] transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+        <p class="hidden px-5 pb-5 text-[15px] leading-7 text-[#636981]">${a}</p>
+      </div>`).join("");
+    $("faq").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-faq]");
+      if (!b) return;
+      const open = b.nextElementSibling.classList.toggle("hidden") === false;
+      b.setAttribute("aria-expanded", open);
+      b.querySelector("svg").classList.toggle("rotate-180", open);
+    });
+
+    /* ---------------------------------
+       CHECKOUT
+       NOTE: this is a visual replica. For real payments, create an order on
+       your server and open Razorpay Checkout (see comment in "Continue").
+    --------------------------------- */
+    const badge = {
+      gpay:    `<span class="flex h-7 w-7 items-center justify-center rounded-full bg-white text-sm font-extrabold text-[#4285f4] ring-1 ring-black/10">G</span>`,
+      phonepe: `<span class="flex h-7 w-7 items-center justify-center rounded-full bg-[#5f259f] text-[11px] font-bold text-white">पे</span>`,
+      paytm:   `<span class="flex h-7 w-9 items-center justify-center rounded-md bg-white text-[10px] font-extrabold text-[#00baf2] ring-1 ring-black/10">paytm</span>`,
+      cred:    `<span class="flex h-7 w-7 items-center justify-center rounded-md bg-black text-xs font-bold text-white">C</span>`,
+      bhim:    `<span class="flex h-7 w-7 items-center justify-center rounded-md bg-[#f58220] text-xs font-bold text-white">B</span>`,
+      upiid:   `<span class="flex h-7 w-7 items-center justify-center text-lg font-extrabold leading-none text-[#e5333f]">•••</span>`,
+      bank:    `<span class="flex h-7 w-7 items-center justify-center rounded-md bg-alive-purple/10 text-alive-purple"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10l9-6 9 6M5 10v8M9 10v8M15 10v8M19 10v8M3 21h18"/></svg></span>`,
+      wallet:  `<span class="flex h-7 w-7 items-center justify-center rounded-md bg-alive-blue/10 text-alive-blue"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/></svg></span>`,
+    };
+    const upiApps = [["gpay", "Google Pay"], ["phonepe", "PhonePe"], ["paytm", "PayTM"], ["cred", "CRED UPI"], ["bhim", "BHIM"], ["upiid", "Apps & UPI ID"]];
+    const banks = ["SBI", "HDFC Bank", "ICICI Bank", "Axis Bank", "Kotak Bank", "Other banks"];
+    const wallets = ["Paytm Wallet", "PhonePe Wallet", "Amazon Pay", "MobiKwik"];
+
+    let selected = null, openSec = "upi";
+
+    const sel = (key) => (selected === key ? "border-alive-purple bg-alive-purple/[.06] ring-2 ring-alive-purple/20" : "border-black/[.1] bg-white");
+
+    function renderCheckout() {
+      const total = inr(plan.price);
+      $("coTop").textContent = $("coBottom").textContent = $("dTotal").textContent = total;
+      $("dPlan").textContent = `${plan.stores} ${plan.stores === 1 ? "store" : "stores"}`;
+      $("dDisc").textContent = "− " + inr(plan.mrp - plan.price);
+      $("coPhoneNum").textContent = data.phone;
+
+      $("coRecommended").innerHTML = ["gpay", "phonepe", "cred"].map((k) => {
+        const name = upiApps.find((a) => a[0] === k)[1];
+        return `<button type="button" data-pick="rec:${k}" class="flex w-full items-center gap-4 px-4 py-4 text-left text-[17px] ${selected === "rec:" + k ? "bg-alive-purple/[.06]" : "bg-white"}">
+          ${badge[k]}<span class="flex-1">UPI - ${name}</span>
+          <svg class="h-4 w-4 text-[#4b5068]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>`;
+      }).join("");
+
+      const chev = (open) => `<svg class="h-5 w-5 transition-transform ${open ? "" : "rotate-180"}" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>`;
+      const section = (id, title, icon, inner) => `
+        <div class="overflow-hidden rounded-xl border border-black/[.1]">
+          <button type="button" data-sec="${id}" aria-expanded="${openSec === id}" class="flex w-full items-center gap-3 px-4 py-4 text-left text-[17px]">${icon}<span class="flex-1">${title}</span>${chev(openSec === id)}</button>
+          ${openSec === id ? `<div class="bg-alive-purple/[.04] p-3">${inner}</div>` : ""}
+        </div>`;
+
+      const upiGrid = `<div class="grid grid-cols-2 gap-2.5">${upiApps.map(([k, n]) =>
+        `<button type="button" data-pick="upi:${k}" class="flex items-center gap-3 rounded-lg border px-3 py-3.5 text-left text-[16px] ${sel("upi:" + k)}">${badge[k]}${n}</button>`).join("")}</div>
+        ${selected === "upi:upiid" ? `<div class="mt-3"><input id="upiId" type="text" inputmode="email" autocomplete="off" placeholder="yourname@bank" class="h-12 w-full rounded-lg border border-black/[.12] bg-white px-4 text-base outline-none focus:border-[#5a40e6]/40 focus:ring-4 focus:ring-[#5a40e6]/10" /><p id="upiErr" class="mt-1.5 hidden text-xs font-semibold text-[#d92d3a]"></p></div>` : ""}`;
+
+      const cardForm = `<div class="space-y-2.5" data-card>
+        <input id="cNum" inputmode="numeric" autocomplete="cc-number" placeholder="Card number" maxlength="19" class="h-12 w-full rounded-lg border border-black/[.12] bg-white px-4 text-base outline-none focus:ring-4 focus:ring-[#5a40e6]/10" />
+        <div class="grid grid-cols-2 gap-2.5">
+          <input id="cExp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" class="h-12 rounded-lg border border-black/[.12] bg-white px-4 text-base outline-none focus:ring-4 focus:ring-[#5a40e6]/10" />
+          <input id="cCvv" inputmode="numeric" autocomplete="cc-csc" placeholder="CVV" maxlength="4" type="password" class="h-12 rounded-lg border border-black/[.12] bg-white px-4 text-base outline-none focus:ring-4 focus:ring-[#5a40e6]/10" />
+        </div>
+        <input id="cName" autocomplete="cc-name" placeholder="Name on card" class="h-12 w-full rounded-lg border border-black/[.12] bg-white px-4 text-base outline-none focus:ring-4 focus:ring-[#5a40e6]/10" />
+        <p id="cErr" class="hidden text-xs font-semibold text-[#d92d3a]"></p></div>`;
+
+      const bankGrid = `<div class="grid grid-cols-2 gap-2.5">${banks.map((b) =>
+        `<button type="button" data-pick="nb:${b}" class="flex items-center gap-3 rounded-lg border px-3 py-3.5 text-left text-[15px] ${sel("nb:" + b)}">${badge.bank}${b}</button>`).join("")}</div>`;
+      const walletGrid = `<div class="grid grid-cols-2 gap-2.5">${wallets.map((w) =>
+        `<button type="button" data-pick="wl:${w}" class="flex items-center gap-3 rounded-lg border px-3 py-3.5 text-left text-[15px] ${sel("wl:" + w)}">${badge.wallet}${w}</button>`).join("")}</div>`;
+
+      $("coAll").innerHTML =
+        section("upi", `UPI <span class="ml-1 inline-flex -space-x-1.5 align-middle">${["gpay", "phonepe", "cred", "paytm"].map((k) => `<span class="scale-[.7]">${badge[k]}</span>`).join("")}</span>`,
+          `<svg class="h-6 w-6 text-[#e5333f]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M4 4l8 8-8 8M12 4l8 8-8 8"/></svg>`, upiGrid) +
+        section("card", "Cards", badge.wallet, cardForm) +
+        section("nb", "Netbanking", badge.bank, bankGrid) +
+        section("wl", "Wallets", badge.wallet, walletGrid);
+    }
+
+    function openCheckout() {
+      selected = null; openSec = "upi";
+      $("coSuccess").classList.add("hidden"); $("coSuccess").classList.remove("flex");
+      $("coDetails").classList.add("hidden");
+      renderCheckout();
+      $("checkout").classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+      $("coBody").scrollTop = 0;
+    }
+    function closeCheckout() {
+      $("checkout").classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    $("buyBtn").addEventListener("click", openCheckout);
+    $("coBack").addEventListener("click", closeCheckout);
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("checkout").classList.contains("hidden")) closeCheckout(); });
+    $("coPhone").addEventListener("click", () => showToast("Demo: change payment number."));
+    $("coDetailsBtn").addEventListener("click", () => {
+      const open = $("coDetails").classList.toggle("hidden") === false;
+      $("coDetailsBtn").setAttribute("aria-expanded", open);
+      $("dChev").classList.toggle("rotate-180", !open);
+    });
+
+    $("coBody").addEventListener("click", (e) => {
+      const pick = e.target.closest("[data-pick]");
+      const sec = e.target.closest("[data-sec]");
+      if (pick) { selected = pick.dataset.pick; keepFields(); }
+      else if (sec) { openSec = openSec === sec.dataset.sec ? null : sec.dataset.sec; if (openSec !== "card") {} keepFields(); }
+    });
+
+    // re-render while preserving typed card / UPI values
+    function keepFields() {
+      const v = {};
+      ["upiId", "cNum", "cExp", "cCvv", "cName"].forEach((id) => { if ($(id)) v[id] = $(id).value; });
+      renderCheckout();
+      Object.entries(v).forEach(([id, val]) => { if ($(id)) $(id).value = val; });
+      if (selected === "upi:upiid" && $("upiId")) $("upiId").focus();
+    }
+
+    $("coBody").addEventListener("input", (e) => {
+      if (e.target.id === "cNum") e.target.value = e.target.value.replace(/\D/g, "").slice(0, 16).replace(/(.{4})/g, "$1 ").trim();
+      if (e.target.id === "cExp") {
+        let d = e.target.value.replace(/\D/g, "").slice(0, 4);
+        e.target.value = d.length > 2 ? d.slice(0, 2) + "/" + d.slice(2) : d;
+      }
+      if (e.target.id === "cCvv") e.target.value = e.target.value.replace(/\D/g, "").slice(0, 4);
+      if (e.target.closest("[data-card]")) selected = "card";
+    });
+
+    const luhn = (n) => { let s = 0, alt = false; for (let i = n.length - 1; i >= 0; i--) { let d = +n[i]; if (alt) { d *= 2; if (d > 9) d -= 9; } s += d; alt = !alt; } return s % 10 === 0; };
+
+    function validate() {
+      if (!selected) { showToast("Select a payment option."); return false; }
+      if (selected === "upi:upiid") {
+        const v = $("upiId").value.trim(), err = $("upiErr");
+        const ok = /^[\w.\-]{2,}@[a-zA-Z]{2,}$/.test(v);
+        err.textContent = ok ? "" : "Enter a valid UPI ID, like name@bank."; err.classList.toggle("hidden", ok);
+        return ok;
+      }
+      if (selected === "card") {
+        const n = $("cNum").value.replace(/\s/g, ""), [mm, yy] = $("cExp").value.split("/");
+        const expOk = mm && yy && +mm >= 1 && +mm <= 12 && new Date(2000 + +yy, +mm, 0, 23, 59) >= new Date();
+        let msg = "";
+        if (n.length < 13 || !luhn(n)) msg = "Enter a valid card number.";
+        else if (!expOk) msg = "Enter a valid expiry date.";
+        else if ($("cCvv").value.length < 3) msg = "Enter the CVV.";
+        else if (!$("cName").value.trim()) msg = "Enter the name on the card.";
+        $("cErr").textContent = msg; $("cErr").classList.toggle("hidden", !msg);
+        return !msg;
+      }
+      return true;
+    }
+    $("coContinue").addEventListener("click", async () => {
+
+    if (!validate()) return;
+
+    const btn = $("coContinue");
+    btn.disabled = true;
+    btn.textContent = "Processing...";
+
+    try {
+      console.log("Plan object:", plan);
+console.log("Plan id:", plan.id);
+
+        // STEP 1 : Create Razorpay Order
+        const response = await fetch("/loyalty/payments/create-order/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken
+            },
+            body: JSON.stringify({
+                plan: plan.id,
+                
+            })
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message);
+        }
+
+        // STEP 2 : Razorpay Checkout
+        const options = {
+
+            key: result.key,
+
+            amount: result.amount,
+
+            currency: result.currency,
+
+            order_id: result.order_id,
+
+            name: "AliveFrame",
+
+            description: plan.name + " Subscription",
+
+            image: "/static/images/logo.png",
+
+            prefill: {
+                name: result.name,
+                email: result.email,
+                contact: result.phone
+            },
+
+            theme: {
+                color: "#2563eb"
+            },
+
+            modal: {
+
+                ondismiss: function () {
+
+                    btn.disabled = false;
+                    btn.textContent = "Continue";
+
+                }
+
+            },
+
+            handler: async function (payment) {
+
+                try {
+
+                    // STEP 3 : Verify Signature
+                    const verifyResponse = await fetch("/loyalty/payments/verify-payment/", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": csrfToken
+                        },
+
+                        body: JSON.stringify({
+
+                            razorpay_order_id: payment.razorpay_order_id,
+
+                            razorpay_payment_id: payment.razorpay_payment_id,
+
+                            razorpay_signature: payment.razorpay_signature
+
+                        })
+
+                    });
+
+                    const verify = await verifyResponse.json();
+
+                    if (!verify.success) {
+
+                        alert(verify.message);
+
+                        btn.disabled = false;
+                        btn.textContent = "Continue";
+
+                        return;
+                    }
+
+                    // SUCCESS
+
+                    btn.disabled = false;
+                    btn.textContent = "Continue";
+
+                    $("sOk").textContent =
+                        `${plan.name} • ${plan.stores} ${plan.stores === 1 ? "store" : "stores"} • ${inr(plan.price)}`;
+
+                    $("sId").textContent =
+                        "Payment ID: " + payment.razorpay_payment_id;
+
+                    $("coSuccess").classList.remove("hidden");
+                    $("coSuccess").classList.add("flex");
+
+                }
+                catch (err) {
+
+                    console.error(err);
+
+                    alert("Payment verification failed.");
+
+                    btn.disabled = false;
+                    btn.textContent = "Continue";
+
+                }
+
+            }
+
+        };
+
+        const rzp = new Razorpay(options);
+
+        rzp.on("payment.failed", function (response) {
+
+            console.log(response.error);
+
+            alert(
+                response.error.description ||
+                "Payment Failed"
+            );
+
+            btn.disabled = false;
+            btn.textContent = "Continue";
+
+        });
+
+        rzp.open();
+
+    }
+    catch (err) {
+
+        console.error(err);
+
+        alert(err.message || "Unable to initiate payment.");
+
+        btn.disabled = false;
+        btn.textContent = "Continue";
+
+    }
+
+});
+
+    // $("coContinue").addEventListener("click", () => {
+    //   if (!validate()) return;
+    //   const btn = $("coContinue");
+    //   btn.disabled = true; btn.textContent = "Processing…";
+
+    //   /* DEMO ONLY — replace this timeout with Razorpay Checkout:
+    //      1. Your server creates an order:  POST /orders  { amount: plan.price * 100, currency: "INR" }
+    //      2. new Razorpay({ key, order_id, amount, handler: (res) => verify on server }).open();
+    //      3. Activate the subscription only after your server verifies the payment signature. */
+    //   setTimeout(() => {
+    //     btn.disabled = false; btn.textContent = "Continue";
+    //     $("sOk").textContent = `Starter Plan • ${plan.stores} ${plan.stores === 1 ? "store" : "stores"} • ${inr(plan.price)}`;
+    //     $("sId").textContent = "Payment ID: demo_" + Math.random().toString(36).slice(2, 10);
+    //     $("coSuccess").classList.remove("hidden"); $("coSuccess").classList.add("flex");
+    //   }, 1800);
+    // });
+
+    // renderPlan();
+  </script>
+</body>
+</html>

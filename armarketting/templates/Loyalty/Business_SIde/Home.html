@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070b3d" />
+  <title>AliveFrame — Business Dashboard</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- QR CODE LIBRARY (added) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ["Inter", "sans-serif"] },
+          colors: {
+            alive: {
+              navy: "#070b3d", navy2: "#0b1154", blue: "#237dff",
+              cyan: "#19d5e8", purple: "#823cff", pink: "#d936ff",
+            },
+          },
+          boxShadow: { alive: "0 30px 90px rgba(7, 13, 65, .15)" },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="min-h-screen overflow-x-hidden bg-[#f6f8ff] font-inter text-[#0b1234]">
+
+  <!-- BACKGROUND GLOW -->
+  <div class="pointer-events-none fixed -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-[#237dff]/20 blur-3xl"></div>
+
+  <div class="relative mx-auto w-full max-w-[480px] pb-28">
+
+    <!-- ============ TRIAL BANNER ============ -->
+    <div id="trialBanner" class="flex items-center gap-3 bg-gradient-to-r from-alive-purple to-alive-blue px-4 py-3 text-white">
+      <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+      <p id="trialBannerText" class="flex-1 text-sm font-semibold leading-snug"></p>
+      <button id="upgradeBtn" type="button" class="rounded-full bg-white px-5 py-2.5 text-center text-sm font-extrabold leading-tight text-alive-purple transition hover:-translate-y-0.5">Upgrade<br />Now</button>
+    </div>
+
+    <!-- ============ HEADER ============ -->
+    <header class="-mt-px rounded-b-[34px] bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-4 pb-6 pt-5 text-white shadow-alive">
+
+      <div class="mb-5 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-2 text-sm font-extrabold tracking-[-0.04em]">
+          <img style="height:1.6rem" src="Asset/logo.png" alt="" />
+          AliveFrame
+        </a>
+        <button id="profileBtn" type="button" aria-label="Profile"
+          class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20" onclick="window.location.href='/loyalty/business-profile'">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </button>
+      </div>
+
+      <!-- Business identity -->
+      <div class="flex items-center gap-3">
+        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-extrabold text-alive-purple"> {{ business_user_profile.business_name|first|upper }}</div>
+        <div class="min-w-0">
+          <h1 id="bizName" class="truncate text-xl font-extrabold tracking-[-0.03em]">{{ business_user_profile.business_name }}</h1>
+          <span class="mt-1 inline-block rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan px-3 py-0.5 text-[11px] font-bold">Basic Subscription</span>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="mt-5 grid grid-cols-4 gap-2">
+        <div class="rounded-2xl bg-white/10 px-1 py-3 text-center backdrop-blur">
+          <svg class="mx-auto h-4 w-4 text-alive-cyan" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>
+          <div id="statScans" class="mt-1 text-xl font-extrabold">0</div>
+          <div class="text-[10px] font-medium tracking-wide text-white/70">Scans</div>
+        </div>
+        <div class="rounded-2xl bg-white/10 px-1 py-3 text-center backdrop-blur">
+          <svg class="mx-auto h-4 w-4 text-alive-cyan" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5M17 4.5a3.5 3.5 0 010 7M22 20c0-2.5-1.5-4-4-5"/></svg>
+          <div id="statUsers" class="mt-1 text-xl font-extrabold">0</div>
+          <div class="text-[10px] font-medium tracking-wide text-white/70">Users</div>
+        </div>
+        <div class="rounded-2xl bg-white/10 px-1 py-3 text-center backdrop-blur">
+          <svg class="mx-auto h-4 w-4 text-alive-cyan" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13M12 8S10 3 7.500 4.500 8 8 12 8zm0 0s2-5 4.500-3.500S16 8 12 8z"/></svg>
+          <div id="statRewards" class="mt-1 text-xl font-extrabold">0</div>
+          <div class="text-[10px] font-medium tracking-wide text-white/70">Rewards</div>
+        </div>
+        <div class="rounded-2xl bg-white/10 px-1 py-3 text-center backdrop-blur">
+          <svg class="mx-auto h-4 w-4 text-alive-cyan" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3"/></svg>
+          <div id="statRepeat" class="mt-1 text-xl font-extrabold">0%</div>
+          <div class="text-[10px] font-medium tracking-wide text-white/70">Repeat</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="space-y-5 px-4 pt-5">
+
+      <!-- ============ FLASH SALE ============ -->
+      <section class="rounded-[28px] bg-gradient-to-br from-alive-navy to-[#1b1163] p-5 text-white shadow-alive">
+        <span class="inline-flex items-center gap-2 rounded-full border border-alive-pink/40 bg-alive-pink/10 px-3 py-1.5 text-[11px] font-extrabold tracking-[.14em] text-alive-pink">
+          <span class="h-2 w-2 rounded-full bg-alive-pink"></span> FLASH SALE
+        </span>
+
+        <div class="mt-4 grid grid-cols-[1fr_130px] items-start gap-3">
+          <div>
+            <h2 class="text-[21px] font-extrabold leading-tight tracking-[-0.04em]">
+              Buy now &amp; get a FREE QR stand delivered to your address!
+            </h2>
+            <button id="videoBtn" type="button"
+              class="mt-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2.5 text-xs font-semibold transition hover:bg-white/20">
+              <span class="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[8px] text-alive-navy">▶</span>
+              Watch how to use video
+            </button>
+          </div>
+
+          <!-- QR stand visual -->
+          <div class="-rotate-3 rounded-2xl border border-white/10 bg-white/5 p-2">
+            <div class="rounded-xl bg-gradient-to-b from-alive-purple to-alive-blue p-2.5 text-center">
+              <div class="text-[8px] font-bold leading-tight">Collect Stamps &amp;<br />Earn Free Rewards</div>
+              <div class="qr-mini mx-auto mt-2 h-[72px] w-[72px] rounded-md bg-white p-1"></div>
+              <div class="mx-auto mt-2 h-2.5 w-14 rounded-full bg-white/80"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-5 flex items-end justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-4">
+          <div>
+            <div class="text-[10px] font-bold tracking-[.14em] text-white/50">ORIGINAL PRICE</div>
+            <div class="mt-1 text-xl font-bold text-white/40 line-through">₹1499</div>
+          </div>
+          <div class="text-right">
+            <div class="text-[10px] font-bold tracking-[.14em] text-alive-cyan">DEAL PRICE</div>
+            <div class="text-[34px] font-extrabold leading-none tracking-[-0.04em]">₹999<span class="ml-1 text-xs font-semibold text-white/60">/ year</span></div>
+          </div>
+        </div>
+
+        <button onclick="window.location.href='/loyalty/payment'" id="buyBtn" type="button"
+          class="mt-4 flex h-[58px] w-full items-center justify-center gap-2 rounded-[17px] bg-gradient-to-r from-[#5131dc] to-[#0f9eea] text-base font-extrabold text-white shadow-lg shadow-[#4e39d6]/30 transition hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          Buy now @Rs.999
+        </button>
+
+        <p class="mt-3 text-center text-xs font-semibold text-alive-cyan">Includes FREE Physical QR Stand + Pro Support</p>
+      </section>
+
+      <!-- ============ FREE TRIAL BANNER ============ -->
+      <section class="flex items-center gap-3 rounded-[22px] border border-alive-purple/20 bg-white/90 p-3 shadow-alive">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-alive-purple/15 to-alive-cyan/20 text-alive-purple">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="text-sm font-extrabold tracking-[-0.02em] text-alive-navy">🎉 Free Trial Active</div>
+          <div class="text-xs text-[#636981]"><span id="trialDays">3</span> days remaining</div>
+        </div>
+        <button id="subBtn" type="button"
+          class="rounded-xl bg-gradient-to-r from-[#5131dc] to-[#0f9eea] px-3 py-2.5 text-[11px] font-extrabold text-white shadow-md shadow-[#4e39d6]/20 transition hover:-translate-y-0.5">
+          START SUBSCRIPTION
+        </button>
+      </section>
+
+      <!-- ============ PENDING APPROVALS ============ -->
+      <section id="approvals" class="hidden rounded-[26px] border border-black/[.07] bg-white/[.92] p-5 shadow-alive" aria-live="polite">
+        <div class="flex items-center gap-3.5">
+          <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#fff1e3] text-[#f26a0f]">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          </div>
+          <div class="min-w-0 flex-1">
+            <h3 class="text-xl font-extrabold tracking-[-0.04em] text-alive-navy">Pending Approvals</h3>
+            <p id="approvalsSub" class="text-sm text-[#636981]"></p>
+          </div>
+          <span id="approvalsCount" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#ff6a00] text-base font-extrabold text-white shadow-md shadow-[#ff6a00]/30"></span>
+        </div>
+        <div id="approvalsList" class="mt-4 space-y-3"></div>
+      </section>
+
+      <!-- ============ QR CODE ============ -->
+      <section class="rounded-[26px] border border-black/[.07] bg-white/[.92] p-5 shadow-alive">
+        <h3 class="text-base font-extrabold tracking-[-0.03em]">Your QR Code</h3>
+
+        <div class="mx-auto mt-4 w-fit rounded-2xl border border-black/[.06] bg-white p-3">
+          <div id="qrMain" class="h-[170px] w-[170px]"></div>
+        </div>
+
+        <div class="mt-3 text-center">
+          <div id="qrName" class="text-xl font-extrabold tracking-[-0.03em]">{{ business_user_profile.business_name}}</div>
+          <div class="mt-1 text-xs text-[#73778a]">Scan to collect rewards</div>
+        </div>
+
+        <div class="mt-5 grid grid-cols-2 gap-3">
+          <button id="copyBtn" type="button"
+            class="flex h-[52px] items-center justify-center gap-2 rounded-[15px] border border-black/10 bg-white text-sm font-semibold text-[#23283c] transition hover:bg-[#f3f4fa]">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+            Copy Link
+          </button>
+          <button id="downloadBtn" type="button"
+            class="flex h-[52px] items-center justify-center gap-2 rounded-[15px] bg-gradient-to-r from-[#5131dc] to-[#0f9eea] text-sm font-extrabold text-white shadow-lg shadow-[#4e39d6]/20 transition hover:-translate-y-0.5">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+            Download
+          </button>
+        </div>
+      </section>
+
+      <!-- ============ REWARD PROGRAMS ============ -->
+      <section class="rounded-[26px] border border-black/[.07] bg-white/[.92] p-5 shadow-alive">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-extrabold tracking-[-0.03em]">Reward Programs</h3>
+          <button id="editBtn" type="button" class="text-sm font-semibold text-[#5238c7]">+ Edit</button>
+        </div>
+
+        <div class="mt-4 flex items-center gap-3 rounded-2xl bg-gradient-to-r from-alive-purple/10 to-alive-cyan/10 p-3.5">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-alive-purple shadow-sm">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13"/></svg>
+          </div>
+          <div class="min-w-0">
+            <div class="truncate text-sm font-bold">Get 5% discount on your total bill a…</div>
+            <div class="mt-1 flex gap-4 text-xs font-medium text-alive-purple">
+              <span>☆ 8 stamps</span><span>▦ 30 days</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ TODAY'S ACTIVITY ============ -->
+      <section class="rounded-[26px] border border-black/[.07] bg-white/[.92] p-5 shadow-alive">
+        <h3 class="text-base font-extrabold tracking-[-0.03em]">Today's Activity</h3>
+        <div class="mt-4 grid grid-cols-2 gap-3">
+          <div class="rounded-2xl border border-[#22b968]/20 bg-[#ecfdf3] py-5 text-center">
+            <svg class="mx-auto h-6 w-6 text-[#22b968]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+            <div id="scansToday" class="mt-1 text-3xl font-extrabold text-[#16a058]">0</div>
+            <div class="text-xs font-medium text-[#22b968]">Scans Today</div>
+          </div>
+          <div class="rounded-2xl border border-alive-purple/20 bg-[#f5f0ff] py-5 text-center">
+            <svg class="mx-auto h-6 w-6 text-alive-purple" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3l2.700 5.600 6.100.9-4.400 4.300 1 6.100L12 17l-5.400 2.900 1-6.100L3.200 9.500l6.100-.9L12 3z"/></svg>
+            <div id="completedToday" class="mt-1 text-3xl font-extrabold text-alive-purple">0</div>
+            <div class="text-xs font-medium text-alive-purple">Completed</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ WEEKLY SCANS ============ -->
+      <section class="rounded-[26px] border border-black/[.07] bg-white/[.92] p-5 shadow-alive">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-xl font-extrabold tracking-[-0.04em]">Weekly Scans</h3>
+            <p class="mt-1 text-xs text-[#73778a]">Last 7 days activity</p>
+          </div>
+          <div class="text-right">
+            <div id="weeklyTotal" class="text-2xl font-extrabold text-alive-purple">0</div>
+            <div id="weeklyAvg" class="text-xs text-[#73778a]">~0.0/day</div>
+          </div>
+        </div>
+        <div id="scansChart" class="mt-4"></div>
+      </section>
+
+      <!-- ============ CUSTOMER GROWTH ============ -->
+      <section class="rounded-[26px] border border-black/[.07] bg-white/[.92] p-5 shadow-alive">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-xl font-extrabold tracking-[-0.04em]">Customer Growth</h3>
+            <p class="mt-1 text-xs text-[#73778a]">Total customers over time</p>
+          </div>
+          <div class="text-right">
+            <div id="customersTotal" class="text-2xl font-extrabold text-alive-blue">{{ business_customers }}</div>
+            <div class="text-xs text-[#73778a]">total customers</div>
+          </div>
+        </div>
+        <div id="growthChart" class="mt-4"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ============ BOTTOM NAV ============ -->
+  <nav class="fixed inset-x-0 bottom-0 z-40 border-t border-black/[.07] bg-white/95 backdrop-blur">
+    <div class="mx-auto grid max-w-[480px] grid-cols-4">
+      <button data-tab="home" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-bold text-alive-purple" onclick="window.location.href ='/loyalty/business-dashboard'">
+        <span class="absolute left-3 top-0 h-[3px] w-12 rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan nav-bar"></span>
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full bg-alive-purple/10">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.500"/><rect x="14" y="3" width="7" height="7" rx="1.500"/><rect x="3" y="14" width="7" height="7" rx="1.500"/><rect x="14" y="14" width="7" height="7" rx="1.500"/></svg>
+        </span>Home
+      </button>
+      <button data-tab="customers" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]" onclick="window.location.href ='/loyalty/customers-list'">
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.500 3-5.500 7-5.500s7 2 7 5.500M17 4.500a3.500 3.500 0 010 7M22 20c0-2.500-1.500-4-4-5"/></svg>
+        </span>Customers
+      </button>
+      <button data-tab="winners" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]" onclick="window.location.href ='/loyalty/winners-list'">
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9M12 8v13"/></svg>
+        </span>Winners
+      </button>
+      <button data-tab="offer" type="button" class="nav-btn relative flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold text-[#747887]" onclick="window.location.href ='/loyalty/create-offer'">
+        <span class="nav-pill flex h-8 w-14 items-center justify-center rounded-full">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.700 1.700 0 00.3 1.800l.1.1a2 2 0 11-2.800 2.800l-.1-.1a1.700 1.700 0 00-1.800-.3 1.700 1.700 0 00-1 1.500V21a2 2 0 11-4 0v-.1a1.700 1.700 0 00-1.100-1.500 1.700 1.700 0 00-1.800.3l-.1.1a2 2 0 11-2.800-2.800l.1-.1a1.700 1.700 0 00.3-1.800 1.700 1.700 0 00-1.500-1H3a2 2 0 110-4h.1a1.700 1.700 0 001.500-1.100 1.700 1.700 0 00-.3-1.800l-.1-.1a2 2 0 112.800-2.800l.1.1a1.700 1.700 0 001.800.3H9a1.700 1.700 0 001-1.500V3a2 2 0 114 0v.1a1.700 1.700 0 001 1.500 1.700 1.700 0 001.800-.3l.1-.1a2 2 0 112.800 2.800l-.1.1a1.700 1.700 0 00-.3 1.800V9a1.700 1.700 0 001.500 1H21a2 2 0 110 4h-.1a1.700 1.700 0 00-1.500 1z"/></svg>
+        </span>Create Offer
+      </button>
+    </div>
+  </nav>
+
+  <!-- TOAST -->
+  <div id="toast" class="fixed bottom-24 left-1/2 z-50 max-w-[calc(100%-32px)] -translate-x-1/2 translate-y-32 rounded-xl bg-[#111738] px-[18px] py-[13px] text-[13px] font-semibold text-white opacity-0 shadow-2xl transition-all duration-300"></div>
+
+  <script>
+    /* ---------------------------------
+       DATA — replace with your API data
+    --------------------------------- */
+    const data = {
+      businessName: "{{ business_user_profile.business_name }}",
+      qrLink: "{{customer_url}}",
+      trialDaysLeft: 3,
+      stats: { scans: "{{ total_scans }}", users: "{{ business_customers }}", rewards: "{{ total_redeemed_rewards }}", repeat: 0 },
+      today: { scans: "{{ today_visit_count }}", completed: "{{ today_redeemed_count }}" },
+      // scans waiting for the business to approve (time = ISO string)
+      pendingScans: JSON.parse('{{ pending_scans|escapejs }}'),
+      // [
+      //   { id: "p1", name: "Aryan kumar", phone: "919608528294", time: "2026-10-07T14:43:00+05:30" },
+      // ],
+      // last 8 days, oldest first
+      weeklyScans: JSON.parse('{{ weekly_visits|escapejs }}'),
+      customerGrowth: JSON.parse('{{ weekly_new_customers|escapejs }}'),
+    };
+
+    /* ---------------------------------
+       FILL TEXT
+    --------------------------------- */
+    const $ = (id) => document.getElementById(id);
+    $("bizName").textContent = data.businessName;
+    $("qrName").textContent = data.businessName;
+    $("trialDays").textContent = data.trialDaysLeft;
+    // Trial banner (hidden once the trial has ended or the business has subscribed)
+    const trialLeft = data.trialDaysLeft;
+    $("trialBanner").classList.toggle("hidden", !(trialLeft > 0));
+    $("trialBannerText").innerHTML = `Your trial period expires in <b>${trialLeft}</b> ${trialLeft === 1 ? "day" : "days"}`;
+    $("statScans").textContent = data.stats.scans;
+    $("statUsers").textContent = data.stats.users;
+    $("statRewards").textContent = data.stats.rewards;
+    $("statRepeat").textContent = data.stats.repeat + "%";
+    $("scansToday").textContent = data.today.scans;
+    $("completedToday").textContent = data.today.completed;
+
+    const weekTotal = data.weeklyScans.slice(1).reduce((a, b) => a + b, 0);
+    $("weeklyTotal").textContent = weekTotal;
+    $("weeklyAvg").textContent = "~" + (weekTotal / 7).toFixed(1) + "/day";
+    $("customersTotal").textContent = data.customerGrowth[data.customerGrowth.length - 1];
+
+    /* ---------------------------------
+       REAL QR CODE (generated from data.qrLink)
+    --------------------------------- */
+    function makeQR(el, text) {
+      const qr = qrcode(0, "M");   // auto size, medium error correction
+      qr.addData(text);
+      qr.make();
+
+      const n = qr.getModuleCount();
+      const q = 1; // quiet-zone margin (in modules)
+      let rects = "";
+      for (let r = 0; r < n; r++) {
+        for (let c = 0; c < n; c++) {
+          if (qr.isDark(r, c)) rects += `<rect x="${c + q}" y="${r + q}" width="1" height="1"/>`;
+        }
+      }
+      const size = n + q * 2;
+      el.innerHTML =
+        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" class="h-full w-full" shape-rendering="crispEdges">
+           <rect width="${size}" height="${size}" fill="#fff"/>
+           <g fill="#070b3d">${rects}</g>
+         </svg>`;
+    }
+
+    makeQR($("qrMain"), data.qrLink);
+    makeQR(document.querySelector(".qr-mini"), data.qrLink);
+
+    /* ---------------------------------
+       LINE CHARTS (inline SVG)
+    --------------------------------- */
+    const days = Array.from({ length: 8 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (7 - i));
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    });
+
+    function lineChart(el, values, color) {
+      const W = 340, H = 220, L = 26, R = 10, T = 12, B = 34;
+      const max = Math.max(4, ...values);
+      const step = Math.ceil(max / 4);
+      const top = step * 4;
+      const x = (i) => L + (i * (W - L - R)) / (values.length - 1);
+      const y = (v) => T + (1 - v / top) * (H - T - B);
+
+      let g = "";
+      for (let k = 0; k <= 4; k++) {
+        const v = k * step;
+        g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="#e8eaf3" stroke-dasharray="3 4"/>
+              <text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="#9a9eab">${v}</text>`;
+      }
+      const pts = values.map((v, i) => `${x(i)},${y(v)}`).join(" ");
+      const dots = values.map((v, i) =>
+        `<circle cx="${x(i)}" cy="${y(v)}" r="4.500" fill="#fff" stroke="${color}" stroke-width="2.500"/>
+         <text x="${x(i)}" y="${H - 10}" text-anchor="middle" font-size="9.500" fill="#9a9eab">${days[i]}</text>`
+      ).join("");
+
+      el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="w-full" role="img">${g}
+        <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.500" stroke-linejoin="round" stroke-linecap="round"/>${dots}</svg>`;
+    }
+    lineChart($("scansChart"), data.weeklyScans, "#823cff");
+    lineChart($("growthChart"), data.customerGrowth, "#237dff");
+
+    /* ---------------------------------
+       TOAST
+    --------------------------------- */
+    function showToast(msg) {
+      const t = $("toast");
+      t.textContent = msg;
+      t.classList.remove("translate-y-32", "opacity-0");
+      t.classList.add("translate-y-0", "opacity-100");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        t.classList.remove("translate-y-0", "opacity-100");
+        t.classList.add("translate-y-32", "opacity-0");
+      }, 3000);
+    }
+
+    /* ---------------------------------
+       ACTIONS (DEMO — connect real logic)
+    --------------------------------- */
+    $("copyBtn").addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(data.qrLink); showToast("Link copied."); }
+      catch { showToast("Couldn't copy. Copy it manually: " + data.qrLink); }
+    });
+
+    $("downloadBtn").addEventListener("click", () => {
+      const svg = $("qrMain").innerHTML;
+      const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+      const a = Object.assign(document.createElement("a"), { href: url, download: "qr-code.svg" });
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("QR code downloaded.");
+    });
+
+    // $("buyBtn").addEventListener("click", () => showToast("Demo: opening payment for ₹999."));
+    // $("upgradeBtn").addEventListener("click", () => showToast("Demo: opening upgrade plans."));
+    // $("subBtn").addEventListener("click", () => showToast("Demo: starting subscription."));
+    // $("videoBtn").addEventListener("click", () => showToast("Demo: playing how-to video."));
+    // $("editBtn").addEventListener("click", () => showToast("Demo: edit reward programs."));
+    // $("profileBtn").addEventListener("click", () => showToast("Demo: open profile."));
+
+    /* ---------------------------------
+       PENDING APPROVALS
+    --------------------------------- */
+    const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const rejecting = new Set();
+
+    function fmtScanTime(iso) {
+      const d = new Date(iso), now = new Date();
+      const diff = Math.round((new Date(now.toDateString()) - new Date(d.toDateString())) / 864e5);
+      const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+      if (diff === 0) return time;
+      return (diff === 1 ? "Yesterday" : d.toLocaleDateString("en-GB", { day: "numeric", month: "short" })) + ", " + time;
+    }
+
+    function refreshStats() {
+      $("statScans").textContent = data.stats.scans;
+      $("scansToday").textContent = data.today.scans;
+      const wt = data.weeklyScans.slice(1).reduce((a, b) => a + b, 0);
+      $("weeklyTotal").textContent = wt;
+      $("weeklyAvg").textContent = "~" + (wt / 7).toFixed(1) + "/day";
+      lineChart($("scansChart"), data.weeklyScans, "#823cff");
+    }
+
+    function renderApprovals() {
+      const list = data.pendingScans, n = list.length;
+      $("approvals").classList.toggle("hidden", n === 0);
+      if (!n) return;
+      $("approvalsCount").textContent = n;
+      $("approvalsSub").textContent = `${n} scan${n === 1 ? "" : "s"} waiting`;
+      $("approvalsList").innerHTML = list.map((p) => `
+        <div class="rounded-2xl border border-black/[.06] bg-[#f8f9fc] p-4">
+          <div class="flex items-center gap-3">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2">
+                <svg class="h-4 w-4 shrink-0 text-[#9da2ad]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+                <span class="truncate text-lg font-extrabold tracking-[-0.03em] text-alive-navy">${esc(p.name)}</span>
+              </div>
+              <a href="tel:+${esc(p.phone)}" class="mt-2 flex items-center gap-2 text-[15px] text-[#636981]">
+                <svg class="h-4 w-4 shrink-0 text-[#9da2ad]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.900a16 16 0 006 6l1.300-1.300a2 2 0 012.100-.4c.9.3 1.800.6 2.800.7a2 2 0 011.700 2z"/></svg>${esc(p.phone)}</a>
+              <div class="mt-2 text-sm text-[#636981]">${fmtScanTime(p.time)}</div>
+            </div>
+            ${rejecting.has(p.id) ? "" : `
+            <div class="flex shrink-0 gap-2.5">
+              <button type="button" data-reject="${esc(p.id)}" aria-label="Reject scan from ${esc(p.name)}" class="flex h-[52px] w-[52px] items-center justify-center rounded-2xl border border-[#f5b8bd] bg-white text-[#e5333f] transition hover:bg-[#fde8ea]">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+              <button type="button" data-approve="${esc(p.id)}" aria-label="Approve scan from ${esc(p.name)}" class="flex h-[52px] w-[52px] items-center justify-center rounded-2xl bg-[#12b45c] text-white shadow-md shadow-[#12b45c]/25 transition hover:-translate-y-0.5">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></button>
+            </div>`}
+          </div>
+          ${rejecting.has(p.id) ? `
+          <div class="mt-3 rounded-xl bg-[#fde8ea] p-3">
+            <p class="text-sm font-semibold text-[#c0262d]">Reject this scan from ${esc(p.name)}?</p>
+            <div class="mt-3 grid grid-cols-2 gap-3">
+              <button type="button" data-keep="${esc(p.id)}" class="h-11 rounded-[14px] border border-black/10 bg-white text-sm font-semibold text-[#23283c]">Keep</button>
+              <button type="button" data-reject-yes="${esc(p.id)}" class="h-11 rounded-[14px] bg-[#d92d3a] text-sm font-extrabold text-white">Reject</button>
+            </div>
+          </div>` : ""}
+        </div>`).join("");
+    }
+    const csrfToken = "{{ csrf_token }}";
+
+    $("approvalsList").addEventListener("click", async (e) => {
+
+    const t = e.target.closest("[data-approve],[data-reject],[data-keep],[data-reject-yes]");
+
+    if (!t) return;
+
+    const d = t.dataset;
+    const id = Number(d.approve || d.reject || d.keep || d.rejectYes);
+
+    const scan = data.pendingScans.find(p => p.id == id);
+    if (!scan) return;
+
+    // ---------------- APPROVE ----------------
+    if (d.approve) {
+
+        try {
+
+            const response = await fetch(`/loyalty/approve-visit/${id}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken
+                }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+
+                data.pendingScans = data.pendingScans.filter(p => p.id != id);
+
+                data.stats.scans++;
+                data.today.scans++;
+                data.weeklyScans[data.weeklyScans.length - 1]++;
+
+                refreshStats();
+                renderApprovals();
+
+                showToast(`Scan approved for ${scan.name}.`);
+            }
+            else{
+                alert(result.message);
+            }
+
+        } catch(err){
+            console.log(err);
+            alert("Unable to approve.");
+        }
+
+    }
+
+    // ---------------- SHOW REJECT CONFIRM ----------------
+    else if (d.reject) {
+      console.log("Reject clicked", id);
+
+        rejecting.add(id);
+        renderApprovals();
+
+    }
+
+    // ---------------- CANCEL REJECT ----------------
+    else if (d.keep) {
+
+        rejecting.delete(id);
+        renderApprovals();
+
+    }
+
+    // ---------------- FINAL REJECT ----------------
+    else if (d.rejectYes) {
+
+        try {
+
+            const response = await fetch(`/loyalty/reject-visit/${id}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken
+                }
+            });
+
+            const result = await response.json();
+
+            if(result.success){
+
+                data.pendingScans = data.pendingScans.filter(p => p.id != id);
+
+                rejecting.delete(id);
+
+                renderApprovals();
+
+                showToast(`Scan rejected for ${scan.name}.`);
+            }
+            else{
+                alert(result.message);
+            }
+
+        } catch(err){
+            console.log(err);
+            alert("Unable to reject.");
+        }
+
+    }
+
+      });
+
+    renderApprovals();
+
+    /* ---------------------------------
+       BOTTOM NAV
+    --------------------------------- */
+    const labels = { home: "Home", customers: "Customers", winners: "Winners", offer: "Create Offer" };
+    document.querySelectorAll(".nav-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".nav-btn").forEach((b) => {
+          const on = b === btn;
+          b.classList.toggle("text-alive-purple", on);
+          b.classList.toggle("font-bold", on);
+          b.classList.toggle("text-[#747887]", !on);
+          b.classList.toggle("font-semibold", !on);
+          b.querySelector(".nav-pill").classList.toggle("bg-alive-purple/10", on);
+          const bar = b.querySelector(".nav-bar");
+          if (bar) bar.style.display = on ? "" : "none";
+        });
+        if (btn.dataset.tab !== "home") showToast(`Demo: ${labels[btn.dataset.tab]} page.`);
+      });
+    });
+  </script>
+</body>
+</html>
