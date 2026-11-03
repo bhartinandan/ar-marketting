@@ -58,9 +58,9 @@ client = razorpay.Client(
         settings.RAZOR_KEY_SECRET
     )
 )
-#######################################################################
+#########################################################################
 ########################## Business Side Views ##########################
-#######################################################################
+#########################################################################
 
 def is_business(user):
     return user.groups.filter(name='LOYALTY-BUSINESS').exists()
@@ -87,6 +87,7 @@ def signin_signup(request):
     Handles client sign-in.
     """
     next_url = request.GET.get("next")
+    print(next_url)
     
     if next_url:
         request.session["next_url"] = next_url
@@ -95,6 +96,11 @@ def signin_signup(request):
 
         if "customer-dashboard" in parts:
             index = parts.index("customer-dashboard")
+            if len(parts) > index + 1:
+                request.session["business_hash_id"] = parts[index + 1]
+
+        elif "customer-scanned-success" in parts:
+            index = parts.index("customer-scanned-success")
             if len(parts) > index + 1:
                 request.session["business_hash_id"] = parts[index + 1]
     
@@ -472,7 +478,6 @@ def business_dashboard(request):
                     action="REDEEMED"
                 ).count()
 
-
         for visit in approval_awating_customers:
             pending_scans.append({
                 "id": visit.id,
@@ -527,8 +532,7 @@ def business_dashboard(request):
 
             weekly_new_customers.append(count)
 
-
-        ###########################return the context to the template#########################
+        ########################### return the context to the template #########################
         return render(request, "Loyalty/Business_SIde/Home.html", context={
             "business_user_profile": business_user_profile,
             "business_customers": business_customers,
