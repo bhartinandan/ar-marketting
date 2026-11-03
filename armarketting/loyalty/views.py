@@ -540,7 +540,7 @@ def business_dashboard(request):
             "reward_programs": reward_programs,
             "weekly_visits": json.dumps(weekly_visits),
             "weekly_new_customers": json.dumps(weekly_new_customers),
-            "customer_url":f"https://4d28-2401-9640-1003-8afd-18b4-efed-ec1d-5f15.ngrok-free.app/loyalty/customer-scanned-success/{encode_primary_key(business_user_profile.id)}"
+            "customer_url":f"https://www.aliveframe.com/loyalty/customer-scanned-success/{encode_primary_key(business_user_profile.id)}"
         })
     except Exception as e:
         logger.exception("Error while loading AR games page")
