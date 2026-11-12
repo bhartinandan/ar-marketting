@@ -65,7 +65,7 @@
         <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-extrabold text-alive-purple"> {{ business_user_profile.business_name|first|upper }}</div>
         <div class="min-w-0">
           <h1 id="bizName" class="truncate text-xl font-extrabold tracking-[-0.03em]">{{ business_user_profile.business_name }}</h1>
-          <span class="mt-1 inline-block rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan px-3 py-0.5 text-[11px] font-bold">Basic Subscription</span>
+          <span class="mt-1 inline-block rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan px-3 py-0.5 text-[11px] font-bold">{{premium_status}}</span>
         </div>
       </div>
 
@@ -202,7 +202,7 @@
       </section>
 
       <!-- ============ REWARD PROGRAMS ============ -->
-      <section class="rounded-[26px] border border-black/[.07] bg-white/[.92] p-5 shadow-alive">
+      <!-- <section class="rounded-[26px] border border-black/[.07] bg-white/[.92] p-5 shadow-alive">
         <div class="flex items-center justify-between">
           <h3 class="text-base font-extrabold tracking-[-0.03em]">Reward Programs</h3>
           <button id="editBtn" type="button" class="text-sm font-semibold text-[#5238c7]">+ Edit</button>
@@ -219,7 +219,7 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
 
       <!-- ============ TODAY'S ACTIVITY ============ -->
       <section class="rounded-[26px] border border-black/[.07] bg-white/[.92] p-5 shadow-alive">
@@ -308,7 +308,7 @@
     const data = {
       businessName: "{{ business_user_profile.business_name }}",
       qrLink: "{{customer_url}}",
-      trialDaysLeft: 3,
+      trialDaysLeft: -1,
       stats: { scans: "{{ total_scans }}", users: "{{ business_customers }}", rewards: "{{ total_redeemed_rewards }}", repeat: 0 },
       today: { scans: "{{ today_visit_count }}", completed: "{{ today_redeemed_count }}" },
       // scans waiting for the business to approve (time = ISO string)

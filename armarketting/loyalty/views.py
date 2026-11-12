@@ -252,6 +252,9 @@ def otp_verification(request):
                     username=user_id,
                     password=None
                 )
+                # if business_hash_id == None and role == "customer":
+                #     messages.error(request, "Invalid access. Please scan the QR code again.")
+                #     return redirect("/loyalty/signin/")
 
                 if role == "business":
                     group = Group.objects.get(name="LOYALTY-BUSINESS")
@@ -302,6 +305,12 @@ def otp_verification(request):
     )
 
 
+def validate_avaibality(request):
+    business_user = request.user
+    business_user_profile = BusinessProfile.objects.filter(user=business_user).first()
+    is_available=business_user_profile.active
+
+    return is_available
 
 @login_required(login_url="/loyalty/signin")
 @user_passes_test(is_business, login_url="/loyalty/signin")
@@ -441,119 +450,139 @@ def business_dashboard(request):
     """  
     # userid_hash = encode_primary_key(hashid)
     try:
+        is_available = validate_avaibality(request)
         business_user = request.user
-        # business_user_id = decode_primary_key(hashid)
-        # argame = ArGame.objects.filter(id=userid).first()
-        # staff = BusinessProfile.objects.filter(user=business_user).first()
-        business_user=User.objects.filter(username=9631218850).first()
-        
         business_user_profile = BusinessProfile.objects.filter(user=business_user).first()
-        business_customers = CustomerVisitCount.objects.filter(business=business_user_profile).count()
-        approval_awating_customers = CustomerVisitHistory.objects.filter(customer_visit__business=business_user_profile, approval_status=False,action="EARNED").all()
+        if is_available:
+            
+            business_customers = CustomerVisitCount.objects.filter(business=business_user_profile).count()
+            approval_awating_customers = CustomerVisitHistory.objects.filter(customer_visit__business=business_user_profile, approval_status=False,action="EARNED").all()
 
-        pending_scans = []
-        
-        total_scans = CustomerVisitHistory.objects.filter(customer_visit__business=business_user_profile, approval_status=True).count()
-        total_redeemed_rewards = CustomerVisitHistory.objects.filter(customer_visit__business=business_user_profile, approval_status=True, action="REDEEMED").count()
-        reward_programs = BusinessOffer.objects.filter(business=business_user_profile).all()
+            pending_scans = []
+            
+            total_scans = CustomerVisitHistory.objects.filter(customer_visit__business=business_user_profile, approval_status=True).count()
+            total_redeemed_rewards = CustomerVisitHistory.objects.filter(customer_visit__business=business_user_profile, approval_status=True, action="REDEEMED").count()
+            reward_programs = BusinessOffer.objects.filter(business=business_user_profile).all()
 
-        ############# Timezone aware date filtering for today visits count#############
-        today = timezone.localdate()
-        start = timezone.make_aware(
-            datetime.combine(today, time.min)
-        )
-        end = start + timedelta(days=1)
-        today_visit_count = CustomerVisitHistory.objects.filter(
-            customer_visit__business=business_user_profile,
-            created_at__gte=start,
-            created_at__lt=end,
-            approval_status=True
-        ).count()
+            ############# Timezone aware date filtering for today visits count#############
+            today = timezone.localdate()
+            start = timezone.make_aware(
+                datetime.combine(today, time.min)
+            )
+            end = start + timedelta(days=1)
+            today_visit_count = CustomerVisitHistory.objects.filter(
+                customer_visit__business=business_user_profile,
+                created_at__gte=start,
+                created_at__lt=end,
+                approval_status=True
+            ).count()
 
-        today_redeemed_count = CustomerVisitHistory.objects.filter(
+            today_redeemed_count = CustomerVisitHistory.objects.filter(
+                        customer_visit__business=business_user_profile,
+                        created_at__gte=start,
+                        created_at__lt=end,
+                        approval_status=True,
+                        action="REDEEMED"
+                    ).count()
+
+            for visit in approval_awating_customers:
+                pending_scans.append({
+                    "id": visit.id,
+                    "name": visit.customer_visit.customer.name,
+                    "phone": visit.customer_visit.customer.contact,
+                    "time": visit.created_at.isoformat(),
+                })
+            ##################### get weekly visits count for the last 7 days #####################
+            weekly_visits = []
+
+            today = timezone.localdate()
+
+            for i in range(6, -1, -1):
+
+                day = today - timedelta(days=i)
+
+                start = timezone.make_aware(
+                    datetime.combine(day, time.min)
+                )
+
+                end = start + timedelta(days=1)
+
+                count = CustomerVisitHistory.objects.filter(
                     customer_visit__business=business_user_profile,
+                    approval_status=True,
                     created_at__gte=start,
                     created_at__lt=end,
-                    approval_status=True,
-                    action="REDEEMED"
                 ).count()
 
-        for visit in approval_awating_customers:
-            pending_scans.append({
-                "id": visit.id,
-                "name": visit.customer_visit.customer.name,
-                "phone": visit.customer_visit.customer.contact,
-                "time": visit.created_at.isoformat(),
+                weekly_visits.append(count)
+
+            #####################daily added customers count for the last 7 days#####################
+            weekly_new_customers = []
+
+            today = timezone.localdate()
+
+            for i in range(6, -1, -1):
+
+                day = today - timedelta(days=i)
+
+                start = timezone.make_aware(
+                    datetime.combine(day, time.min)
+                )
+
+                end = start + timedelta(days=1)
+
+                count = CustomerVisitCount.objects.filter(
+                    business=business_user_profile,
+                    created_at__gte=start,
+                    created_at__lt=end,
+                ).count()
+
+                weekly_new_customers.append(count)
+
+            ########################### return the context to the template #########################
+            return render(request, "Loyalty/Business_SIde/Home.html", context={
+                "business_user_profile": business_user_profile,
+                "business_customers": business_customers,
+                "pending_scans": json.dumps(pending_scans),
+                "total_scans": total_scans,
+                "total_redeemed_rewards": total_redeemed_rewards,
+                "today_visit_count": today_visit_count,
+                "today_redeemed_count": today_redeemed_count,
+                "reward_programs": reward_programs,
+                "weekly_visits": json.dumps(weekly_visits),
+                "weekly_new_customers": json.dumps(weekly_new_customers),
+                "customer_url":f"https://www.aliveframe.com/loyalty/customer-scanned-success/{encode_primary_key(business_user_profile.id)}",
+                "premium_status": "Premium" ,
             })
-        ##################### get weekly visits count for the last 7 days #####################
-        weekly_visits = []
+        # "customer_url":f"https://55b2-2401-4900-7031-f46f-508-1856-de34-abb8.ngrok-free.app/loyalty/customer-scanned-success/{encode_primary_key(business_user_profile.id)}",
+         # "customer_url":f"https://www.aliveframe.com/loyalty/customer-scanned-success/{encode_primary_key(business_user_profile.id)}",
+    # f"https://2b94-2401-4900-d154-e28f-c6d-4398-1b79-4a1.ngrok-free.app/loyalty/customer-scanned-success/{encode_primary_key(business_user_profile.id)}"
+        else:
+            pending_scans=[]
+            weekly_visits=[]
+            weekly_new_customers=[] 
+            ########################### return the context to the template #########################
+            return render(request, "Loyalty/Business_SIde/Home.html", context={
+                "business_user_profile": business_user_profile,
+                "business_customers": 0,
+                "pending_scans": json.dumps(pending_scans),
+                "total_scans": 0,
+                "total_redeemed_rewards": 0,
+                "today_visit_count": 0,
+                "today_redeemed_count": 0,
+                "reward_programs": 0,
+                "weekly_visits": json.dumps(weekly_visits),
+                "weekly_new_customers": json.dumps(weekly_new_customers),
+                "customer_url":f"https://www.aliveframe.com/loyalty/customer-scanned-success/{encode_primary_key(business_user_profile.id)}",
+                "premium_status": "Free",
+            })
 
-        today = timezone.localdate()
-
-        for i in range(6, -1, -1):
-
-            day = today - timedelta(days=i)
-
-            start = timezone.make_aware(
-                datetime.combine(day, time.min)
-            )
-
-            end = start + timedelta(days=1)
-
-            count = CustomerVisitHistory.objects.filter(
-                customer_visit__business=business_user_profile,
-                approval_status=True,
-                created_at__gte=start,
-                created_at__lt=end,
-            ).count()
-
-            weekly_visits.append(count)
-
-        #####################daily added customers count for the last 7 days#####################
-        weekly_new_customers = []
-
-        today = timezone.localdate()
-
-        for i in range(6, -1, -1):
-
-            day = today - timedelta(days=i)
-
-            start = timezone.make_aware(
-                datetime.combine(day, time.min)
-            )
-
-            end = start + timedelta(days=1)
-
-            count = CustomerVisitCount.objects.filter(
-                business=business_user_profile,
-                created_at__gte=start,
-                created_at__lt=end,
-            ).count()
-
-            weekly_new_customers.append(count)
-
-        ########################### return the context to the template #########################
-        return render(request, "Loyalty/Business_SIde/Home.html", context={
-            "business_user_profile": business_user_profile,
-            "business_customers": business_customers,
-            "pending_scans": json.dumps(pending_scans),
-            "total_scans": total_scans,
-            "total_redeemed_rewards": total_redeemed_rewards,
-            "today_visit_count": today_visit_count,
-            "today_redeemed_count": today_redeemed_count,
-            "reward_programs": reward_programs,
-            "weekly_visits": json.dumps(weekly_visits),
-            "weekly_new_customers": json.dumps(weekly_new_customers),
-            "customer_url":f"https://www.aliveframe.com/loyalty/customer-scanned-success/{encode_primary_key(business_user_profile.id)}"
-        })
     except Exception as e:
         logger.exception("Error while loading AR games page")
         return render(request, "client_error.html", {
             "error_message": "An unexpected error occurred. Please try again later."
         })
 
-
-    return render(request, "Loyalty/Business_SIde/Home.html")
 
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -646,7 +675,7 @@ def update_business_profile(request):
     # business_user_id = decode_primary_key(hashid)
     # argame = ArGame.objects.filter(id=userid).first()
     # staff = BusinessProfile.objects.filter(user=business_user).first()
-    business_user=User.objects.filter(username=9631218850).first()
+    # business_user=User.objects.filter(username=9631218850).first()
     profile = BusinessProfile.objects.filter(user=business_user).first()
 
     data = json.loads(request.body)
@@ -740,10 +769,13 @@ def create_offer(request):
     """
     Handles offer creation for business users.
     """
+    business_user = request.user
+    
+    business_user_profile = BusinessProfile.objects.filter(user=business_user).first()
 
 
 
-    return render(request, "Loyalty/Business_SIde/Create_Offer.html")
+    return render(request, "Loyalty/Business_SIde/Create_Offer.html",context={"business_user_profile":business_user_profile})
 
 @login_required(login_url="/loyalty/signin")
 @user_passes_test(is_business, login_url="/loyalty/signin")
@@ -755,7 +787,7 @@ def create_stamp_card(request):
     # business_user_id = decode_primary_key(hashid)
     # argame = ArGame.objects.filter(id=userid).first()
     # staff = BusinessProfile.objects.filter(user=business_user).first()
-    business_user=User.objects.filter(username=9631218850).first()
+    # business_user=User.objects.filter(username=9631218850).first()
     
     business_user_profile = BusinessProfile.objects.filter(user=business_user).first()
     business_offer = BusinessOffer.objects.filter(business=business_user_profile).all()
@@ -791,6 +823,7 @@ def customers_list(request):
 
     try:
         business = BusinessProfile.objects.get(user=request.user)
+        business_user_profile = business
     except BusinessProfile.DoesNotExist:
         return redirect("/loyalty/business-welcome")
 
@@ -900,7 +933,7 @@ def customers_list(request):
     return render(
         request,
         "Loyalty/Business_SIde/Customers.html",
-        {
+        {"business_user_profile":business_user_profile,
         "customers": json.dumps(customers),
         "business": business,
         },
@@ -916,7 +949,7 @@ def winners_list(request):
     # business_user_id = decode_primary_key(hashid)
     # argame = ArGame.objects.filter(id=userid).first()
     # staff = BusinessProfile.objects.filter(user=business_user).first()
-    business_user=User.objects.filter(username=9631218850).first()
+    # business_user=User.objects.filter(username=9631218850).first()
     business_user_profile = BusinessProfile.objects.filter(user=business_user).first()
     business_customers = CustomerVisitCount.objects.filter(business=business_user_profile).count()
     approval_awating_customers = CustomerVisitHistory.objects.filter(customer_visit__business=business_user_profile,action="REDEEMED").all() 
@@ -1129,12 +1162,6 @@ def business_help(request):
 
     return render(request, "Loyalty/Business_SIde/Help&Support.html")
 
-@login_required
-@require_POST
-def validate_avaibality(request):
-    is_available=False
-
-    return is_available
 
 @login_required
 @require_POST
@@ -1409,7 +1436,9 @@ def customer_dashboard(request, hash_id):
     print(customer_user)
     customer_profile = CustomerProfile.objects.filter(user=customer_user).first()
    
+    # customer_visit_count = CustomerVisitCount.objects.filter(customer=customer_profile, business__id=decode_primary_key(hash_id)).first()
     customer_visit_count = CustomerVisitCount.objects.filter(customer=customer_profile, business__id=decode_primary_key(hash_id)).first()
+
     
     redeemed_count = CustomerVisitHistory.objects.filter(
                     customer_visit=customer_visit_count,
@@ -1581,9 +1610,11 @@ def customer_explore(request, hash_id):
     business_list = []
 
     for business in businesses:
+        business_hash_id = encode_primary_key(business.id)
         business_list.append([
             business.business_name,
-            business.business_category
+            business.business_category,
+            business_hash_id
         ])
     print(categories)
     print(business_list)

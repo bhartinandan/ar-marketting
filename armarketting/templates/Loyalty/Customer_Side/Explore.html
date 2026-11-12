@@ -114,7 +114,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 function render(){
   $("chips").innerHTML=cats.map(c=>`<button class="chip" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join("");
   const f=data.filter(d=>(cat==="All"||d[1]===cat)&&d[0].toLowerCase().includes(term));
-  $("list").innerHTML=f.slice(0,shown).map(d=>`<a class="biz" href="#" style="text-decoration:none;color:inherit"><span class="av">${esc([...d[0]][0].toUpperCase())}</span><span class="info"><b>${esc(d[0])}</b><span>Win: Loyalty reward</span></span><span class="right"><em>OPEN</em><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></span></a>`).join("")||'<p class="empty">No businesses found. Try another search or category.</p>';
+  $("list").innerHTML=f.slice(0,shown).map(d=>`<a class="biz" onclick="window.location.href ='/loyalty/customer-dashboard/${d[2]}'" style="text-decoration:none;color:inherit"><span class="av">${esc([...d[0]][0].toUpperCase())}</span><span class="info"><b>${esc(d[0])}</b><span>Win: Loyalty reward</span></span><span class="right"><em>OPEN</em><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></span></a>`).join("")||'<p class="empty">No businesses found. Try another search or category.</p>';
   $("more").style.display=f.length>shown?"block":"none";
 }
 $("chips").onclick=e=>{const c=e.target.closest(".chip");if(c){cat=c.dataset.c;shown=6;render()}};

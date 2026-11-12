@@ -50,12 +50,12 @@
     <!-- HEADER -->
     <header class="-mt-px rounded-b-[34px] bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-4 pb-8 pt-6 text-white shadow-alive">
       <div class="flex items-center gap-3">
-        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-extrabold text-alive-purple">A</div>
+        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-extrabold text-alive-purple">{{ business_name|first|upper }}</div>
         <div class="min-w-0 flex-1">
           <h1 id="bizName" class="truncate text-xl font-extrabold tracking-[-0.03em]">"{{business_name}}"</h1>
-          <span class="mt-1 inline-block rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan px-3 py-0.5 text-[11px] font-bold">Basic Subscription</span>
+          <!-- <span class="mt-1 inline-block rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan px-3 py-0.5 text-[11px] font-bold">Basic Subscription</span> -->
         </div>
-        <button id="profileBtn" type="button" aria-label="Profile" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20">
+        <button onclick="window.location.href='/loyalty/business-profile'" id="profileBtn" type="button" aria-label="Profile" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
         </button>
       </div>
@@ -63,7 +63,7 @@
 
     <main class="px-4 pt-6">
 
-      <a href="business-offers.html" class="inline-flex items-center gap-2 py-2 text-[15px] font-bold text-alive-navy">
+      <a onclick="window.location.href ='/loyalty/create-offer'" class="inline-flex items-center gap-2 py-2 text-[15px] font-bold text-alive-navy">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
         Back to Menu
       </a>
@@ -71,12 +71,12 @@
       <!-- TITLE ROW -->
       <div class="mt-4 flex flex-wrap items-center gap-3">
         <h2 class="text-[26px] font-extrabold tracking-[-0.045em] text-alive-navy">Reward Programs</h2>
-        <button id="liveToggle" type="button" role="switch" aria-checked="true" class="flex items-center gap-3 rounded-full border border-black/[.05] bg-white px-3 py-2.5 shadow-sm">
+        <!-- <button id="liveToggle" type="button" role="switch" aria-checked="true" class="flex items-center gap-3 rounded-full border border-black/[.05] bg-white px-3 py-2.5 shadow-sm">
           <span id="liveTrack" class="relative h-8 w-14 rounded-full bg-gradient-to-r from-[#5131dc] to-[#0f9eea] transition">
             <span id="liveKnob" class="absolute top-1 h-6 w-6 rounded-full bg-white shadow transition-all" style="left:28px"></span>
           </span>
           <span id="liveLabel" class="pr-1 text-sm font-extrabold tracking-[.12em] text-alive-navy">LIVE</span>
-        </button>
+        </button> -->
         <button id="addBtn" type="button" class="ml-auto flex h-[52px] items-center gap-2 rounded-full border border-black/[.05] bg-white px-5 text-[15px] font-bold text-alive-purple shadow-sm transition hover:-translate-y-0.5">
           <span class="text-xl leading-none">+</span> Add Reward
         </button>
@@ -185,7 +185,7 @@
       //   { id: 3, image: null, visits: 5, expiryDays: 30, description: "After 5 visit" },
       // ],
     };
-
+    
     const LIMITS = { minVisits: 1, maxVisits: 20, maxRewards: 5, maxDays: 365 };
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -201,6 +201,7 @@
       dirty = v;
       $("dirtyNote").classList.toggle("hidden", !v);
     }
+    
 
     /* ---------------------------------
        REWARD CARDS
@@ -286,16 +287,16 @@
     /* ---------------------------------
        LIVE TOGGLE
     --------------------------------- */
-    function renderToggle() {
-      $("liveToggle").setAttribute("aria-checked", data.live);
-      $("liveTrack").className = `relative h-8 w-14 rounded-full transition ${data.live ? "bg-gradient-to-r from-[#5131dc] to-[#0f9eea]" : "bg-[#cfd3de]"}`;
-      $("liveKnob").style.left = data.live ? "28px" : "4px";
-      $("liveLabel").textContent = data.live ? "LIVE" : "PAUSED";
-    }
-    $("liveToggle").addEventListener("click", () => {
-      data.live = !data.live; markDirty(); renderToggle(); renderPreview();
-      showToast(data.live ? "Program is live. Save to apply." : "Program paused. Save to apply.");
-    });
+    // function renderToggle() {
+    //   $("liveToggle").setAttribute("aria-checked", data.live);
+    //   $("liveTrack").className = `relative h-8 w-14 rounded-full transition ${data.live ? "bg-gradient-to-r from-[#5131dc] to-[#0f9eea]" : "bg-[#cfd3de]"}`;
+    //   $("liveKnob").style.left = data.live ? "28px" : "4px";
+    //   $("liveLabel").textContent = data.live ? "LIVE" : "PAUSED";
+    // }
+    // $("liveToggle").addEventListener("click", () => {
+    //   data.live = !data.live; markDirty(); renderToggle(); renderPreview();
+    //   showToast(data.live ? "Program is live. Save to apply." : "Program paused. Save to apply.");
+    // });
 
     /* ---------------------------------
        CARD EVENTS (delegated)
@@ -451,7 +452,7 @@
       }, 3000);
     }
 
-    renderToggle(); renderCards(); renderPreview();
+ renderCards(); renderPreview();
   </script>
 </body>
 </html>

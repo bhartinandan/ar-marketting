@@ -49,17 +49,17 @@
     <!-- ============ HEADER ============ -->
     <header class="-mt-px rounded-b-[34px] bg-gradient-to-br from-alive-navy via-alive-navy2 to-[#2a1a8f] px-4 pb-6 pt-6 text-white shadow-alive">
       <div class="flex items-center gap-3">
-        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-extrabold text-alive-purple">A</div>
+        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-extrabold text-alive-purple">{{ business_user_profile.business_name|first|upper }}</div>
         <div class="min-w-0 flex-1">
-          <h1 id="bizName" class="truncate text-xl font-extrabold tracking-[-0.03em]">Aryan Resturant</h1>
-          <span class="mt-1 inline-block rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan px-3 py-0.5 text-[11px] font-bold">Basic Subscription</span>
+          <h1 id="bizName" class="truncate text-xl font-extrabold tracking-[-0.03em]">{{ business_user_profile.business_name}}</h1>
+          <!-- <span class="mt-1 inline-block rounded-full bg-gradient-to-r from-alive-purple to-alive-cyan px-3 py-0.5 text-[11px] font-bold">Basic Subscription</span> -->
         </div>
         <button onclick="window.location.href='/loyalty/business-profile'" id="profileBtn" type="button" aria-label="Profile" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
         </button>
       </div>
 
-      <div class="mt-5 grid grid-cols-4 gap-2">
+      <!-- <div class="mt-5 grid grid-cols-4 gap-2">
         <div class="rounded-2xl bg-white/10 px-1 py-3.5 text-center backdrop-blur">
           <svg class="mx-auto h-4 w-4 text-alive-cyan" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>
           <div id="statScans" class="mt-1 text-2xl font-extrabold">1</div>
@@ -80,7 +80,7 @@
           <div id="statRepeat" class="mt-1 text-2xl font-extrabold">0%</div>
           <div class="text-[10px] font-medium tracking-wide text-white/70">Repeat</div>
         </div>
-      </div>
+      </div> -->
     </header>
 
     <main class="px-4 pt-6">
@@ -166,8 +166,8 @@
        Timestamps are ISO strings (e.g. 2026-10-07T14:43:00+05:30)
     --------------------------------- */
     const data = {
-      businessName: "Aryan Resturant",
-      trialDaysLeft: 2,
+      businessName: "{{ business_user_profile.business_name}}",
+      trialDaysLeft: -1,
       stats: { scans: 1, users: 1, rewards: 0, repeat: 0 },
       // timestamps are ISO strings (demo values are relative to now)
       customers: JSON.parse('{{ customers|escapejs }}'),
@@ -195,10 +195,15 @@
 
     $("bizName").textContent = data.businessName;
     $("trialDays").textContent = data.trialDaysLeft;
-    $("statScans").textContent = data.stats.scans;
-    $("statUsers").textContent = data.stats.users;
-    $("statRewards").textContent = data.stats.rewards;
-    $("statRepeat").textContent = data.stats.repeat + "%";
+    $("trialDays").textContent = data.trialDaysLeft;
+    // Trial banner (hidden once the trial has ended or the business has subscribed)
+    const trialLeft = data.trialDaysLeft;
+    $("trialBanner").classList.toggle("hidden", !(trialLeft > 0));
+    // $("statScans").textContent = data.stats.scans;
+    // $("statUsers").textContent = data.stats.users;
+    // $("statRewards").textContent = data.stats.rewards;
+    // $("statRepeat").textContent = data.stats.repeat + "%";
+    
 
     /* ---------------------------------
        FILTERS
