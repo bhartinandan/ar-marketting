@@ -384,7 +384,7 @@ def welcome_business(request):
                 print("profile not found")
 
                 # Create new profile
-                BusinessProfile.objects.create(
+                profile = BusinessProfile.objects.create(
                     user=request.user,
                     business_partner_name=name,
                     business_name=business_name,
@@ -392,6 +392,21 @@ def welcome_business(request):
                     business_contact=business_contact,
                     latitude=latitude,
                     longitude=longitude,
+                )
+
+                messages.success(
+                    request,
+                    "Business profile created successfully."
+                )
+                 # Create default welcome offer
+                BusinessOffer.objects.get_or_create(
+                    business=profile,
+                    offer_details=" Welcome Reward",
+                    defaults={
+                        "visit_required": 5,
+                        "available": True,
+                        "reward_expiration_days": 30,
+                    },
                 )
 
                 messages.success(
